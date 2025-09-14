@@ -81,7 +81,7 @@ const About: React.FC = () => {
             <div className="text-center bg-gradient-to-r from-[#F9A246] to-orange-400 rounded-lg p-6 text-white">
               <p className="text-lg mb-2">We are more than a supplement company.</p>
               <p className="text-lg mb-2">We are a family, a movement, a partner in your journey.</p>
-              <p className="mb-4">With every product, every consultation, every step forward, we stand by one promise:</p>
+              <p className="mb-4">With ~ every product, every consultation, every step forward, we stand by one promise:</p>
               <p className="text-xl font-bold">O² Nutrition – Authentic Fuel. Real Results. Trusted Nationwide.</p>
             </div>
           </div>
