@@ -53,16 +53,7 @@ const Dashboard: React.FC = () => {
   const { wishlist, removeFromWishlist } = useWishlist();
   const { toast } = useToast();
 
-  // Real-time stats from actual orders
-  const stats = {
-    totalOrders: orders.length,
-    todayOrders: orders.filter(order => {
-      const today = new Date().toLocaleDateString();
-      return order.date === today;
-    }).length,
-    pendingOrders: orders.filter(order => order.status === 'pending').length,
-    completedOrders: orders.filter(order => order.status === 'delivered').length,
-  };
+
 
   const [activeTab, setActiveTab] = useState("overview");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -223,84 +214,7 @@ const Dashboard: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Real-time Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <Card className="relative overflow-hidden">
-                    <CardContent className="p-6">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <Package className="h-6 w-6 text-blue-600" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Total Orders</p>
-                          <p className="text-2xl font-bold text-gray-900">
-                            {stats.totalOrders}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="absolute top-2 right-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      </div>
-                    </CardContent>
-                  </Card>
 
-                  <Card className="relative overflow-hidden">
-                    <CardContent className="p-6">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                          <Calendar className="h-6 w-6 text-[#F9A245]" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Today's Orders</p>
-                          <p className="text-2xl font-bold text-[#F9A245]">
-                            {stats.todayOrders}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="absolute top-2 right-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="relative overflow-hidden">
-                    <CardContent className="p-6">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                          <Clock className="h-6 w-6 text-yellow-600" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Pending</p>
-                          <p className="text-2xl font-bold text-yellow-600">
-                            {stats.pendingOrders}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="absolute top-2 right-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="relative overflow-hidden">
-                    <CardContent className="p-6">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                          <Check className="h-6 w-6 text-green-600" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Completed</p>
-                          <p className="text-2xl font-bold text-green-600">
-                            {stats.completedOrders}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="absolute top-2 right-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
 
                 {/* Last Order Card */}
                 {orders.length > 0 && (

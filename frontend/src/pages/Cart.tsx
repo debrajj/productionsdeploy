@@ -54,6 +54,7 @@ const Cart: React.FC = () => {
         state.total
       );
       setAppliedCoupon(validatedCoupon);
+      localStorage.setItem('appliedCoupon', JSON.stringify(validatedCoupon));
       setPromoCode("");
     } catch (error) {
       setPromoError(error instanceof Error ? error.message : "Invalid coupon code");
@@ -64,6 +65,7 @@ const Cart: React.FC = () => {
 
   const removePromo = () => {
     setAppliedCoupon(null);
+    localStorage.removeItem('appliedCoupon');
     setPromoError("");
   };
 
@@ -77,6 +79,7 @@ const Cart: React.FC = () => {
         state.total
       );
       setAppliedCoupon(validatedCoupon);
+      localStorage.setItem('appliedCoupon', JSON.stringify(validatedCoupon));
       setShowAvailableCoupons(false);
     } catch (error) {
       setPromoError(error instanceof Error ? error.message : "Cannot apply this coupon");

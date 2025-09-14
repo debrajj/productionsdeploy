@@ -2,39 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '../../../payload.config'
 
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url)
-    const userId = searchParams.get('userId')
-
-    const payload = await getPayload({ config })
-
-    if (userId) {
-      const result = await payload.find({
-        collection: 'orders',
-        where: {
-          userId: {
-            equals: userId,
-          },
-        },
-        sort: '-createdAt',
-        limit: 100,
-      })
-      return NextResponse.json({ success: true, orders: result.docs })
-    } else {
-      const orders = await payload.find({
-        collection: 'orders',
-        sort: '-createdAt',
-        limit: 100
-      })
-      return NextResponse.json(orders)
-    }
-  } catch (error) {
-    console.error('Error fetching orders:', error)
-    return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 })
-  }
-}
-
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
@@ -44,27 +11,35 @@ export async function POST(request: NextRequest) {
     let formattedAddress = 'No address provided'
     if (data.shippingAddress && typeof data.shippingAddress === 'object') {
       const addr = data.shippingAddress
-      formattedAddress = `${addr.firstName || ''} ${addr.lastName || ''}\n${addr.address || ''}\n${addr.apartment ? addr.apartment + '\n' : ''}${addr.city || ''}, ${addr.state || ''} - ${addr.zipCode || ''}\nPhone: ${addr.phone || ''}`
+      const fullName = `${addr.firstName || ''} ${addr.lastName || ''}`.trim()
+      const addressLine1 = addr.address || ''
+      const addressLine2 = addr.apartment ? addr.apartment : ''
+      const cityStateZip = `${addr.city || ''}, ${addr.state || ''} - ${addr.zipCode || ''}`.replace(/^, /, '').replace(/ - $/, '')
+      const phone = addr.phone ? `Phone: ${addr.phone}` : ''
+      
+      formattedAddress = [fullName, addressLine1, addressLine2, cityStateZip, phone]
+        .filter(line => line.trim())
+        .join('\n')
     } else if (typeof data.shippingAddress === 'string') {
       formattedAddress = data.shippingAddress
     }
 
     const orderData = {
-      orderNumber: `ORD-${Date.now()}`,
+      orderNumber: `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
       customerEmail: data.customerEmail || 'customer@example.com',
-      status: data.status || 'pending',
-      items: data.items || [{
-        id: '1',
-        name: 'Product',
-        price: 100,
-        quantity: 1
-      }],
-      subtotal: data.subtotal || 100,
-      total: data.total || 100,
+      userId: data.userId, // Include userId for linking to user account
+      items: data.items || [],
+      subtotal: data.subtotal || 0,
+      total: data.total || 0,
+      shippingCost: data.shippingCost || 0,
+      couponCode: data.couponCode,
+      discount: data.discount || 0,
       deliveryMethod: data.deliveryMethod || 'standard',
       paymentMethod: data.paymentMethod || 'COD',
       shippingAddress: formattedAddress,
-      tracking: data.tracking || {}
+      tracking: {
+        status: 'pending'
+      }
     }
 
     const order = await payload.create({

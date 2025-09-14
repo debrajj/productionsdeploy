@@ -1,19 +1,12 @@
 import type { CollectionConfig } from 'payload'
-import OrderView from '../../components/OrderView'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
-  lockDocuments: false,
   admin: {
     useAsTitle: 'orderNumber',
     defaultColumns: ['orderNumber', 'customerEmail', 'status', 'total', 'createdAt'],
     group: 'E-commerce',
-    description: '📋 Customer Orders - Clean printable format',
-    components: {
-      views: {
-        Edit: OrderView,
-      },
-    },
+    description: '📋 Customer Orders',
   },
   access: {
     read: ({ req: { user } }) => {
@@ -28,51 +21,95 @@ export const Orders: CollectionConfig = {
       return false;
     },
     delete: ({ req: { user } }) => {
-      // Only admin can delete orders
-      if (user) return true;
+      // Only authenticated admin users can delete orders
+      console.log('Delete access check - User:', user ? 'authenticated' : 'not authenticated');
+      if (user) {
+        console.log('User email:', user.email);
+        return true;
+      }
+      console.log('Delete access denied - no user');
       return false;
     },
   },
+
   hooks: {
     beforeChange: [
       ({ data }) => {
-        // Convert shippingAddress object to string if it's an object
-        if (data.shippingAddress && typeof data.shippingAddress === 'object') {
-          const addr = data.shippingAddress
-          data.shippingAddress = `${addr.firstName || ''} ${addr.lastName || ''}\n${addr.address || ''}${addr.apartment ? ', ' + addr.apartment : ''}\n${addr.city || ''}, ${addr.state || ''} - ${addr.zipCode || ''}\nPhone: ${addr.phone || ''}`
+        // Generate items summary with variations
+        if (data.items && data.items.length > 0) {
+          data.itemsSummary = data.items.map(item => {
+            let itemText = item.name || 'Product';
+            
+            // Add flavor if available
+            if (item.flavor) {
+              itemText += ` (${item.flavor})`;
+            }
+            
+            // Add weight if available
+            if (item.weight) {
+              itemText += ` - ${item.weight}`;
+            }
+            
+            // Add any other variant info
+            if (item.variant && item.variant !== item.flavor && item.variant !== item.weight) {
+              itemText += ` [${item.variant}]`;
+            }
+            
+            return `${itemText} x${item.quantity} - ₹${item.price}`;
+          }).join('\n');
         }
         
-        // Generate items summary
-        if (data.items && Array.isArray(data.items)) {
-          data.itemsSummary = data.items.map((item, index) => 
-            `Item ${index + 1}:\nID: ${item.id}\nName: ${item.name}\nPrice: ₹${item.price}\nQuantity: ${item.quantity}\nTotal: ₹${item.price * item.quantity}`
-          ).join('\n\n')
+        // Generate detailed order summary with price breakdown
+        const subtotal = data.subtotal || 0;
+        const shipping = data.shippingCost || 0;
+        const discount = data.discountAmount || data.discount || 0;
+        const total = data.total || 0;
+        const couponCode = data.couponCode;
+        const itemCount = data.items ? data.items.length : 0;
+        
+        let orderSummary = `💰 ORDER SUMMARY\n`;
+        orderSummary += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        orderSummary += `Subtotal (${itemCount} items): ₹${subtotal.toLocaleString()}\n`;
+        
+        if (couponCode && discount > 0) {
+          orderSummary += `Discount (${couponCode}): -₹${discount.toLocaleString()}\n`;
+          orderSummary += `After Discount: ₹${(subtotal - discount).toLocaleString()}\n`;
         }
         
-        // Generate order summary
-        const deliveryLabels = {
-          standard: 'Standard Delivery',
-          express: 'Express Delivery', 
-          overnight: 'Overnight Delivery'
-        }
-        const paymentLabels = {
-          CARD: 'Card Payment',
-          UPI: 'UPI Payment',
-          COD: 'Cash on Delivery'
+        if (shipping > 0) {
+          orderSummary += `Shipping: ₹${shipping.toLocaleString()}\n`;
+        } else {
+          orderSummary += `Shipping: FREE\n`;
         }
         
-        data.orderSummary = `Subtotal: ₹${data.subtotal || 0}\nShipping: ₹${data.shippingCost || 0}\nTotal: ₹${data.total || 0}\n\nDelivery: ${deliveryLabels[data.deliveryMethod] || data.deliveryMethod}\nPayment: ${paymentLabels[data.paymentMethod] || data.paymentMethod}`
+        orderSummary += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        orderSummary += `TOTAL: ₹${total.toLocaleString()}\n`;
+        orderSummary += `Payment Method: ${data.paymentMethod || 'N/A'}\n`;
         
-        return data
+        data.orderSummary = orderSummary;
+        
+        return data;
+      },
+    ],
+    beforeDelete: [
+      ({ req, id }) => {
+        console.log('🗑️ Attempting to delete order with ID:', id);
+        console.log('🔐 User:', req.user ? req.user.email : 'No user');
+        return true;
+      },
+    ],
+    afterDelete: [
+      ({ req, id, doc }) => {
+        console.log('✅ Successfully deleted order:', doc.orderNumber);
       },
     ],
   },
+
   fields: [
     {
       name: 'orderNumber',
       type: 'text',
       required: true,
-      unique: true,
       admin: {
         description: 'Unique order number (e.g., ORD-2024-001)',
       },
@@ -83,6 +120,13 @@ export const Orders: CollectionConfig = {
       required: true,
       admin: {
         description: 'Customer email',
+      },
+    },
+    {
+      name: 'userId',
+      type: 'text',
+      admin: {
+        description: 'User ID for linking orders to users',
       },
     },
 
@@ -126,6 +170,27 @@ export const Orders: CollectionConfig = {
           required: true,
           min: 1,
         },
+        {
+          name: 'flavor',
+          type: 'text',
+          admin: {
+            description: 'Product flavor (e.g., mango, chocolate)',
+          },
+        },
+        {
+          name: 'weight',
+          type: 'text',
+          admin: {
+            description: 'Product weight (e.g., 250gm, 1kg)',
+          },
+        },
+        {
+          name: 'variant',
+          type: 'text',
+          admin: {
+            description: 'Other product variations',
+          },
+        },
       ],
     },
     {
@@ -157,6 +222,21 @@ export const Orders: CollectionConfig = {
     },
     {
       name: 'shippingCost',
+      type: 'number',
+      min: 0,
+      admin: {
+        hidden: true,
+      },
+    },
+    {
+      name: 'couponCode',
+      type: 'text',
+      admin: {
+        hidden: true,
+      },
+    },
+    {
+      name: 'discount',
       type: 'number',
       min: 0,
       admin: {

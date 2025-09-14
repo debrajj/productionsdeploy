@@ -1036,18 +1036,7 @@ const Index: React.FC = () => {
         </section>
       </div>
 
-      {/* Sticky Cart Button */}
-      {state.itemCount > 0 && (
-        <div className="fixed bottom-4 right-4 z-[9999]">
-          <button
-            onClick={() => navigate("/cart")}
-            className="bg-[#F9A245] text-white px-4 py-3 rounded-full shadow-lg hover:bg-[#e8933a] transition-all duration-300 flex items-center space-x-2"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            <span className="font-bold">{state.itemCount}</span>
-          </button>
-        </div>
-      )}
+
     </>
   );
 };

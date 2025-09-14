@@ -140,6 +140,7 @@ export interface User {
   firstName: string;
   lastName: string;
   phone: string;
+  role: 'admin' | 'user';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -701,7 +702,7 @@ export interface Subscriber {
   createdAt: string;
 }
 /**
- * 📋 Customer Orders - Clean printable format
+ * 📋 Customer Orders
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "orders".
@@ -717,6 +718,10 @@ export interface Order {
    */
   customerEmail: string;
   /**
+   * User ID for linking orders to users
+   */
+  userId?: string | null;
+  /**
    * 📦 ORDER ITEMS - Summary of all items
    */
   itemsSummary?: string | null;
@@ -728,6 +733,18 @@ export interface Order {
     name: string;
     price: number;
     quantity: number;
+    /**
+     * Product flavor (e.g., mango, chocolate)
+     */
+    flavor?: string | null;
+    /**
+     * Product weight (e.g., 250gm, 1kg)
+     */
+    weight?: string | null;
+    /**
+     * Other product variations
+     */
+    variant?: string | null;
   }[];
   /**
    * 💰 ORDER SUMMARY - Pricing and payment details
@@ -736,6 +753,8 @@ export interface Order {
   subtotal: number;
   total: number;
   shippingCost?: number | null;
+  couponCode?: string | null;
+  discount?: number | null;
   deliveryMethod: 'standard' | 'express' | 'overnight';
   paymentMethod: 'CARD' | 'UPI' | 'COD';
   /**
@@ -914,6 +933,7 @@ export interface UsersSelect<T extends boolean = true> {
   firstName?: T;
   lastName?: T;
   phone?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1122,6 +1142,7 @@ export interface SubscribersSelect<T extends boolean = true> {
 export interface OrdersSelect<T extends boolean = true> {
   orderNumber?: T;
   customerEmail?: T;
+  userId?: T;
   itemsSummary?: T;
   items?:
     | T
@@ -1130,11 +1151,16 @@ export interface OrdersSelect<T extends boolean = true> {
         name?: T;
         price?: T;
         quantity?: T;
+        flavor?: T;
+        weight?: T;
+        variant?: T;
       };
   orderSummary?: T;
   subtotal?: T;
   total?: T;
   shippingCost?: T;
+  couponCode?: T;
+  discount?: T;
   deliveryMethod?: T;
   paymentMethod?: T;
   shippingAddress?: T;

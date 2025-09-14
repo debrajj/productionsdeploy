@@ -184,13 +184,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const fetchUserOrders = async (userId: string) => {
     try {
+      console.log('Fetching orders for user:', userId);
       const apiOrders = await orderService.fetchUserOrders(userId);
-      if (Array.isArray(apiOrders)) {
+      console.log('API response:', apiOrders);
+      
+      if (Array.isArray(apiOrders) && apiOrders.length > 0) {
         const transformedOrders: Order[] = apiOrders.map((order: any) => ({
           id: order.id,
           orderNumber: order.orderNumber,
           date: order.createdAt ? new Date(order.createdAt).toLocaleDateString() : new Date().toLocaleDateString(),
-          status: order.status,
+          status: order.tracking?.status || order.status || 'pending',
           items: order.items || [],
           total: order.total || 0,
           shippingAddress: order.shippingAddress ? {
@@ -221,9 +224,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           tracking: order.tracking
         }));
         setOrders(transformedOrders);
+        console.log('Orders set:', transformedOrders);
+      } else {
+        console.log('No orders found for user');
+        setOrders([]);
       }
     } catch (error) {
       console.error('Error fetching orders:', error);
+      setOrders([]);
     }
   };
 
@@ -398,16 +406,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const apiOrder = await orderService.createOrder({
         orderNumber: orderData.orderNumber,
         customerEmail: orderData.customerEmail || user?.email || 'guest@example.com',
-        customerName: `${orderData.shippingAddress?.firstName || 'User'} ${orderData.shippingAddress?.lastName || 'Name'}`,
+        userId: user?.id, // Add userId to link order with user
         items: orderData.items.map((item: any) => ({
-          product: item.id,
+          id: item.id,
+          name: item.name,
+          price: item.price,
           quantity: item.quantity,
-          price: item.price
+          flavor: item.flavor,
+          weight: item.weight,
+          variant: item.variant
         })),
+        subtotal: orderData.subtotal || orderData.total,
+        total: orderData.total,
+        shippingCost: orderData.shippingCost || 0,
         shippingAddress: orderData.shippingAddress,
-        totalAmount: orderData.total,
-        paymentMethod: orderData.paymentMethod.toLowerCase(),
-        status: 'pending'
+        deliveryMethod: orderData.deliveryMethod || 'standard',
+        paymentMethod: orderData.paymentMethod || 'COD'
       });
       
       // Create local order for immediate display

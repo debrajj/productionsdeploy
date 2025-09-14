@@ -29,10 +29,21 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      titleSuffix: '- O2 Nutrition Admin',
+      titleSuffix: '- O2 Nutrition Store Management',
       favicon: '/favicon.ico',
+      ogImage: '/og-image.jpg',
     },
-    css: path.resolve(dirname, './app/globals.css'),
+    css: path.resolve(dirname, './app/(payload)/custom.scss'),
+  },
+  cookiePrefix: 'payload-admin',
+  csrf: [
+    process.env.FRONTEND_URL,
+    process.env.ADMIN_URL,
+    process.env.BACKEND_URL,
+  ].filter(Boolean),
+  cookies: {
+    secure: false,
+    sameSite: 'lax',
   },
   collections: [
     Users,

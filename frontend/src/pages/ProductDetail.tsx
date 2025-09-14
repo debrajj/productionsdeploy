@@ -146,6 +146,12 @@ const ProductDetail: React.FC = () => {
         console.log("Product API response:", response);
         if (response.success && response.data) {
           setProduct(response.data);
+          // Set initial price from variants or base price
+          if (response.data.variants && response.data.variants.length > 0) {
+            setSelectedPrice(response.data.variants[0].price);
+          } else {
+            setSelectedPrice(response.data.price);
+          }
         } else {
           setError(response.error || "Product not found");
         }
@@ -178,9 +184,7 @@ const ProductDetail: React.FC = () => {
   const [selectedWeight, setSelectedWeight] = useState<string | undefined>(
     undefined
   );
-  const [selectedPrice, setSelectedPrice] = useState<number | undefined>(
-    undefined
-  );
+  const [selectedPrice, setSelectedPrice] = useState<number>(0);
   const [recentlyViewed, setRecentlyViewed] = useState<ApiProduct[]>([]);
   const [apiVariants, setApiVariants] = useState<{flavors: string[], weights: string[]}>({ flavors: [], weights: [] });
 
@@ -237,17 +241,7 @@ const ProductDetail: React.FC = () => {
 
   // Set default selected flavor/weight on mount or when product loads
   useEffect(() => {
-    if (product) {
-      // Option 1: Simple Flavors & Weights
-      if (product.simpleFlavors && !selectedFlavor) {
-        const flavors = product.simpleFlavors.split(',').map(f => f.trim());
-        setSelectedFlavor(flavors[0]);
-      }
-      if (product.simpleWeights && !selectedWeight) {
-        const weights = product.simpleWeights.split(',').map(w => w.trim());
-        setSelectedWeight(weights[0]);
-      }
-      
+    if (product && selectedPrice === 0) {
       // Option 2: Variants with individual pricing
       if (product.variants && product.variants.length > 0) {
         const variantFlavors = Array.from(new Set(product.variants.map(v => v.flavor).filter(Boolean)));
@@ -259,23 +253,48 @@ const ProductDetail: React.FC = () => {
         if (variantWeights.length > 0 && !selectedWeight) {
           setSelectedWeight(variantWeights[0]);
         }
+        setSelectedPrice(product.variants[0]?.price || product.price);
+      }
+      // Option 1: Simple Flavors & Weights
+      else {
+        if (product.simpleFlavors && !selectedFlavor) {
+          const flavors = product.simpleFlavors.split(',').map(f => f.trim());
+          setSelectedFlavor(flavors[0]);
+        }
+        if (product.simpleWeights && !selectedWeight) {
+          const weights = product.simpleWeights.split(',').map(w => w.trim());
+          setSelectedWeight(weights[0]);
+        }
+        setSelectedPrice(product.price);
       }
     }
-  }, [product, selectedFlavor, selectedWeight]);
+  }, [product]);
 
   // Update price when flavor/weight changes
   useEffect(() => {
     if (product) {
-      // Option 1: Simple Flavors & Weights - use base price
-      if (product.simpleFlavors || product.simpleWeights) {
-        setSelectedPrice(product.price);
-      }
       // Option 2: Variants with individual pricing - find matching variant
-      else if (product.variants && product.variants.length > 0 && selectedFlavor && selectedWeight) {
-        const match = product.variants.find(
-          (v) => v.flavor === selectedFlavor && v.weight === selectedWeight
-        );
-        setSelectedPrice(match ? match.price : product.price);
+      if (product.variants && product.variants.length > 0) {
+        if (selectedFlavor && selectedWeight) {
+          const match = product.variants.find(
+            (v) => v.flavor === selectedFlavor && v.weight === selectedWeight
+          );
+          setSelectedPrice(match ? match.price : product.price);
+        } else if (selectedFlavor || selectedWeight) {
+          // If only one variant is selected, find the first matching variant
+          const match = product.variants.find(
+            (v) => (selectedFlavor ? v.flavor === selectedFlavor : true) && 
+                   (selectedWeight ? v.weight === selectedWeight : true)
+          );
+          setSelectedPrice(match ? match.price : product.price);
+        } else {
+          // No variant selected, use first variant price or base price
+          setSelectedPrice(product.variants[0]?.price || product.price);
+        }
+      }
+      // Option 1: Simple Flavors & Weights - use base price
+      else if (product.simpleFlavors || product.simpleWeights) {
+        setSelectedPrice(product.price);
       }
       // Fallback to base price
       else {
@@ -445,7 +464,7 @@ const ProductDetail: React.FC = () => {
               <div className="space-y-1">
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-bold text-gray-900">
-                    ₹{((selectedPrice || product.price) * quantity).toLocaleString()}
+                    ₹{(selectedPrice * quantity).toLocaleString()}
                   </span>
                   {product.originalPrice && (
                     <span className="text-xl text-gray-500 line-through">
@@ -614,14 +633,15 @@ const ProductDetail: React.FC = () => {
                       )}
                       
                       {/* Show current variant price */}
-                      {selectedFlavor && selectedWeight && (
-                        <div className="p-3 bg-[#F9A245]/10 rounded-lg">
-                          <div className="text-sm text-gray-700">
-                            <strong>Selected:</strong> {selectedFlavor} - {selectedWeight}
+                      {(selectedFlavor || selectedWeight) && (
+                        <div className="p-4 bg-gradient-to-r from-[#F9A245]/10 to-[#F9A245]/5 rounded-lg border border-[#F9A245]/20">
+                          <div className="text-sm text-gray-700 mb-1">
+                            <strong>Selected:</strong> {selectedFlavor && selectedWeight ? `${selectedFlavor} - ${selectedWeight}` : selectedFlavor || selectedWeight}
                           </div>
-                          <div className="text-lg font-bold text-[#F9A245]">
+                          <div className="text-xl font-bold text-[#F9A245]">
                             ₹{(selectedPrice || product.price).toLocaleString()}
                           </div>
+
                         </div>
                       )}
                     </div>

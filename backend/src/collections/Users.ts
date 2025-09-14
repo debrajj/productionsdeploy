@@ -5,7 +5,25 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
   },
-  auth: true,
+  auth: {
+    verify: false,
+    tokenExpiration: 7200, // 2 hours default
+    maxLoginAttempts: 5,
+    lockTime: 600000, // 10 minutes
+    cookies: {
+      secure: false,
+      sameSite: 'lax',
+    },
+  },
+  access: {
+    admin: ({ req: { user } }) => {
+      if (user?.email === 'rk129479@gmail.com') {
+        return false
+      }
+      return user?.email === 'gainmode46@gmail.com'
+    },
+  },
+
   fields: [
     {
       name: 'firstName',
@@ -20,6 +38,16 @@ export const Users: CollectionConfig = {
     {
       name: 'phone',
       type: 'text',
+      required: true,
+    },
+    {
+      name: 'role',
+      type: 'select',
+      options: [
+        { label: 'Admin', value: 'admin' },
+        { label: 'User', value: 'user' },
+      ],
+      defaultValue: 'user',
       required: true,
     },
   ],

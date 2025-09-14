@@ -37,6 +37,29 @@ const Checkout: React.FC = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const checkout = useCheckout();
+  
+  // Get applied coupon from localStorage (set by cart page)
+  const [appliedCoupon, setAppliedCoupon] = React.useState<any>(null);
+  
+  React.useEffect(() => {
+    const loadCoupon = () => {
+      const savedCoupon = localStorage.getItem('appliedCoupon');
+      if (savedCoupon) {
+        try {
+          const coupon = JSON.parse(savedCoupon);
+          console.log('Loaded coupon:', coupon);
+          setAppliedCoupon(coupon);
+        } catch (error) {
+          console.error('Failed to parse applied coupon:', error);
+        }
+      }
+    };
+    
+    loadCoupon();
+    // Listen for storage changes
+    window.addEventListener('storage', loadCoupon);
+    return () => window.removeEventListener('storage', loadCoupon);
+  }, []);
 
   // Auto-fill email for logged-in users
   React.useEffect(() => {
@@ -100,10 +123,12 @@ const Checkout: React.FC = () => {
           upsellDiscount: item.upsellDiscount || 0,
           originalPrice: item.originalPrice || item.price,
         })),
-        subtotal: state.total,
+        subtotal: subtotalINR,
         total: finalTotalINR,
         shippingCost: shippingCostINR,
-        discountAmount: 0, // Will be calculated based on applied coupons
+        discountAmount: discountAmount,
+        couponCode: appliedCoupon?.code || null,
+        discount: discountAmount,
         deliveryMethod: checkout.deliveryMethod,
         paymentMethod: checkout.paymentMethod.toUpperCase(),
         shippingAddress: {
@@ -209,12 +234,24 @@ const Checkout: React.FC = () => {
 
   // Calculate pricing in INR (prices are already in INR)
   const subtotalINR = state.total;
+  const discountAmount = appliedCoupon ? (appliedCoupon.discountAmount || 0) : 0;
+  const discountedSubtotal = Math.max(0, subtotalINR - discountAmount);
   const deliveryCharges = {
     standard: 99,
   };
-  const shippingCostINR =
+  const shippingCostINR = (appliedCoupon?.freeShipping || discountedSubtotal >= 1500) ? 0 :
     deliveryCharges[checkout.deliveryMethod as keyof typeof deliveryCharges];
-  const finalTotalINR = subtotalINR + shippingCostINR;
+  const finalTotalINR = discountedSubtotal + shippingCostINR;
+  
+  // Debug logging
+  console.log('Checkout pricing:', {
+    subtotalINR,
+    appliedCoupon,
+    discountAmount,
+    discountedSubtotal,
+    shippingCostINR,
+    finalTotalINR
+  });
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
@@ -767,10 +804,28 @@ const Checkout: React.FC = () => {
                         {item.selectedFlavor && ` • ${item.selectedFlavor}`}
                         {item.selectedWeight && ` • ${item.selectedWeight}`}
                       </p>
+                      {item.isUpsell && item.upsellDiscount && (
+                        <p className="text-xs text-green-600">
+                          {item.upsellDiscount}% off upsell discount
+                        </p>
+                      )}
                     </div>
-                    <p className="font-medium text-[#F9A245]">
-                      ₹{(item.price * item.quantity).toLocaleString()}
-                    </p>
+                    <div className="text-right">
+                      {item.originalPrice && item.originalPrice > item.price ? (
+                        <div>
+                          <p className="text-xs text-gray-500 line-through">
+                            ₹{(item.originalPrice * item.quantity).toLocaleString()}
+                          </p>
+                          <p className="font-medium text-[#F9A245]">
+                            ₹{(item.price * item.quantity).toLocaleString()}
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="font-medium text-[#F9A245]">
+                          ₹{(item.price * item.quantity).toLocaleString()}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -779,32 +834,86 @@ const Checkout: React.FC = () => {
 
               {/* Pricing Breakdown */}
               <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">
-                    Subtotal ({state.itemCount} items)
-                  </span>
-                  <span className="font-medium">
-                    ₹{subtotalINR.toLocaleString()}
-                  </span>
-                </div>
+                {(() => {
+                  const originalTotal = state.items.reduce((sum, item) => 
+                    sum + (item.originalPrice || item.price) * item.quantity, 0
+                  );
+                  const totalDiscount = originalTotal - subtotalINR;
+                  
+                  return (
+                    <>
+                      {totalDiscount > 0 && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">
+                            Original Price ({state.itemCount} items)
+                          </span>
+                          <span className="text-gray-500 line-through">
+                            ₹{originalTotal.toLocaleString()}
+                          </span>
+                        </div>
+                      )}
+                      
+                      {totalDiscount > 0 && (
+                        <div className="flex justify-between">
+                          <span className="text-green-600">
+                            Discount
+                          </span>
+                          <span className="text-green-600 font-medium">
+                            -₹{totalDiscount.toLocaleString()}
+                          </span>
+                        </div>
+                      )}
+                      
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">
+                          Subtotal ({state.itemCount} items)
+                        </span>
+                        <span className="font-medium">
+                          ₹{subtotalINR.toLocaleString()}
+                        </span>
+                      </div>
+                      
+                      {appliedCoupon && (
+                        <div className="flex justify-between text-green-600">
+                          <span>
+                            Discount ({appliedCoupon.code})
+                          </span>
+                          <span className="font-medium">
+                            -₹{discountAmount.toLocaleString()}
+                          </span>
+                        </div>
+                      )}
 
-                <div className="flex justify-between">
-                  <span className="text-gray-600">
-                    {checkout.deliveryMethod === "standard" && "Standard Delivery"}
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">
+                          Standard Delivery
+                        </span>
+                        <span className="font-medium">
+                          {shippingCostINR === 0 ? (
+                            <span className="text-green-600">FREE</span>
+                          ) : (
+                            `₹${shippingCostINR}`
+                          )}
+                        </span>
+                      </div>
 
+                      <Separator />
 
-                  </span>
-                  <span className="font-medium">₹99</span>
-                </div>
-
-                <Separator />
-
-                <div className="flex justify-between font-bold text-lg">
-                  <span className="text-gray-900">Total</span>
-                  <span className="text-[#F9A245]">
-                    ₹{finalTotalINR.toLocaleString()}
-                  </span>
-                </div>
+                      <div className="flex justify-between font-bold text-lg">
+                        <span className="text-gray-900">Total</span>
+                        <span className="text-[#F9A245]">
+                          ₹{finalTotalINR.toLocaleString()}
+                        </span>
+                      </div>
+                      
+                      {totalDiscount > 0 && (
+                        <div className="text-center text-sm text-green-600 font-medium">
+                          You saved ₹{totalDiscount.toLocaleString()}!
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
 
               {/* Security Badge */}
