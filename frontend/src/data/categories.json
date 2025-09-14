@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Build Muscle",
+    "slug": "build-muscle",
+    "image": "https://media.bodyandfit.com/i/bodyandfit/Triple-Hotspot_Lose-weight_Position3?w=480&sm=aspect&aspect=1:0.55556&fmt=webp",
+    "count": 45
+  },
+  {
+    "id": 2,
+    "name": "Lose Weight",
+    "slug": "lose-weight",
+    "image": "https://media.bodyandfit.com/i/bodyandfit/Triple-Hotspot_Lose-weight_Position4?w=480&sm=aspect&aspect=1:0.55556&fmt=webp",
+    "count": 28
+  },
+  {
+    "id": 3,
+    "name": "Improve Endurance",
+    "slug": "improve-endurance",
+    "image": "https://media.bodyandfit.com/i/bodyandfit/Triple-Hotspot_Lose-weight_Position2?w=480&sm=aspect&aspect=1:0.55556&fmt=webp",
+    "count": 67
+  },
+  {
+    "id": 4,
+    "name": "Stay Healthy",
+    "slug": "stay-healthy",
+    "image": "https://media.bodyandfit.com/i/bodyandfit/Triple-Hotspot_Lose-weight_Position1?w=480&sm=aspect&aspect=1:0.55556&fmt=webp",
+    "count": 32
+  }
+]

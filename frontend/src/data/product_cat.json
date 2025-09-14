@@ -1,0 +1,466 @@
+[
+  {
+    "id": 1,
+    "name": "SPORTS NUTRITION",
+    "slug": "sports-nutrition",
+    "subcategories": [
+      {
+        "name": "Proteins",
+        "slug": "proteins",
+        "items": [
+          "Whey Proteins",
+          "Beginners Whey Protein",
+          "Whey Protein Isolate",
+          "Raw Whey Proteins",
+          "Plant Proteins",
+          "Protein for Women",
+          "Protein Blends",
+          "Casein Proteins",
+          "Soy Proteins"
+        ]
+      },
+      {
+        "name": "Gainers",
+        "slug": "gainers",
+        "items": [
+          "Weight Gainers",
+          "Mass Gainers",
+          "Herbal Weight Gainers"
+        ]
+      },
+      {
+        "name": "Protein Foods",
+        "slug": "protein-foods",
+        "items": [
+          "Peanut Butter",
+          "Muesli",
+          "Protein Shakes",
+          "Oats",
+          "Cereals",
+          "Protein Bars"
+        ]
+      },
+      {
+        "name": "Pre/Post Workout",
+        "slug": "pre-post-workout",
+        "items": [
+          "Pre-Workout",
+          "Creatine",
+          "Beta Alanine",
+          "BCAAs",
+          "Carb Blends",
+          "Electrolytes",
+          "EAA",
+          "Nitric Oxide",
+          "Other Supports",
+          "Citrulline Malate"
+        ]
+      },
+      {
+        "name": "Workout Essentials",
+        "slug": "workout-essentials",
+        "items": [
+          "Fat Burners",
+          "L-Carnitine",
+          "Multivitamins for Bodybuilding",
+          "Testosterone Booster",
+          "ZMA"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "VITAMINS & SUPPLEMENTS",
+    "slug": "vitamins-supplements",
+    "subcategories": [
+      {
+        "name": "Omega Fatty Acids",
+        "slug": "omega-fatty-acids",
+        "items": [
+          "Omega 3",
+          "Fish Oil",
+          "Flaxseed Oil",
+          "Cod Liver Oil",
+          "Krill Oil"
+        ]
+      },
+      {
+        "name": "Multivitamins",
+        "slug": "multivitamins",
+        "items": [
+          "Multivitamins - Men",
+          "Multivitamins - Women",
+          "Multivitamins - Children"
+        ]
+      },
+      {
+        "name": "Skin Supplements",
+        "slug": "skin-supplements",
+        "items": [
+          "Collagen",
+          "Glutathione",
+          "Cleansers",
+          "Moisturizer",
+          "Face Wash",
+          "Serum",
+          "Under Eye Care"
+        ]
+      },
+      {
+        "name": "Hair Supplements",
+        "slug": "hair-supplements",
+        "items": [
+          "Hair Regrowth Solution Kits",
+          "Multivitamins - General",
+          "DHT Blocker",
+          "Biotin",
+          "Speciality Shampoo",
+          "Hair Conditioner",
+          "Hair Mask",
+          "Glutathione"
+        ]
+      },
+      {
+        "name": "Speciality Supplements",
+        "slug": "speciality-supplements",
+        "items": [
+          "Probiotics",
+          "Collagen",
+          "DHT Blocker",
+          "Fat Loss Supplements",
+          "Performance",
+          "Glucosamine Supplements",
+          "L-Arginine",
+          "Forskolin",
+          "Other Supplements",
+          "Personal Wellness",
+          "CLA"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "AYURVEDA & HERBS",
+    "slug": "ayurveda-herbs",
+    "subcategories": [
+      {
+        "name": "Herbs for Weight Loss",
+        "slug": "herbs-weight-loss",
+        "items": [
+          "Green Coffee Bean Extracts",
+          "Garcinia Cambogia",
+          "Green Tea Extract",
+          "Guggul"
+        ]
+      },
+      {
+        "name": "Vital Herbs",
+        "slug": "vital-herbs",
+        "items": [
+          "Ginseng",
+          "Ginkgo Biloba",
+          "Herbal Weight Gainer",
+          "Lutein",
+          "Other Herbal Supplements",
+          "Women Health Care"
+        ]
+      },
+      {
+        "name": "Antioxidants",
+        "slug": "antioxidants",
+        "items": [
+          "Milk Thistle",
+          "Spirulina",
+          "Tulsi",
+          "Turmeric",
+          "Amla"
+        ]
+      },
+      {
+        "name": "Herbs for Immunity",
+        "slug": "herbs-immunity",
+        "items": [
+          "Giloy",
+          "Ayush Kwath",
+          "Amla",
+          "Turmeric",
+          "Ashwagandha",
+          "Neem",
+          "Ginger"
+        ]
+      },
+      {
+        "name": "Herbs for Personal Care",
+        "slug": "herbs-personal-care",
+        "items": [
+          "Ashwagandha",
+          "Shilajit",
+          "Musli",
+          "Maca",
+          "Horny Goat Weed"
+        ]
+      },
+      {
+        "name": "Herbal Extracts",
+        "slug": "herbal-extracts",
+        "items": [
+          "Shatavari Extract",
+          "Bilberry Extract",
+          "Yashtimadhu Extract",
+          "Other Herbs Extract"
+        ]
+      },
+      {
+        "name": "Herbs for Digestive Care",
+        "slug": "herbs-digestive-care",
+        "items": [
+          "Wheat Grass",
+          "Garlic",
+          "Triphala",
+          "Boswellia",
+          "Cinnamon",
+          "Licorice",
+          "Ginger"
+        ]
+      },
+      {
+        "name": "Herbs for Hair Care",
+        "slug": "herbs-hair-care",
+        "items": [
+          "Saw Palmetto",
+          "Aloe Vera",
+          "Brahmi / Shankhpushpi",
+          "Moringa",
+          "Fenugreek",
+          "Neem",
+          "Bhringraj"
+        ]
+      },
+      {
+        "name": "Herbal Oils",
+        "slug": "herbal-oils",
+        "items": [
+          "Coconut Oil",
+          "Evening Primrose Oil",
+          "Other Herbal Oils"
+        ]
+      },
+      {
+        "name": "Herbs for Diabetic Care",
+        "slug": "herbs-diabetic-care",
+        "items": [
+          "Diabetic Care",
+          "Stevia",
+          "Gymnema",
+          "Arjuna"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "HEALTH FOOD & DRINKS",
+    "slug": "health-food-drinks",
+    "subcategories": [
+      {
+        "name": "Weight Loss Foods",
+        "slug": "weight-loss-foods",
+        "items": [
+          "Oats",
+          "Meal Replacement",
+          "Protein Shakes",
+          "Energy Drinks / Powders",
+          "Cooking Oils & Sprays",
+          "Chia Seeds",
+          "Quinoa",
+          "Dry Fruits",
+          "Honey"
+        ]
+      },
+      {
+        "name": "Vinegar and Health Juices",
+        "slug": "vinegar-health-juices",
+        "items": [
+          "Apple Cider Vinegar",
+          "Aloe Vera Juice",
+          "Amla Juice",
+          "Wheat Grass Juice",
+          "Noni Juice",
+          "Karela Jamun Juice",
+          "Other Juices",
+          "Triphala Juice"
+        ]
+      },
+      {
+        "name": "Protein Foods & Bars",
+        "slug": "protein-foods-bars",
+        "items": [
+          "Peanut Butter",
+          "Muesli",
+          "Protein Shakes",
+          "Oats",
+          "Cereals"
+        ]
+      },
+      {
+        "name": "Protein Bars",
+        "slug": "protein-bars",
+        "items": [
+          "Protein Cookies",
+          "Nut Butters",
+          "Snack Energy Bars"
+        ]
+      },
+      {
+        "name": "Protein for Wellness",
+        "slug": "protein-wellness",
+        "items": [
+          "Plant Proteins",
+          "Protein for Women",
+          "Meal Replacement",
+          "Soy Protein",
+          "Protein Blends"
+        ]
+      },
+      {
+        "name": "Family Nutrition",
+        "slug": "family-nutrition",
+        "items": [
+          "Nutrition for Children",
+          "Nutrition for Adults"
+        ]
+      },
+      {
+        "name": "Healthy Beverages",
+        "slug": "healthy-beverages",
+        "items": [
+          "Green Tea",
+          "Herbal Tea",
+          "Matcha"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "FITNESS",
+    "slug": "fitness",
+    "subcategories": [
+      {
+        "name": "Gym Accessories",
+        "slug": "gym-accessories",
+        "items": [
+          "Hand Grips",
+          "Multi Gym Accessories",
+          "Ab Trainers",
+          "Ankle & Wrist Weights"
+        ]
+      },
+      {
+        "name": "Fitness Trackers",
+        "slug": "fitness-trackers",
+        "items": [
+          "Smart Watches",
+          "Earbuds"
+        ]
+      },
+      {
+        "name": "Gym Essentials",
+        "slug": "gym-essentials",
+        "items": [
+          "Resistance Bands",
+          "Gym Gloves",
+          "Jump Ropes",
+          "Gym Belts",
+          "Gym Bags",
+          "Yoga Mats",
+          "Gym Shakers"
+        ]
+      },
+      {
+        "name": "Fitness Clothing",
+        "slug": "fitness-clothing",
+        "items": [
+          "MB Activewear",
+          "T-shirts",
+          "Shorts",
+          "Joggers"
+        ]
+      },
+      {
+        "name": "Gym Supports",
+        "slug": "gym-supports",
+        "items": [
+          "Wrist Support",
+          "Knee Support",
+          "Abdominal Support",
+          "Waist Belts"
+        ]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "WELLNESS",
+    "slug": "wellness",
+    "subcategories": [
+      {
+        "name": "Skin Care",
+        "slug": "skin-care",
+        "items": [
+          "Cleansers",
+          "Skin Therapy",
+          "Moisturizer",
+          "Toner",
+          "Men's Grooming",
+          "Face Serum",
+          "Face Mask",
+          "Body Lotion"
+        ]
+      },
+      {
+        "name": "Hair Care",
+        "slug": "hair-care",
+        "items": [
+          "Hair Serum",
+          "Hair Mask",
+          "Hair Oils",
+          "Speciality Shampoo",
+          "Hair Conditioner"
+        ]
+      },
+      {
+        "name": "Personal Care",
+        "slug": "personal-care",
+        "items": [
+          "Mask",
+          "Pain-Relief",
+          "Fragrances"
+        ]
+      },
+      {
+        "name": "Herbs for Skin Care",
+        "slug": "herbs-skin-care",
+        "items": [
+          "Turmeric",
+          "Neem",
+          "Amla",
+          "Aloe Vera"
+        ]
+      },
+      {
+        "name": "Herbs for Hair Growth",
+        "slug": "herbs-hair-growth",
+        "items": [
+          "Biotin",
+          "Niacin",
+          "Saw Palmetto",
+          "Fenugreek",
+          "Brahmi"
+        ]
+      }
+    ]
+  }
+]

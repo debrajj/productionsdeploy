@@ -1,0 +1,41 @@
+{
+  "desktop": [
+    {
+      "image": "https://www.myprosportnutrition.com/cdn/shop/files/turn-power_69017c4e-2342-45a5-8e99-fcd3786532bf.png?v=1696857510&width=3000",
+      "badge": "🔥 20% OFF FIRST ORDER",
+      "heading": "Nourish Your Body & Soul",
+      "description": "Premium supplements to fuel your fitness journey and enhance your well-being with science-backed nutrition.",
+      "primaryButtonText": "Explore Now"
+    },
+    {
+      "image": "https://cdn.muscleandstrength.com/sites/all/themes/mnsnew/images/hero/front.jpg",
+      "badge": "⚡️ NEW ARRIVALS",
+      "heading": "Ignite Your Workout Power",
+      "description": "Performance-enhancing supplements designed to push your limits and achieve peak potential in every session.",
+      "primaryButtonText": "Explore Now"
+    },
+    {
+      "image": "https://1upnutrition.com/cdn/shop/articles/5_Clear_Protein_Recipes_To_Refresh_Your_Supplement_Routine_3548274e-bc67-4109-96b6-b104ceaacba9_600x400_crop_center@2x.progressive.jpg?v=1743611171",
+      "badge": "🌟 WELLNESS COLLECTION",
+      "heading": "Complete Wellness Journey",
+      "description": "Transform your lifestyle with our comprehensive wellness collection from recovery to daily nutrition.",
+      "primaryButtonText": "Explore Now"
+    }
+  ],
+  "mobile": [
+    {
+      "image": "https://cdn.muscleandstrength.com/sites/all/themes/mnsnew/images/hero/workouts-800.jpg",
+      "badge": "💪 DAILY VITALITY",
+      "heading": "Energy That Lasts All Day",
+      "description": "Stay sharp and energized with clean daily vitamins and wellness essentials made for everyday hustle.",
+      "primaryButtonText": "Explore Now"
+    },
+    {
+      "image": "https://cdn.muscleandstrength.com/sites/all/themes/mnsnew/images/hero/front-800.jpg",
+      "badge": "🌿 ORGANIC CARE",
+      "heading": "Clean, Organic Nutrition",
+      "description": "Fuel your goals with plant-based proteins and organic blends, crafted to support natural wellness.",
+      "primaryButtonText": "Explore Now"
+    }
+  ]
+}

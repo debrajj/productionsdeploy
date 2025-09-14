@@ -1,0 +1,4 @@
+/* Suppress hydration warnings for browser extensions */
+body {
+  /* This helps with browser extension hydration issues */
+}

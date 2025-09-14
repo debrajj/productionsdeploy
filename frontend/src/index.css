@@ -1,0 +1,209 @@
+@import './assets/fonts/fonts.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  :root {
+    /* Brand Colors */
+    --background: 210 17% 98%;
+    --foreground: 0 0% 7%; /* #121212 */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%; /* #121212 */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%; /* #121212 */
+
+    /* Primary Brand Color - Orange */
+    --primary: 34.7 93.8% 62.2%; /* #F9A245 */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 34.7 93.8% 57.2%; /* slightly darker #F9A245 */
+
+    /* Success/Accent Green */
+    --secondary: 146.7 48% 49.4%; /* #40B75D */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 17% 96%;
+    --muted-foreground: 215 13% 50%;
+
+    --accent: 146.7 48% 49.4%; /* #40B75D */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 34.7 93.8% 62.2%; /* #F9A245 */
+
+    --radius: 0.5rem;
+
+    /* Custom Brand Variables */
+    --gradient-primary: linear-gradient(135deg, hsl(34.7 93.8% 62.2%), hsl(34.7 93.8% 57.2%)); /* #F9A245 */
+    --gradient-secondary: linear-gradient(135deg, hsl(146.7 48% 49.4%), hsl(150 65% 45%)); /* #40B75D to slightly darker green */
+    --gradient-hero: linear-gradient(135deg, hsl(34.7 93.8% 62.2% / 0.1), hsl(146.7 48% 49.4% / 0.1));
+
+    /* Shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(34.7 93.8% 62.2% / 0.2); /* #F9A245 */
+    --shadow-card: 0 4px 16px -4px hsl(0 0% 7% / 0.1); /* #121212 */
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 0 0% 7%; /* #121212 */
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 0 0% 7%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  #root {
+    width: 100vw;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .full-width-section {
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    min-width: 100vw !important;
+  }
+
+  .force-full-width {
+    width: 100vw !important;
+    min-width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+  }
+
+  .force-full-width > * {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+/* Global Fonts */
+body, p {
+  font-family: "HelveticaNeue", "HelveticaNeueMedium", "Helvetica Neue Medium", sans-serif !important;
+}
+
+/* Heading Fonts */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "League Spartan", sans-serif;
+}
+
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+
+@keyframes float {
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0.6;
+    }
+    50% { 
+      transform: translateY(-15px) rotate(180deg);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes lightning-dash {
+    0% { 
+      stroke-dashoffset: 0;
+      opacity: 0.3;
+    }
+    50% { 
+      stroke-dashoffset: 20;
+      opacity: 0.8;
+    }
+    100% { 
+      stroke-dashoffset: 40;
+      opacity: 0.3;
+    }
+  }
+  
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+  
+  .animate-lightning {
+    animation: lightning-dash 3s linear infinite;
+  }

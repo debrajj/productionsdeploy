@@ -1,0 +1,80 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Premium Whey Protein",
+      "price": 49.99,
+      "originalPrice": 59.99,
+      "rating": 5,
+      "reviews": 324,
+      "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop",
+      "onSale": true
+    },
+    {
+      "id": 2,
+      "name": "Pre-Workout Formula",
+      "price": 34.99,
+      "rating": 4,
+      "reviews": 189,
+      "image": "https://images.unsplash.com/photo-1544991875-5dc1b05f607d?w=400&h=300&fit=crop",
+      "onSale": false
+    },
+    {
+      "id": 3,
+      "name": "BCAA Recovery",
+      "price": 24.99,
+      "originalPrice": 29.99,
+      "rating": 5,
+      "reviews": 267,
+      "image": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop",
+      "onSale": true
+    },
+    {
+      "id": 4,
+      "name": "Creatine Monohydrate",
+      "price": 19.99,
+      "rating": 4,
+      "reviews": 156,
+      "image": "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=300&fit=crop",
+      "onSale": false
+    },
+    {
+      "id": 5,
+      "name": "Mass Gainer Pro",
+      "price": 64.99,
+      "originalPrice": 74.99,
+      "rating": 5,
+      "reviews": 98,
+      "image": "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
+      "onSale": true
+    },
+    {
+      "id": 6,
+      "name": "Multivitamin Complex",
+      "price": 29.99,
+      "rating": 4,
+      "reviews": 203,
+      "image": "https://images.unsplash.com/photo-1550572017-edd951b55104?w=400&h=300&fit=crop",
+      "onSale": false
+    },
+    {
+      "id": 7,
+      "name": "Fat Burner Elite",
+      "price": 39.99,
+      "originalPrice": 49.99,
+      "rating": 4,
+      "reviews": 145,
+      "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop",
+      "onSale": true
+    },
+    {
+      "id": 8,
+      "name": "Omega-3 Capsules",
+      "price": 22.99,
+      "rating": 5,
+      "reviews": 312,
+      "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop",
+      "onSale": false
+    }
+  ]
+}

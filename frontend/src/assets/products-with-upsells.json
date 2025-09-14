@@ -1,0 +1,180 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Premium Whey Protein",
+      "price": 4199,
+      "originalPrice": 4999,
+      "rating": 5,
+      "reviews": 324,
+      "image": "https://cdn.nutrabay.com/wp-content/uploads/2023/09/NB-AVT-1001-23-01.jpg",
+      "brand": "O2 Nutrition",
+      "category": "SPORTS NUTRITION",
+      "onSale": true,
+      "upsells": [
+        {
+          "upsellProduct": {
+            "id": "3",
+            "name": "BCAA Recovery",
+            "price": 1899,
+            "image": "https://cdn.nutrabay.com/wp-content/uploads/2023/12/NB-ATH-1002-01-01.jpg",
+            "brand": "O2 Nutrition"
+          },
+          "discountPercentage": 15,
+          "description": "Perfect recovery combo - Protein + BCAA for maximum muscle growth",
+          "active": true
+        },
+        {
+          "upsellProduct": {
+            "id": "4",
+            "name": "Creatine Monohydrate",
+            "price": 1299,
+            "image": "https://cdn2.nutrabay.com/uploads/variant/images/featured_image-NB-NUT-1098-01-1753305036-1500x1500.webp",
+            "brand": "O2 Nutrition"
+          },
+          "discountPercentage": 20,
+          "description": "Power stack - Protein + Creatine for strength and muscle building",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Pre-Workout Formula",
+      "price": 2499,
+      "rating": 4,
+      "reviews": 189,
+      "image": "https://cdn2.nutrabay.com/uploads/variant/images/featured_image-NB-BGM-1066-01-1200x1200.webp",
+      "brand": "O2 Nutrition",
+      "category": "SPORTS NUTRITION",
+      "onSale": false,
+      "upsells": [
+        {
+          "upsellProduct": {
+            "id": "3",
+            "name": "BCAA Recovery",
+            "price": 1899,
+            "image": "https://cdn.nutrabay.com/wp-content/uploads/2023/12/NB-ATH-1002-01-01.jpg",
+            "brand": "O2 Nutrition"
+          },
+          "discountPercentage": 18,
+          "description": "Performance stack - Pre-workout + BCAA for sustained energy",
+          "active": true
+        },
+        {
+          "upsellProduct": {
+            "id": "4",
+            "name": "Creatine Monohydrate",
+            "price": 1299,
+            "image": "https://cdn2.nutrabay.com/uploads/variant/images/featured_image-NB-NUT-1098-01-1753305036-1500x1500.webp",
+            "brand": "O2 Nutrition"
+          },
+          "discountPercentage": 25,
+          "description": "Strength combo - Pre-workout + Creatine for explosive power",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "BCAA Recovery",
+      "price": 1899,
+      "originalPrice": 2299,
+      "rating": 5,
+      "reviews": 267,
+      "image": "https://cdn.nutrabay.com/wp-content/uploads/2023/12/NB-ATH-1002-01-01.jpg",
+      "brand": "O2 Nutrition",
+      "category": "SPORTS NUTRITION",
+      "onSale": true,
+      "upsells": [
+        {
+          "upsellProduct": {
+            "id": "1",
+            "name": "Premium Whey Protein",
+            "price": 4199,
+            "image": "https://cdn.nutrabay.com/wp-content/uploads/2023/09/NB-AVT-1001-23-01.jpg",
+            "brand": "O2 Nutrition"
+          },
+          "discountPercentage": 10,
+          "description": "Complete recovery - BCAA + Protein for optimal muscle repair",
+          "active": true
+        },
+        {
+          "upsellProduct": {
+            "id": "2",
+            "name": "Pre-Workout Formula",
+            "price": 2499,
+            "image": "https://cdn2.nutrabay.com/uploads/variant/images/featured_image-NB-BGM-1066-01-1200x1200.webp",
+            "brand": "O2 Nutrition"
+          },
+          "discountPercentage": 12,
+          "description": "Energy & Recovery combo - Pre-workout + BCAA for all-day performance",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Creatine Monohydrate",
+      "price": 1299,
+      "rating": 4,
+      "reviews": 156,
+      "image": "https://cdn2.nutrabay.com/uploads/variant/images/featured_image-NB-NUT-1098-01-1753305036-1500x1500.webp",
+      "brand": "O2 Nutrition",
+      "category": "SPORTS NUTRITION",
+      "onSale": false,
+      "upsells": [
+        {
+          "upsellProduct": {
+            "id": "1",
+            "name": "Premium Whey Protein",
+            "price": 4199,
+            "image": "https://cdn.nutrabay.com/wp-content/uploads/2023/09/NB-AVT-1001-23-01.jpg",
+            "brand": "O2 Nutrition"
+          },
+          "discountPercentage": 15,
+          "description": "Muscle building stack - Creatine + Protein for maximum gains",
+          "active": true
+        },
+        {
+          "upsellProduct": {
+            "id": "2",
+            "name": "Pre-Workout Formula",
+            "price": 2499,
+            "image": "https://cdn2.nutrabay.com/uploads/variant/images/featured_image-NB-BGM-1066-01-1200x1200.webp",
+            "brand": "O2 Nutrition"
+          },
+          "discountPercentage": 20,
+          "description": "Power combo - Creatine + Pre-workout for intense workouts",
+          "active": true
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Mass Gainer Pro",
+      "price": 5499,
+      "originalPrice": 6299,
+      "rating": 5,
+      "reviews": 98,
+      "image": "https://cdn2.nutrabay.com/uploads/variant/images/variant-6286-featured_image-Isopure_Low_Carb_100_Whey_Protein_Isolate_Powder__1_Kg_22_Lb_Dutch_Chocolate.jpg",
+      "brand": "O2 Nutrition",
+      "category": "SPORTS NUTRITION",
+      "onSale": true,
+      "upsells": [
+        {
+          "upsellProduct": {
+            "id": "4",
+            "name": "Creatine Monohydrate",
+            "price": 1299,
+            "image": "https://cdn2.nutrabay.com/uploads/variant/images/featured_image-NB-NUT-1098-01-1753305036-1500x1500.webp",
+            "brand": "O2 Nutrition"
+          },
+          "discountPercentage": 22,
+          "description": "Mass building combo - Gainer + Creatine for serious size",
+          "active": true
+        }
+      ]
+    }
+  ]
+}

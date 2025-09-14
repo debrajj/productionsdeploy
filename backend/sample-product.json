@@ -1,0 +1,67 @@
+{
+  "name": "Premium Whey Protein Isolate",
+  "image": "https://o2nutrition.com/cdn/shop/files/2_bf926972-514f-44af-99ab-8482d7b296a4.jpg?v=1753303766&width=578",
+  "images": [
+    {
+      "url": "https://o2nutrition.com/cdn/shop/files/2_bf926972-514f-44af-99ab-8482d7b296a4.jpg?v=1753303766&width=578"
+    },
+    {
+      "url": "https://o2nutrition.com/cdn/shop/files/3_bf926972-514f-44af-99ab-8482d7b296a4.jpg?v=1753303766&width=578"
+    },
+    {
+      "url": "https://o2nutrition.com/cdn/shop/files/4_bf926972-514f-44af-99ab-8482d7b296a4.jpg?v=1753303766&width=578"
+    }
+  ],
+  "rating": 4.8,
+  "reviews": 234,
+  "price": 4199,
+  "originalPrice": 4999,
+  "onSale": true,
+  "category": "SPORTS NUTRITION",
+  "categorySlug": "sports-nutrition",
+  "subcategory": "Proteins",
+  "subcategorySlug": "proteins",
+  "brand": "O2 Nutrition",
+  "featured": true,
+  "trending": true,
+  "description": "High-quality whey protein isolate with 25g of pure protein per serving. Perfect for muscle building and recovery after intense workouts. Fast-absorbing formula supports lean muscle growth and post-workout recovery.",
+  "certifications": [
+    { "name": "GMP Certified" },
+    { "name": "Third-Party Tested" },
+    { "name": "Gluten-Free" },
+    { "name": "Lactose-Free" },
+    { "name": "No Artificial Colors" }
+  ],
+  "nutritionInfo": {
+    "servingSize": "30g (1 scoop)",
+    "servingsPerContainer": 33,
+    "protein": "25g",
+    "carbohydrates": "2g",
+    "fat": "0.5g",
+    "calories": 110,
+    "sodium": "50mg",
+    "calcium": "120mg"
+  },
+  "ingredients": [
+    { "name": "Whey Protein Isolate" },
+    { "name": "Natural Flavors" },
+    { "name": "Lecithin" },
+    { "name": "Stevia Extract" }
+  ],
+  "subscriptionOptions": {
+    "available": true,
+    "discounts": {
+      "monthly": 10,
+      "quarterly": 15,
+      "biannual": 20
+    }
+  },
+  "variants": [
+    { "flavor": "Strawberry", "weight": "60 capsules", "price": 4199 },
+    { "flavor": "Strawberry", "weight": "120 capsules", "price": 6999 },
+    { "flavor": "Chocolate", "weight": "60 capsules", "price": 4299 },
+    { "flavor": "Chocolate", "weight": "120 capsules", "price": 7099 },
+    { "flavor": "Vanilla", "weight": "60 capsules", "price": 4399 },
+    { "flavor": "Vanilla", "weight": "120 capsules", "price": 7199 }
+  ]
+}

@@ -1,0 +1,449 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "SPORTS NUTRITION",
+      "slug": "sports-nutrition",
+      "subcategories": [
+        {
+          "name": "Proteins",
+          "slug": "proteins",
+          "items": [
+            "Whey Proteins",
+            "Beginners Whey Protein",
+            "Whey Protein Isolate",
+            "Raw Whey Proteins",
+            "Plant Proteins"
+          ]
+        },
+        {
+          "name": "Gainers",
+          "slug": "gainers",
+          "items": ["Weight Gainers", "Mass Gainers", "Herbal Weight Gainers"]
+        },
+        {
+          "name": "Pre/Post Workout",
+          "slug": "pre-post-workout",
+          "items": [
+            "Pre-Workout",
+            "Creatine",
+            "Beta Alanine",
+            "BCAAs",
+            "Carb Blends"
+          ]
+        },
+        {
+          "name": "Fat Burners",
+          "slug": "fat-burners",
+          "items": [
+            "Thermogenic Fat Burners",
+            "L-Carnitine",
+            "CLA",
+            "Green Tea Extract"
+          ]
+        },
+        {
+          "name": "Amino Acids",
+          "slug": "amino-acids",
+          "items": [
+            "Essential Amino Acids",
+            "Glutamine",
+            "Arginine",
+            "Taurine"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "VITAMINS & SUPPLEMENTS",
+      "slug": "vitamins-supplements",
+      "subcategories": [
+        {
+          "name": "Omega Fatty Acids",
+          "slug": "omega-fatty-acids",
+          "items": ["Omega 3", "Fish Oil", "Flaxseed Oil", "Cod Liver Oil"]
+        },
+        {
+          "name": "Multivitamins",
+          "slug": "multivitamins",
+          "items": [
+            "Multivitamins - Men",
+            "Multivitamins - Women",
+            "Multivitamins - Children"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "AYURVEDA & HERBS",
+      "slug": "ayurveda-herbs",
+      "subcategories": [
+        {
+          "name": "Herbs for Weight Loss",
+          "slug": "herbs-weight-loss",
+          "items": [
+            "Green Coffee Bean Extracts",
+            "Garcinia Cambogia",
+            "Green Tea Extract"
+          ]
+        },
+        {
+          "name": "Vital Herbs",
+          "slug": "vital-herbs",
+          "items": ["Ginseng", "Ginkgo Biloba", "Ashwagandha", "Turmeric"]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "HEALTH FOOD & DRINKS",
+      "slug": "health-food-drinks",
+      "subcategories": [
+        {
+          "name": "Weight Loss Foods",
+          "slug": "weight-loss-foods",
+          "items": ["Oats", "Meal Replacement", "Protein Shakes"]
+        },
+        {
+          "name": "Health Juices",
+          "slug": "health-juices",
+          "items": ["Aloe Vera Juice", "Amla Juice", "Karela Juice"]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "FITNESS",
+      "slug": "fitness",
+      "subcategories": [
+        {
+          "name": "Gym Accessories",
+          "slug": "gym-accessories",
+          "items": ["Hand Grips", "Multi Gym Accessories", "Shaker Bottles"]
+        },
+        {
+          "name": "Fitness Trackers",
+          "slug": "fitness-trackers",
+          "items": ["Smart Watches", "Heart Rate Monitors", "Step Counters"]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "WELLNESS",
+      "slug": "wellness",
+      "subcategories": [
+        {
+          "name": "Skin Care",
+          "slug": "skin-care",
+          "items": ["Cleansers", "Moisturizer", "Face Wash", "Serum"]
+        },
+        {
+          "name": "Hair Care",
+          "slug": "hair-care",
+          "items": ["Hair Regrowth Solution", "Biotin", "Hair Conditioner"]
+        }
+      ]
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Avvatar Absolute 100% Whey Protein - 1 Kg (2.2 Lb), Malai Kulfi",
+      "image": "https://cdn.nutrabay.com/wp-content/uploads/2023/09/NB-AVT-1001-23-01.jpg",
+      "images": [
+        "https://cdn.nutrabay.com/wp-content/uploads/2023/09/NB-AVT-1001-23-01.jpg",
+        "https://cdn.nutrabay.com/wp-content/uploads/2023/09/NB-AVT-1001-23-02.jpg",
+        "https://cdn.nutrabay.com/wp-content/uploads/2023/09/NB-AVT-1001-23-03.jpg"
+      ],
+      "rating": 4.8,
+      "reviews": 234,
+      "price": 4199,
+      "originalPrice": 4999,
+      "onSale": true,
+      "category": "SPORTS NUTRITION",
+      "categorySlug": "sports-nutrition",
+      "subcategory": "Proteins",
+      "subcategorySlug": "proteins",
+      "brand": "Avvatar",
+      "featured": true,
+      "trending": true,
+      "bestSeller": true,
+      "lovedByExperts": true,
+      "description": "Premium 100% whey protein concentrate with delicious Malai Kulfi flavor. Perfect for muscle building and recovery after intense workouts.",
+      "certifications": [
+        "GMP Certified",
+        "Third-Party Tested",
+        "No Artificial Colors"
+      ],
+      "nutritionInfo": {
+        "servingSize": "30g (1 scoop)",
+        "servingsPerContainer": 33,
+        "protein": "24g",
+        "carbohydrates": "3g",
+        "fat": "1.5g",
+        "calories": 120
+      },
+      "ingredients": [
+        "Whey Protein Concentrate",
+        "Natural Flavors",
+        "Lecithin",
+        "Stevia Extract"
+      ],
+      "variants": [
+        { "flavor": "Malai Kulfi", "weight": "1kg", "price": 4199 },
+        { "flavor": "Chocolate", "weight": "1kg", "price": 4199 },
+        { "flavor": "Vanilla", "weight": "1kg", "price": 4199 }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "HYPR Pre-Workout - 480 gm",
+      "image": "https://cdn.nutrabay.com/wp-content/uploads/2023/12/NB-ATH-1002-01-01.jpg",
+      "rating": 4.6,
+      "reviews": 189,
+      "price": 2899,
+      "originalPrice": 3299,
+      "onSale": true,
+      "category": "SPORTS NUTRITION",
+      "categorySlug": "sports-nutrition",
+      "subcategory": "Pre/Post Workout",
+      "subcategorySlug": "pre-post-workout",
+      "brand": "HYPR",
+      "featured": true,
+      "trending": false,
+      "bestSeller": true,
+      "lovedByExperts": false,
+      "description": "Explosive pre-workout formula with caffeine, beta-alanine, and citrulline for maximum energy and pump during your training sessions.",
+      "nutritionInfo": {
+        "servingSize": "10g (1 scoop)",
+        "servingsPerContainer": 48,
+        "caffeine": "200mg",
+        "betaAlanine": "3.2g",
+        "citrulline": "6g",
+        "calories": 5
+      },
+      "ingredients": [
+        "Citrulline Malate",
+        "Beta-Alanine",
+        "Caffeine Anhydrous",
+        "Taurine"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Naturaltein Whey Protein Isolate - 1 Kg (2.2 Lb), Chocolate",
+      "image": "https://cdn.nutrabay.com/wp-content/uploads/2023/11/NB-NTR-1000-01-01.jpg",
+      "rating": 4.7,
+      "reviews": 156,
+      "price": 5499,
+      "category": "SPORTS NUTRITION",
+      "categorySlug": "sports-nutrition",
+      "subcategory": "Proteins",
+      "subcategorySlug": "proteins",
+      "brand": "Naturaltein",
+      "featured": false,
+      "trending": true,
+      "bestSeller": false,
+      "lovedByExperts": true,
+      "description": "Pure whey protein isolate with 27g of protein per serving. Low in carbs and fat, perfect for lean muscle growth.",
+      "nutritionInfo": {
+        "servingSize": "30g (1 scoop)",
+        "servingsPerContainer": 33,
+        "protein": "27g",
+        "carbohydrates": "1g",
+        "fat": "0.5g",
+        "calories": 110
+      },
+      "ingredients": [
+        "Whey Protein Isolate",
+        "Cocoa Powder",
+        "Natural Flavors",
+        "Stevia"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "AS-IT-IS ATOM PWR Raw Whey Protein with Enzyme - 1 Kg (2.2 Lb), Double Rich Chocolate",
+      "image": "https://cdn2.nutrabay.com/uploads/variant/images/variant-30100-featured_image-ASITIS_ATOM_PWR_Raw_Whey_Protein_with_Enzyme__1_Kg_22_Lb_Double_Rich_Chocolate.jpg",
+      "rating": 4.5,
+      "reviews": 298,
+      "price": 3899,
+      "category": "SPORTS NUTRITION",
+      "categorySlug": "sports-nutrition",
+      "subcategory": "Proteins",
+      "subcategorySlug": "proteins",
+      "brand": "AS-IT-IS",
+      "featured": true,
+      "bestSeller": true,
+      "lovedByExperts": true,
+      "trending": false,
+      "description": "Raw whey protein with added digestive enzymes for better absorption. Minimally processed for maximum nutrition.",
+      "nutritionInfo": {
+        "servingSize": "30g (1 scoop)",
+        "servingsPerContainer": 33,
+        "protein": "25g",
+        "carbohydrates": "2g",
+        "fat": "1g",
+        "calories": 115
+      },
+      "ingredients": [
+        "Whey Protein Concentrate",
+        "Digestive Enzyme Blend",
+        "Cocoa Powder",
+        "Natural Flavors"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Bigmuscles Nutrition Karnage Pre Workout",
+      "image": "https://cdn2.nutrabay.com/uploads/variant/images/featured_image-NB-BGM-1066-01-1200x1200.webp",
+      "rating": 4.4,
+      "reviews": 167,
+      "price": 3499,
+      "originalPrice": 3999,
+      "onSale": true,
+      "category": "SPORTS NUTRITION",
+      "categorySlug": "sports-nutrition",
+      "subcategory": "Pre/Post Workout",
+      "subcategorySlug": "pre-post-workout",
+      "brand": "Bigmuscles Nutrition",
+      "featured": false,
+      "trending": true,
+      "bestSeller": false,
+      "lovedByExperts": false,
+      "description": "High-intensity pre-workout formula designed to deliver explosive energy, focus and pumps for your toughest workouts.",
+      "nutritionInfo": {
+        "servingSize": "10g (1 scoop)",
+        "servingsPerContainer": 48,
+        "caffeine": "250mg",
+        "betaAlanine": "3.5g",
+        "citrulline": "6g",
+        "calories": 10
+      },
+      "ingredients": [
+        "Citrulline Malate",
+        "Beta-Alanine",
+        "Caffeine Anhydrous",
+        "L-Tyrosine"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Nutrabay High Protein Oats",
+      "image": "https://cdn2.nutrabay.com/uploads/variant/images/featured_image-NB-NUT-1098-01-1753305036-1500x1500.webp",
+      "rating": 4.3,
+      "reviews": 134,
+      "price": 1599,
+      "category": "HEALTH FOOD & DRINKS",
+      "categorySlug": "health-food-drinks",
+      "subcategory": "Weight Loss Foods",
+      "subcategorySlug": "weight-loss-foods",
+      "brand": "Nutrabay",
+      "featured": false,
+      "trending": true,
+      "bestSeller": false,
+      "lovedByExperts": true,
+      "description": "High-protein oats enriched with additional protein for a nutritious breakfast or snack. Helps in weight management and provides sustained energy.",
+      "nutritionInfo": {
+        "servingSize": "50g",
+        "servingsPerContainer": 20,
+        "protein": "15g",
+        "carbohydrates": "30g",
+        "fiber": "8g",
+        "calories": 180
+      },
+      "ingredients": ["Oats", "Whey Protein", "Chia Seeds", "Flaxseeds"]
+    },
+    {
+      "id": 7,
+      "name": "Isopure Low Carb 100% Whey Protein Isolate Powder - 1 Kg (2.2 Lb), Dutch Chocolate",
+      "image": "https://cdn2.nutrabay.com/uploads/variant/images/variant-6286-featured_image-Isopure_Low_Carb_100_Whey_Protein_Isolate_Powder__1_Kg_22_Lb_Dutch_Chocolate.jpg",
+      "rating": 4.8,
+      "reviews": 267,
+      "price": 5999,
+      "category": "SPORTS NUTRITION",
+      "categorySlug": "sports-nutrition",
+      "subcategory": "Proteins",
+      "subcategorySlug": "proteins",
+      "brand": "Isopure",
+      "featured": true,
+      "trending": true,
+      "bestSeller": true,
+      "lovedByExperts": true,
+      "description": "Zero-carb whey protein isolate with 25g of pure protein per serving. Perfect for keto and low-carb diets.",
+      "nutritionInfo": {
+        "servingSize": "30g (1 scoop)",
+        "servingsPerContainer": 33,
+        "protein": "25g",
+        "carbohydrates": "0g",
+        "fat": "0g",
+        "calories": 100
+      },
+      "ingredients": [
+        "Whey Protein Isolate",
+        "Cocoa Powder",
+        "Natural Flavors",
+        "Lecithin"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Avvatar Whey Protein Concentrate - 1 Kg (2.2 Lb), Chocolate",
+      "image": "https://cdn.nutrabay.com/wp-content/uploads/2022/06/NB-AVT-1000-07-01.jpg",
+      "rating": 4.6,
+      "reviews": 189,
+      "price": 3299,
+      "originalPrice": 3899,
+      "onSale": true,
+      "category": "SPORTS NUTRITION",
+      "categorySlug": "sports-nutrition",
+      "subcategory": "Proteins",
+      "subcategorySlug": "proteins",
+      "brand": "Avvatar",
+      "featured": true,
+      "trending": true,
+      "bestSeller": true,
+      "lovedByExperts": true,
+      "description": "Premium whey protein concentrate with 24g protein per serving. Perfect for muscle building and recovery.",
+      "nutritionInfo": {
+        "servingSize": "30g",
+        "servingsPerContainer": 33,
+        "protein": "24g",
+        "carbohydrates": "3g",
+        "fat": "1.5g",
+        "calories": 120
+      },
+      "ingredients": ["Whey Protein Concentrate", "Natural Flavors", "Lecithin", "Stevia"]
+    },
+    {
+      "id": 9,
+      "name": "Nutrabay Gold 100% Whey Protein - 1 Kg (2.2 Lb), Chocolate",
+      "image": "https://cdn2.nutrabay.com/uploads/variant/images/featured_image-NB-WYM-1001-01-1500x1500.webp",
+      "rating": 4.5,
+      "reviews": 178,
+      "price": 3799,
+      "category": "SPORTS NUTRITION",
+      "categorySlug": "sports-nutrition",
+      "subcategory": "Proteins",
+      "subcategorySlug": "proteins",
+      "brand": "Nutrabay",
+      "featured": false,
+      "trending": true,
+      "bestSeller": false,
+      "lovedByExperts": true,
+      "description": "Premium quality whey protein with 24g protein per serving. Great taste and easy mixability.",
+      "nutritionInfo": {
+        "servingSize": "30g",
+        "servingsPerContainer": 33,
+        "protein": "24g",
+        "carbohydrates": "3g",
+        "fat": "1.5g",
+        "calories": 120
+      },
+      "ingredients": ["Whey Protein Concentrate", "Cocoa Powder", "Natural Flavors", "Stevia"]
+    }
+  ]
+}
