@@ -6,7 +6,7 @@ export const Orders: CollectionConfig = {
   lockDocuments: false,
   admin: {
     useAsTitle: 'orderNumber',
-    defaultColumns: ['orderNumber', 'customerEmail', 'shippingAddress', 'status', 'total', 'createdAt'],
+    defaultColumns: ['orderNumber', 'customerEmail', 'status', 'total', 'createdAt'],
     group: 'E-commerce',
     description: '📋 Customer Orders - Clean printable format',
     components: {
@@ -36,6 +36,12 @@ export const Orders: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ data }) => {
+        // Convert shippingAddress object to string if it's an object
+        if (data.shippingAddress && typeof data.shippingAddress === 'object') {
+          const addr = data.shippingAddress
+          data.shippingAddress = `${addr.firstName || ''} ${addr.lastName || ''}\n${addr.address || ''}${addr.apartment ? ', ' + addr.apartment : ''}\n${addr.city || ''}, ${addr.state || ''} - ${addr.zipCode || ''}\nPhone: ${addr.phone || ''}`
+        }
+        
         // Generate items summary
         if (data.items && Array.isArray(data.items)) {
           data.itemsSummary = data.items.map((item, index) => 

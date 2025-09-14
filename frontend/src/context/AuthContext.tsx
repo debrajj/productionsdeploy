@@ -398,7 +398,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const apiOrder = await orderService.createOrder({
         orderNumber: orderData.orderNumber,
         customerEmail: orderData.customerEmail || user?.email || 'guest@example.com',
-        customerName: `${orderData.shippingAddress.firstName} ${orderData.shippingAddress.lastName}`,
+        customerName: `${orderData.shippingAddress?.firstName || 'User'} ${orderData.shippingAddress?.lastName || 'Name'}`,
         items: orderData.items.map((item: any) => ({
           product: item.id,
           quantity: item.quantity,

@@ -40,16 +40,16 @@ const Checkout: React.FC = () => {
 
   // Auto-fill email for logged-in users
   React.useEffect(() => {
-    console.log('User object:', user);
-    console.log('User email:', user?.email);
+    // console.log('User object:', user);
+    // console.log('User email:', user?.email);
     if (user?.email && !checkout.formData.email) {
       checkout.updateFormData('email', user.email);
     }
   }, [user?.email, checkout.formData.email]);
 
   // Debug: Check if user is logged in
-  console.log('Is user logged in?', !!user);
-  console.log('User data:', user);
+  // console.log('Is user logged in?', !!user);
+  // console.log('User data:', user);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -241,12 +241,12 @@ const Checkout: React.FC = () => {
               <CardHeader className="bg-green-50">
                 <CardTitle className="flex items-center text-gray-900">
                   <Mail className="h-5 w-5 mr-2 text-green-600" />
-                  Logged in as {user.firstName} {user.lastName}
+                  Logged in as {user?.firstName || 'User'} {user?.lastName || ''}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
                 <p className="text-sm text-gray-600">
-                  Order updates will be sent to: <span className="font-medium">{user.email}</span>
+                  Order updates will be sent to: <span className="font-medium">{user?.email || 'your email'}</span>
                 </p>
               </CardContent>
             </Card>
