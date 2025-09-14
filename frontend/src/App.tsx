@@ -11,6 +11,8 @@ import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import ContactFloat from "@/components/ContactFloat";
+import AppLoader from "@/components/AppLoader";
+import { useAppLoader } from "@/hooks/useAppLoader";
 import Index from "./pages/Index";
 import Category from "./pages/Category";
 import CategoryPage from "./pages/CategoryPage";
@@ -45,7 +47,8 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [isChatbotOpen, setIsChatbotOpen] = useState(false)
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const { isLoading } = useAppLoader();
 
   return (
   <ErrorBoundary>
@@ -56,6 +59,7 @@ const App = () => {
             <TooltipProvider>
               <Toaster />
               <Sonner />
+              <AppLoader isLoading={isLoading} />
               <BrowserRouter>
                 <ScrollToTop />
                 <div className="min-h-screen flex flex-col bg-background font-body">

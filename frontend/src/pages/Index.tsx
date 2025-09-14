@@ -715,20 +715,7 @@ const Index: React.FC = () => {
                   <p className="text-sm sm:text-lg text-white/90 font-medium">
                     Exclusive deals | Pro tips | Early access
                   </p>
-                  <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 mt-4 text-sm text-white/80">
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-400">✓</span>
-                      <span>No spam</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-400">✓</span>
-                      <span>Unsubscribe anytime</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-400">✓</span>
-                      <span>Exclusive deals</span>
-                    </div>
-                  </div>
+
                 </div>
                 <div className="max-w-lg sm:max-w-2xl mx-auto">
                   <SubscribeCTA 
@@ -1014,7 +1001,7 @@ const Index: React.FC = () => {
               {/* CTA pill bottom-right - improved mobile positioning */}
               <div className="absolute right-1.5 xs:right-1.5 sm:right-3 bottom-1.5 xs:bottom-1.5 sm:bottom-3 z-20">
                 <button
-                  onClick={() => navigate("/products")}
+                  onClick={() => navigate("/goal/build-muscle")}
                   className="inline-flex items-center gap-1 xs:gap-1 sm:gap-2 rounded-lg bg-[#F9A245] hover:bg-transparent hover:text-gray-800 text-white font-medium px-3 py-2 text-xs sm:text-sm transition-all duration-300 border border-[#F9A245]"
                 >
                   VIEW PRODUCTS

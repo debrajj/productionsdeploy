@@ -1,9 +1,28 @@
 import React from 'react';
 
-const LoadingSpinner: React.FC = () => {
+interface LoadingSpinnerProps {
+  size?: 'sm' | 'md' | 'lg';
+  message?: string;
+  showMessage?: boolean;
+}
+
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
+  size = 'md', 
+  message = 'Loading...', 
+  showMessage = false 
+}) => {
+  const sizeClasses = {
+    sm: 'h-4 w-4',
+    md: 'h-8 w-8',
+    lg: 'h-12 w-12'
+  };
+
   return (
-    <div className="flex items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#F9A245]"></div>
+    <div className="flex flex-col items-center justify-center gap-3">
+      <div className={`animate-spin rounded-full ${sizeClasses[size]} border-2 border-gray-200 border-t-[#F9A245]`}></div>
+      {showMessage && (
+        <p className="text-sm text-gray-600 animate-pulse">{message}</p>
+      )}
     </div>
   );
 };

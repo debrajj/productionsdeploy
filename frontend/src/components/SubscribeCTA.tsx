@@ -109,18 +109,15 @@ const SubscribeCTA: React.FC<SubscribeCTAProps> = ({
               <div className="mt-2 sm:mt-3 flex items-center justify-center space-x-2 sm:space-x-4 text-white/80 text-xs">
                 <div className="flex items-center space-x-1">
                   <span className="text-green-400">✓</span>
-                  <span className="hidden sm:inline">No spam</span>
-                  <span className="sm:hidden">Safe</span>
+                  <span>No spam</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <span className="text-green-400">✓</span>
-                  <span className="hidden sm:inline">Unsubscribe anytime</span>
-                  <span className="sm:hidden">Free</span>
+                  <span>Unsubscribe anytime</span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <span className="text-green-400">✓</span>
-                  <span className="hidden sm:inline">Exclusive deals</span>
-                  <span className="sm:hidden">Deals</span>
+                  <span>Exclusive deals</span>
                 </div>
               </div>
             </div>

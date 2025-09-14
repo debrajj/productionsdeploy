@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Clock,
   Star,
@@ -9,59 +9,55 @@ import {
   Percent,
   ShoppingCart,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "@/context/CartContext";
+import { productApi, Product } from "@/services/api";
 import SubscribeCTA from "@/components/SubscribeCTA";
+import PageLoader from "@/components/PageLoader";
 
 const Offers: React.FC = () => {
-  const hotDeals = [
-    {
-      id: 1,
-      name: "Whey Protein Isolate",
-      brand: "MuscleBlaze",
-      originalPrice: "₹3,999",
-      salePrice: "₹2,799",
-      discount: "30%",
-      rating: 4.8,
-      image:
-        "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=400&fit=crop",
-      timeLeft: "6h 23m",
-    },
-    {
-      id: 2,
-      name: "BCAA Energy Drink",
-      brand: "Optimum Nutrition",
-      originalPrice: "₹2,499",
-      salePrice: "₹1,749",
-      discount: "30%",
-      rating: 4.6,
-      image:
-        "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=400&fit=crop",
-      timeLeft: "4h 15m",
-    },
-    {
-      id: 3,
-      name: "Creatine Monohydrate",
-      brand: "MuscleTech",
-      originalPrice: "₹1,999",
-      salePrice: "₹1,399",
-      discount: "30%",
-      rating: 4.7,
-      image:
-        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop",
-      timeLeft: "8h 45m",
-    },
-    {
-      id: 4,
-      name: "Multivitamin Complex",
-      brand: "Dymatize",
-      originalPrice: "₹1,499",
-      salePrice: "₹1,049",
-      discount: "30%",
-      rating: 4.5,
-      image:
-        "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=400&fit=crop",
-      timeLeft: "2h 30m",
-    },
-  ];
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const [hotDeals, setHotDeals] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadOfferProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await productApi.getProducts({ onSale: true, limit: 8 });
+        if (response.success) {
+          setHotDeals(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to load offer products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadOfferProducts();
+  }, []);
+
+  const handleProductClick = (product: Product) => {
+    navigate(`/product/${product.slug || product.id}`);
+  };
+
+  const handleAddToCart = (product: Product) => {
+    addToCart(
+      {
+        id: String(product.id),
+        name: product.name,
+        price: product.price,
+        image: product.image,
+      },
+      1
+    );
+  };
+
+  const calculateDiscount = (original: number, current: number) => {
+    return Math.round(((original - current) / original) * 100);
+  };
 
   const offerCategories = [
     {
@@ -89,6 +85,10 @@ const Offers: React.FC = () => {
       count: "10+",
     },
   ];
+
+  if (loading) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -148,70 +148,88 @@ const Offers: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {hotDeals.map((deal) => (
-              <div
-                key={deal.id}
-                className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
-              >
-                <div className="relative aspect-square bg-gray-50 overflow-hidden">
-                  <img
-                    src={deal.image}
-                    alt={deal.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-2 left-2">
-                    <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                      -{deal.discount}
-                    </span>
-                  </div>
-                  <div className="absolute top-2 right-2 bg-black/70 text-white text-xs font-semibold px-2 py-1 rounded flex items-center">
-                    <Clock className="w-3 h-3 mr-1" />
-                    {deal.timeLeft}
-                  </div>
-                </div>
-
-                <div className="p-3 sm:p-4">
-                  <p className="text-xs text-[#F9A245] font-semibold mb-1">
-                    {deal.brand}
-                  </p>
-                  <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2">
-                    {deal.name}
-                  </h3>
-
-                  <div className="flex items-center mb-3">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-3 h-3 ${i < Math.floor(deal.rating) ? "text-[#F9A245] fill-current" : "text-gray-300"}`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-xs text-gray-500 ml-2">
-                      ({deal.rating})
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center space-x-2">
-                      <span className="font-bold text-base text-gray-900">
-                        {deal.salePrice}
-                      </span>
-                      <span className="text-sm text-gray-500 line-through">
-                        {deal.originalPrice}
-                      </span>
+          {hotDeals.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {hotDeals.map((deal) => (
+                <div
+                  key={deal.id}
+                  className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden cursor-pointer"
+                  onClick={() => handleProductClick(deal)}
+                >
+                  <div className="relative aspect-square bg-gray-50 overflow-hidden">
+                    <img
+                      src={deal.image}
+                      alt={deal.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    {deal.originalPrice && (
+                      <div className="absolute top-2 left-2">
+                        <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                          -{calculateDiscount(deal.originalPrice, deal.price)}%
+                        </span>
+                      </div>
+                    )}
+                    <div className="absolute top-2 right-2 bg-black/70 text-white text-xs font-semibold px-2 py-1 rounded flex items-center">
+                      <Clock className="w-3 h-3 mr-1" />
+                      Limited
                     </div>
                   </div>
 
-                  <button className="w-full bg-[#F9A245] hover:bg-[#FEB47B] text-white font-semibold text-sm py-2 rounded-lg transition-all duration-300 hover:scale-[1.02] flex items-center justify-center">
-                    <ShoppingCart className="w-4 h-4 mr-1" />
-                    Add to Cart
-                  </button>
+                  <div className="p-3 sm:p-4">
+                    <p className="text-xs text-[#F9A245] font-semibold mb-1">
+                      {deal.brand}
+                    </p>
+                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2">
+                      {deal.name}
+                    </h3>
+
+                    <div className="flex items-center mb-3">
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3 h-3 ${i < Math.floor(deal.rating || 0) ? "text-[#F9A245] fill-current" : "text-gray-300"}`}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-xs text-gray-500 ml-2">
+                        ({deal.rating || 0})
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-bold text-base text-gray-900">
+                          ₹{deal.price.toLocaleString()}
+                        </span>
+                        {deal.originalPrice && (
+                          <span className="text-sm text-gray-500 line-through">
+                            ₹{deal.originalPrice.toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAddToCart(deal);
+                      }}
+                      className="w-full bg-[#F9A245] hover:bg-[#FEB47B] text-white font-semibold text-sm py-2 rounded-lg transition-all duration-300 hover:scale-[1.02] flex items-center justify-center"
+                    >
+                      <ShoppingCart className="w-4 h-4 mr-1" />
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <p className="text-white font-medium text-lg mb-4">No offers available at the moment</p>
+              <p className="text-white/80">Check back soon for amazing deals!</p>
+            </div>
+          )}
         </div>
       </section>
 
