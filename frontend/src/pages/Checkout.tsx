@@ -30,6 +30,11 @@ import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { useCheckout } from "@/hooks/useCheckout";
+import { useOrderAutoFill } from "@/hooks/useOrderAutoFill";
+import { AddressSaver } from "@/components/AddressSaver";
+import { SavedAddresses } from "@/components/SavedAddresses";
+import { QuickReorder } from "@/components/QuickReorder";
+import { GuestCheckoutSaver } from "@/components/GuestCheckoutSaver";
 
 const Checkout: React.FC = () => {
   const { state, clearCart } = useCart();
@@ -37,6 +42,12 @@ const Checkout: React.FC = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const checkout = useCheckout();
+  const [selectedAddressId, setSelectedAddressId] = React.useState<string>();
+  
+  // Auto-fill order form with user registration data
+  useOrderAutoFill({ updateFormData: checkout.updateFormData });
+  
+  const hasGuestInfo = !user && !!localStorage.getItem('nutri_guest_info');
   
   // Get applied coupon from localStorage (set by cart page)
   const [appliedCoupon, setAppliedCoupon] = React.useState<any>(null);
@@ -61,14 +72,22 @@ const Checkout: React.FC = () => {
     return () => window.removeEventListener('storage', loadCoupon);
   }, []);
 
-  // Auto-fill email for logged-in users
-  React.useEffect(() => {
-    // console.log('User object:', user);
-    // console.log('User email:', user?.email);
-    if (user?.email && !checkout.formData.email) {
-      checkout.updateFormData('email', user.email);
+  // Handle address selection
+  const handleSelectAddress = (address: any) => {
+    if (address === null) {
+      setSelectedAddressId(undefined);
+      return;
     }
-  }, [user?.email, checkout.formData.email]);
+    setSelectedAddressId(address.id);
+    checkout.updateFormData('firstName', address.firstName);
+    checkout.updateFormData('lastName', address.lastName);
+    checkout.updateFormData('address', address.address);
+    checkout.updateFormData('apartment', address.apartment || '');
+    checkout.updateFormData('city', address.city);
+    checkout.updateFormData('state', address.state);
+    checkout.updateFormData('zipCode', address.zipCode);
+    checkout.updateFormData('phone', address.phone);
+  };
 
   // Debug: Check if user is logged in
   // console.log('Is user logged in?', !!user);
@@ -272,22 +291,45 @@ const Checkout: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8">
         {/* Checkout Form */}
         <div className="lg:col-span-2">
+          {/* Quick Reorder Section */}
+          <div className="mb-6">
+            <QuickReorder />
+          </div>
+          
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-8">
             {/* User Information */}
-            <Card className="border-gray-200">
-              <CardHeader className="bg-green-50">
-                <CardTitle className="flex items-center text-gray-900">
-                  <Mail className="h-5 w-5 mr-2 text-green-600" />
-                  Logged in as {user?.firstName || 'User'} {user?.lastName || ''}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-6">
-                <p className="text-sm text-gray-600">
-                  Order updates will be sent to: <span className="font-medium">{user?.email || 'your email'}</span>
-                </p>
-              </CardContent>
-            </Card>
+            {user ? (
+              <Card className="border-gray-200">
+                <CardHeader className="bg-green-50">
+                  <CardTitle className="flex items-center text-gray-900">
+                    <Mail className="h-5 w-5 mr-2 text-green-600" />
+                    Logged in as {user?.firstName || 'User'} {user?.lastName || ''}
+                  </CardTitle>
+                </CardHeader>
 
+              </Card>
+            ) : hasGuestInfo && (
+              <Card className="border-blue-200">
+                <CardHeader className="bg-blue-50">
+                  <CardTitle className="flex items-center text-blue-900">
+                    <Mail className="h-5 w-5 mr-2 text-blue-600" />
+                    Welcome Back!
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <p className="text-sm text-blue-700">
+                    ✓ We've pre-filled your information from your last order to make checkout faster.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Saved Addresses */}
+            <SavedAddresses 
+              onSelectAddress={handleSelectAddress}
+              selectedAddressId={selectedAddressId}
+            />
+            
             {/* Shipping Address */}
             <Card className="border-gray-200">
               <CardHeader className="bg-gray-50">
@@ -296,7 +338,12 @@ const Checkout: React.FC = () => {
                   Shipping Address
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 pt-6">
+              <CardContent className={`space-y-4 pt-6 ${selectedAddressId ? 'opacity-50' : ''}`}>
+                {selectedAddressId && (
+                  <div className="bg-orange-50 border border-[#F9A245] rounded-lg p-3 mb-4">
+                    <p className="text-orange-800 text-sm font-medium">✓ Using saved address</p>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <Label
@@ -311,6 +358,7 @@ const Checkout: React.FC = () => {
                       value={checkout.formData.firstName}
                       onChange={(e) => checkout.updateFormData("firstName", e.target.value)}
                       className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.firstName ? 'border-red-500' : ''}`}
+                      disabled={!!selectedAddressId}
                       required
                     />
                   </div>
@@ -327,6 +375,7 @@ const Checkout: React.FC = () => {
                       value={checkout.formData.lastName}
                       onChange={(e) => checkout.updateFormData("lastName", e.target.value)}
                       className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.lastName ? 'border-red-500' : ''}`}
+                      disabled={!!selectedAddressId}
                       required
                     />
                   </div>
@@ -345,6 +394,7 @@ const Checkout: React.FC = () => {
                     value={checkout.formData.address}
                     onChange={(e) => checkout.updateFormData("address", e.target.value)}
                     className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.address ? 'border-red-500' : ''}`}
+                    disabled={!!selectedAddressId}
                     required
                   />
                 </div>
@@ -362,6 +412,7 @@ const Checkout: React.FC = () => {
                     value={checkout.formData.apartment}
                     onChange={(e) => checkout.updateFormData("apartment", e.target.value)}
                     className="mt-1 focus:ring-[#F9A245] focus:border-[#F9A245]"
+                    disabled={!!selectedAddressId}
                   />
                 </div>
 
@@ -376,6 +427,7 @@ const Checkout: React.FC = () => {
                       value={checkout.formData.city}
                       onChange={(e) => checkout.updateFormData("city", e.target.value)}
                       className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.city ? 'border-red-500' : ''}`}
+                      disabled={!!selectedAddressId}
                       required
                     />
                   </div>
@@ -447,6 +499,7 @@ const Checkout: React.FC = () => {
                         value={checkout.formData.zipCode}
                         onChange={(e) => checkout.updateFormData("zipCode", e.target.value)}
                         className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.zipCode ? 'border-red-500' : ''}`}
+                        disabled={!!selectedAddressId}
                         required
                       />
                       {checkout.formData.zipCode && (
@@ -478,9 +531,25 @@ const Checkout: React.FC = () => {
                     value={checkout.formData.phone}
                     onChange={(e) => checkout.updateFormData("phone", e.target.value)}
                     className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.phone ? 'border-red-500' : ''}`}
+                    disabled={!!selectedAddressId}
                     required
                   />
                 </div>
+                
+                {/* Address Saver for logged-in users */}
+                {user && (
+                  <AddressSaver 
+                    formData={checkout.formData}
+                    onAddressSaved={() => {
+                      // Optionally refresh addresses or show success message
+                    }}
+                  />
+                )}
+                
+                {/* Guest Checkout Saver for non-logged-in users */}
+                {!user && (
+                  <GuestCheckoutSaver formData={checkout.formData} />
+                )}
               </CardContent>
             </Card>
 
@@ -654,6 +723,9 @@ const Checkout: React.FC = () => {
                         className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.nameOnCard ? 'border-red-500' : ''}`}
                         required
                       />
+                      {checkout.errors.nameOnCard && (
+                        <p className="text-xs text-red-500 mt-1">{checkout.errors.nameOnCard}</p>
+                      )}
                     </div>
 
                     <div>
@@ -671,6 +743,9 @@ const Checkout: React.FC = () => {
                         className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.cardNumber ? 'border-red-500' : ''}`}
                         required
                       />
+                      {checkout.errors.cardNumber && (
+                        <p className="text-xs text-red-500 mt-1">{checkout.errors.cardNumber}</p>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -689,6 +764,9 @@ const Checkout: React.FC = () => {
                           className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.expiryDate ? 'border-red-500' : ''}`}
                           required
                         />
+                        {checkout.errors.expiryDate && (
+                          <p className="text-xs text-red-500 mt-1">{checkout.errors.expiryDate}</p>
+                        )}
                       </div>
                       <div>
                         <Label
@@ -705,6 +783,9 @@ const Checkout: React.FC = () => {
                           className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.cvv ? 'border-red-500' : ''}`}
                           required
                         />
+                        {checkout.errors.cvv && (
+                          <p className="text-xs text-red-500 mt-1">{checkout.errors.cvv}</p>
+                        )}
                       </div>
                     </div>
                     <div className="flex items-center space-x-2 text-sm text-gray-600">
@@ -729,9 +810,14 @@ const Checkout: React.FC = () => {
                       <Input
                         id="upiId"
                         placeholder="yourname@paytm"
-                        className="mt-1 focus:ring-[#F9A245] focus:border-[#F9A245]"
+                        value={checkout.formData.upiId || ''}
+                        onChange={(e) => checkout.updateFormData("upiId", e.target.value)}
+                        className={`mt-1 focus:ring-[#F9A245] focus:border-[#F9A245] ${checkout.errors.upiId ? 'border-red-500' : ''}`}
                         required
                       />
+                      {checkout.errors.upiId && (
+                        <p className="text-xs text-red-500 mt-1">{checkout.errors.upiId}</p>
+                      )}
                     </div>
                     <div className="text-sm text-gray-600">
                       <p>

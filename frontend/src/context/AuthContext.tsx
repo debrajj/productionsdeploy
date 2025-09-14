@@ -249,6 +249,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           phone: response.data.user.phone,
           createdAt: response.data.user.createdAt || new Date().toISOString(),
         };
+        
+        // Save for order auto-fill
+        localStorage.setItem('nutri_user_data', JSON.stringify(userData));
 
         setUser(userData);
 
@@ -258,6 +261,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         // Fetch real orders
         await fetchUserOrders(userData.id);
+        
+        // Don't auto-create empty addresses
 
         // Fetch orders once on login
         // No auto-polling
@@ -289,6 +294,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           phone: response.data.phone,
           createdAt: response.data.createdAt || new Date().toISOString(),
         };
+        
+        // Save for order auto-fill
+        localStorage.setItem('nutri_user_data', JSON.stringify(newUser));
 
         setUser(newUser);
         return true;
@@ -314,6 +322,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem("nutri_orders");
     localStorage.removeItem("nutri_addresses");
     localStorage.removeItem("nutri_wishlist");
+    localStorage.removeItem("nutri_user_data");
     localStorage.removeItem("wishlist");
   };
 
@@ -423,6 +432,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         deliveryMethod: orderData.deliveryMethod || 'standard',
         paymentMethod: orderData.paymentMethod || 'COD'
       });
+      
+      // Auto-save shipping address if not already saved
+      if (orderData.shippingAddress && user) {
+        const addressExists = addresses.some(addr => 
+          addr.address === orderData.shippingAddress.address &&
+          addr.zipCode === orderData.shippingAddress.zipCode
+        );
+        
+        if (!addressExists) {
+          const newAddress: Address = {
+            id: Date.now().toString(),
+            type: 'home',
+            firstName: orderData.shippingAddress.firstName,
+            lastName: orderData.shippingAddress.lastName,
+            address: orderData.shippingAddress.address,
+            apartment: orderData.shippingAddress.apartment,
+            city: orderData.shippingAddress.city,
+            state: orderData.shippingAddress.state,
+            zipCode: orderData.shippingAddress.zipCode,
+            phone: orderData.shippingAddress.phone,
+            isDefault: addresses.length === 0
+          };
+          setAddresses(prev => [...prev, newAddress]);
+        }
+      }
       
       // Create local order for immediate display
       const newOrder: Order = {

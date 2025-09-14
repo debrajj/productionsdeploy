@@ -38,6 +38,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/hooks/useWishlist";
 import { useToast } from "@/hooks/use-toast";
+import { AddressManager } from "@/components/AddressManager";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -748,69 +749,8 @@ const Dashboard: React.FC = () => {
                     Manage your shipping addresses
                   </p>
                 </div>
-
-                {addresses.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {addresses.map((address) => (
-                      <Card
-                        key={address.id}
-                        className={
-                          address.isDefault ? "ring-2 ring-[#F9A245]" : ""
-                        }
-                      >
-                        <CardContent className="p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-8 h-8 bg-[#F9A245] rounded-full flex items-center justify-center">
-                                <Home className="h-4 w-4 text-white" />
-                              </div>
-                              <div>
-                                <h3 className="font-medium text-gray-900 capitalize">
-                                  {address.type}
-                                </h3>
-                                {address.isDefault && (
-                                  <span className="text-xs text-[#F9A245] font-medium">
-                                    Default
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            <Button size="sm" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </div>
-                          <div className="space-y-1 text-sm text-gray-600">
-                            <p className="font-medium text-gray-900">
-                              {address.firstName} {address.lastName}
-                            </p>
-                            <p>{address.address}</p>
-                            {address.apartment && <p>{address.apartment}</p>}
-                            <p>
-                              {address.city}, {address.state} {address.zipCode}
-                            </p>
-                            <p>{address.phone}</p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                ) : (
-                  <Card>
-                    <CardContent className="py-12 text-center">
-                      <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        No addresses saved
-                      </h3>
-                      <p className="text-gray-600 mb-6">
-                        Add an address for faster checkout
-                      </p>
-                      <Button className="bg-[#F9A245] hover:bg-[#e8913d] text-white">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Address
-                      </Button>
-                    </CardContent>
-                  </Card>
-                )}
+                
+                <AddressManager />
               </div>
             )}
 

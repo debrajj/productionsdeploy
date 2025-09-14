@@ -37,6 +37,34 @@ const Signup: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
+  // Auto-fill from saved guest info or signup prefill
+  React.useEffect(() => {
+    const loadSavedInfo = () => {
+      const signupPrefill = localStorage.getItem('nutri_signup_prefill');
+      const guestInfo = localStorage.getItem('nutri_guest_info');
+      
+      let savedData = null;
+      if (signupPrefill) {
+        savedData = JSON.parse(signupPrefill);
+        localStorage.removeItem('nutri_signup_prefill'); // Remove after use
+      } else if (guestInfo) {
+        savedData = JSON.parse(guestInfo);
+      }
+      
+      if (savedData) {
+        setFormData(prev => ({
+          ...prev,
+          firstName: savedData.firstName || prev.firstName,
+          lastName: savedData.lastName || prev.lastName,
+          email: savedData.email || prev.email,
+          phone: savedData.phone || prev.phone
+        }));
+      }
+    };
+    
+    loadSavedInfo();
+  }, []);
+
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {

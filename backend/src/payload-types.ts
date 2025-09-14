@@ -137,9 +137,17 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  name?: string | null;
+  phone?: string | null;
+  defaultAddress?: {
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+  };
+  googleId?: string | null;
   role: 'admin' | 'user';
   updatedAt: string;
   createdAt: string;
@@ -932,7 +940,17 @@ export interface PayloadMigration {
 export interface UsersSelect<T extends boolean = true> {
   firstName?: T;
   lastName?: T;
+  name?: T;
   phone?: T;
+  defaultAddress?:
+    | T
+    | {
+        address?: T;
+        city?: T;
+        state?: T;
+        zipCode?: T;
+      };
+  googleId?: T;
   role?: T;
   updatedAt?: T;
   createdAt?: T;

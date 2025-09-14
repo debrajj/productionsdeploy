@@ -7,38 +7,84 @@ export const Users: CollectionConfig = {
   },
   auth: {
     verify: false,
-    tokenExpiration: 7200, // 2 hours default
+    tokenExpiration: 7200,
     maxLoginAttempts: 5,
-    lockTime: 600000, // 10 minutes
+    lockTime: 600000,
     cookies: {
       secure: false,
       sameSite: 'lax',
     },
   },
-  access: {
-    admin: ({ req: { user } }) => {
-      if (user?.email === 'rk129479@gmail.com') {
-        return false
+  hooks: {
+    afterLogin: [
+      ({ req, user }) => {
+        // Auto-save user profile data for order auto-fill
+        if (user) {
+          const userData = {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phone: user.phone,
+            defaultAddress: user.defaultAddress
+          };
+          // This will be used by frontend for auto-fill
+          req.user = { ...req.user, ...userData };
+        }
       }
-      return user?.email === 'gainmode46@gmail.com'
-    },
+    ]
   },
+
+
+
 
   fields: [
     {
       name: 'firstName',
       type: 'text',
-      required: true,
+      required: false,
     },
     {
       name: 'lastName',
       type: 'text',
-      required: true,
+      required: false,
+    },
+    {
+      name: 'name',
+      type: 'text',
+      required: false,
     },
     {
       name: 'phone',
       type: 'text',
-      required: true,
+      required: false,
+    },
+    {
+      name: 'defaultAddress',
+      type: 'group',
+      fields: [
+        {
+          name: 'address',
+          type: 'text',
+        },
+        {
+          name: 'city',
+          type: 'text',
+        },
+        {
+          name: 'state',
+          type: 'text',
+        },
+        {
+          name: 'zipCode',
+          type: 'text',
+        },
+      ],
+    },
+    {
+      name: 'googleId',
+      type: 'text',
+      required: false,
     },
     {
       name: 'role',
