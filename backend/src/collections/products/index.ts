@@ -117,10 +117,22 @@ export const Products: CollectionConfig = {
           })
         }
         
+        // Convert nutrition image
+        if (doc.nutritionImage) {
+          if (typeof doc.nutritionImage === 'object' && doc.nutritionImage.filename) {
+            doc.nutritionImage = `/media/${doc.nutritionImage.filename}`
+          } else if (typeof doc.nutritionImage === 'string') {
+            // If it's just an ID, we need to populate it
+            // This will be handled by the populate in the API call
+          }
+        }
+        
         // Clean up any remaining object references
         delete doc.mainImage
         delete doc.imageUrl
         delete doc.additionalImages
+        
+        console.log('Product after processing:', { id: doc.id, nutritionImage: doc.nutritionImage })
         
         return doc
       },
@@ -503,6 +515,14 @@ export const Products: CollectionConfig = {
       ],
     },
     {
+      name: 'nutritionImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Nutrition facts image',
+      },
+    },
+    {
       name: 'ingredients',
       type: 'array',
       admin: {
@@ -518,78 +538,34 @@ export const Products: CollectionConfig = {
         },
       ],
     },
+
     {
-      name: 'subscriptionOptions',
-      type: 'group',
+      name: 'simpleFlavors',
+      type: 'text',
       admin: {
-        description: 'Subscription options',
+        description: 'Comma-separated flavors for simple variants (e.g., Chocolate, Vanilla, Strawberry)',
       },
-      fields: [
-        {
-          name: 'available',
-          type: 'checkbox',
-          defaultValue: false,
-          admin: {
-            description: 'Check if subscription is available for this product',
-          },
-        },
-        {
-          name: 'discounts',
-          type: 'group',
-          admin: {
-            description: 'Subscription discount percentages',
-          },
-          fields: [
-            {
-              name: 'monthly',
-              type: 'number',
-              min: 0,
-              max: 100,
-              admin: {
-                description: 'Monthly subscription discount % (e.g., 10)',
-              },
-            },
-            {
-              name: 'quarterly',
-              type: 'number',
-              min: 0,
-              max: 100,
-              admin: {
-                description: 'Quarterly subscription discount % (e.g., 15)',
-              },
-            },
-            {
-              name: 'biannual',
-              type: 'number',
-              min: 0,
-              max: 100,
-              admin: {
-                description: '6-month subscription discount % (e.g., 20)',
-              },
-            },
-          ],
-        },
-      ],
     },
+
     {
       name: 'variants',
       type: 'array',
       admin: {
-        description: 'Product variants (flavors, sizes, etc.)',
+        description: 'Product variants with individual pricing (flavors, sizes, etc.)',
       },
       fields: [
         {
           name: 'flavor',
           type: 'text',
           admin: {
-            description: 'Flavor name (e.g., Chocolate, Vanilla)',
+            description: 'Flavor name (e.g., Chocolate, Vanilla, Strawberry)',
           },
         },
         {
           name: 'weight',
           type: 'text',
           admin: {
-            description: 'Size/weight (e.g., 1kg, 60 capsules)',
+            description: 'Weight (e.g., 250g, 500g, 1kg)',
           },
         },
         {
@@ -602,52 +578,7 @@ export const Products: CollectionConfig = {
         },
       ],
     },
-    {
-      name: 'bundledOffers',
-      type: 'array',
-      fields: [
-        {
-          name: 'id',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'name',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'description',
-          type: 'textarea',
-        },
-        {
-          name: 'productIds',
-          type: 'array',
-          fields: [
-            {
-              name: 'productId',
-              type: 'number',
-            },
-          ],
-        },
-        {
-          name: 'originalPrice',
-          type: 'number',
-          min: 0,
-        },
-        {
-          name: 'bundlePrice',
-          type: 'number',
-          min: 0,
-        },
-        {
-          name: 'savings',
-          type: 'number',
-          min: 0,
-          max: 100,
-        },
-      ],
-    },
+
     {
       name: 'upsells',
       type: 'array',

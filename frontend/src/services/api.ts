@@ -38,6 +38,7 @@ export interface Product {
     sodium?: string;
     calcium?: string;
   };
+  nutritionImage?: string;
   ingredients?: { name: string }[];
   subscriptionOptions?: {
     available?: boolean;
@@ -52,6 +53,7 @@ export interface Product {
     weight?: string;
     price?: number;
   }[];
+  simpleFlavors?: string;
   bundledOffers?: any[];
   upsells?: Array<{
     upsellProduct: Product;
@@ -202,9 +204,14 @@ export const productApi = {
         description: product.description,
         certifications: product.certifications || [],
         nutritionInfo: product.nutritionInfo || {},
+        nutritionImage: product.nutritionImage && product.nutritionImage.startsWith('/') 
+          ? getImageUrl(product.nutritionImage) 
+          : product.nutritionImage,
         ingredients: product.ingredients || [],
         subscriptionOptions: product.subscriptionOptions || {},
         variants: product.variants || [],
+        simpleFlavors: product.simpleFlavors,
+        simpleWeights: product.simpleWeights,
         bundledOffers: product.bundledOffers || [],
         upsells: product.upsells || [],
         createdAt: product.createdAt,
@@ -278,9 +285,14 @@ export const productApi = {
         description: data.description,
         certifications: data.certifications || [],
         nutritionInfo: data.nutritionInfo || {},
+        nutritionImage: data.nutritionImage && data.nutritionImage.startsWith('/') 
+          ? getImageUrl(data.nutritionImage) 
+          : data.nutritionImage,
         ingredients: data.ingredients || [],
         subscriptionOptions: data.subscriptionOptions || {},
         variants: data.variants || [],
+        simpleFlavors: data.simpleFlavors,
+        simpleWeights: data.simpleWeights,
         bundledOffers: data.bundledOffers || [],
         upsells: data.upsells || [],
         createdAt: data.createdAt,
@@ -357,9 +369,14 @@ export const productApi = {
         description: product.description,
         certifications: product.certifications || [],
         nutritionInfo: product.nutritionInfo || {},
+        nutritionImage: product.nutritionImage && product.nutritionImage.startsWith('/') 
+          ? getImageUrl(product.nutritionImage) 
+          : product.nutritionImage,
         ingredients: product.ingredients || [],
         subscriptionOptions: product.subscriptionOptions || {},
         variants: product.variants || [],
+        simpleFlavors: product.simpleFlavors,
+        simpleWeights: product.simpleWeights,
         bundledOffers: product.bundledOffers || [],
         upsells: product.upsells || [],
         createdAt: product.createdAt,

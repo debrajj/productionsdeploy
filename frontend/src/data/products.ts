@@ -14,10 +14,17 @@ export interface Product {
   featured: boolean;
   trending: boolean;
   onSale: boolean;
-  variants?: {
-    weight?: string[];
-    flavor?: string[];
-  };
+  // Option 1: Simple Flavors & Weights (mutually exclusive with variants)
+  simpleFlavors?: string; // comma-separated flavors
+  simpleWeights?: string; // comma-separated weights
+  
+  // Option 2: Variants with individual pricing (mutually exclusive with simple options)
+  variants?: Array<{
+    id: string;
+    flavor: string;
+    weight: string;
+    price: number;
+  }>;
   rating: number;
   reviews: number;
 }
@@ -126,10 +133,8 @@ export const products: Product[] = [
     featured: true,
     trending: true,
     onSale: true,
-    variants: {
-      weight: ['1 lb', '2 lbs', '5 lbs', '10 lbs'],
-      flavor: ['Vanilla', 'Chocolate', 'Strawberry', 'Cookies & Cream']
-    },
+    simpleFlavors: 'Vanilla, Chocolate, Strawberry, Cookies & Cream',
+    simpleWeights: '1 lb, 2 lbs, 5 lbs, 10 lbs',
     rating: 4.8,
     reviews: 2847
   },
@@ -148,9 +153,7 @@ export const products: Product[] = [
     featured: true,
     trending: false,
     onSale: false,
-    variants: {
-      weight: ['300g', '500g', '1kg']
-    },
+    simpleWeights: '300g, 500g, 1kg',
     rating: 4.6,
     reviews: 1523
   },
@@ -170,10 +173,14 @@ export const products: Product[] = [
     featured: false,
     trending: true,
     onSale: true,
-    variants: {
-      weight: ['20 servings', '40 servings'],
-      flavor: ['Blue Razz', 'Fruit Punch', 'Green Apple']
-    },
+    variants: [
+      { id: 'v1', flavor: 'Blue Razz', weight: '20 servings', price: 3299 },
+      { id: 'v2', flavor: 'Blue Razz', weight: '40 servings', price: 5999 },
+      { id: 'v3', flavor: 'Fruit Punch', weight: '20 servings', price: 3299 },
+      { id: 'v4', flavor: 'Fruit Punch', weight: '40 servings', price: 5999 },
+      { id: 'v5', flavor: 'Green Apple', weight: '20 servings', price: 3299 },
+      { id: 'v6', flavor: 'Green Apple', weight: '40 servings', price: 5999 }
+    ],
     rating: 4.7,
     reviews: 892
   },
@@ -192,10 +199,8 @@ export const products: Product[] = [
     featured: true,
     trending: false,
     onSale: false,
-    variants: {
-      weight: ['2 lbs', '4 lbs'],
-      flavor: ['Vanilla', 'Chocolate', 'Unflavored']
-    },
+    simpleFlavors: 'Vanilla, Chocolate, Unflavored',
+    simpleWeights: '2 lbs, 4 lbs',
     rating: 4.4,
     reviews: 675
   },
@@ -215,10 +220,14 @@ export const products: Product[] = [
     featured: false,
     trending: true,
     onSale: true,
-    variants: {
-      weight: ['6 lbs', '12 lbs'],
-      flavor: ['Chocolate', 'Vanilla', 'Strawberry']
-    },
+    variants: [
+      { id: 'v1', flavor: 'Chocolate', weight: '6 lbs', price: 6699 },
+      { id: 'v2', flavor: 'Chocolate', weight: '12 lbs', price: 11999 },
+      { id: 'v3', flavor: 'Vanilla', weight: '6 lbs', price: 6699 },
+      { id: 'v4', flavor: 'Vanilla', weight: '12 lbs', price: 11999 },
+      { id: 'v5', flavor: 'Strawberry', weight: '6 lbs', price: 6699 },
+      { id: 'v6', flavor: 'Strawberry', weight: '12 lbs', price: 11999 }
+    ],
     rating: 4.5,
     reviews: 1234
   },
@@ -237,9 +246,7 @@ export const products: Product[] = [
     featured: false,
     trending: false,
     onSale: false,
-    variants: {
-      weight: ['60 capsules', '120 capsules']
-    },
+    simpleWeights: '60 capsules, 120 capsules',
     rating: 4.3,
     reviews: 456
   }

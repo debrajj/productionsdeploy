@@ -7,8 +7,11 @@ export interface CartItem {
   price: number;
   image: string;
   quantity: number;
-  variant?: string;
-  weight?: string;
+  // Variant details for both simple and complex variants
+  selectedFlavor?: string;
+  selectedWeight?: string;
+  variantId?: string; // For complex variants with individual pricing
+  variantType?: 'simple' | 'complex'; // Track which variant system is used
   isGiftCard?: boolean;
   giftCardData?: any;
   // Add upsell tracking
@@ -73,13 +76,19 @@ const calculateItemCount = (items: CartItem[]): number => {
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case "ADD_ITEM": {
+      // Create unique identifier for cart items including variants
+      const getItemKey = (item: CartItem) => {
+        return `${item.id}-${item.selectedFlavor || ''}-${item.selectedWeight || ''}-${item.variantId || ''}`;
+      };
+      
+      const newItemKey = getItemKey(action.payload as CartItem);
       const existingItem = state.items.find(
-        (item) => item.id === action.payload.id
+        (item) => getItemKey(item) === newItemKey
       );
 
       if (existingItem) {
         const updatedItems = state.items.map((item) =>
-          item.id === action.payload.id
+          getItemKey(item) === newItemKey
             ? {
                 ...item,
                 quantity: item.quantity + (action.payload.quantity || 1),
@@ -105,8 +114,12 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     }
 
     case "REMOVE_ITEM": {
+      const getItemKey = (item: CartItem) => {
+        return `${item.id}-${item.selectedFlavor || ''}-${item.selectedWeight || ''}-${item.variantId || ''}`;
+      };
+      
       const updatedItems = state.items.filter(
-        (item) => item.id !== action.payload
+        (item) => getItemKey(item) !== action.payload
       );
       return {
         items: updatedItems,
@@ -116,9 +129,13 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     }
 
     case "UPDATE_QUANTITY": {
+      const getItemKey = (item: CartItem) => {
+        return `${item.id}-${item.selectedFlavor || ''}-${item.selectedWeight || ''}-${item.variantId || ''}`;
+      };
+      
       if (action.payload.quantity <= 0) {
         const updatedItems = state.items.filter(
-          (item) => item.id !== action.payload.id
+          (item) => getItemKey(item) !== action.payload.id
         );
         return {
           items: updatedItems,
@@ -128,7 +145,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       }
 
       const updatedItems = state.items.map((item) =>
-        item.id === action.payload.id
+        getItemKey(item) === action.payload.id
           ? { ...item, quantity: action.payload.quantity }
           : item
       );
@@ -287,12 +304,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   };
 
-  const removeFromCart = (id: string) => {
-    dispatch({ type: "REMOVE_ITEM", payload: id });
+  const removeFromCart = (itemKey: string) => {
+    dispatch({ type: "REMOVE_ITEM", payload: itemKey });
   };
 
-  const updateQuantity = (id: string, quantity: number) => {
-    dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity } });
+  const updateQuantity = (itemKey: string, quantity: number) => {
+    dispatch({ type: "UPDATE_QUANTITY", payload: { id: itemKey, quantity } });
   };
 
   const clearCart = () => {

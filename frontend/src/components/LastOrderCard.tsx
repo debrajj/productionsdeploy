@@ -97,7 +97,16 @@ const LastOrderCard: React.FC = () => {
               />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                <p className="text-xs text-gray-600">Qty: {item.quantity}</p>
+                <div className="text-xs text-gray-600">
+                  <span>Qty: {item.quantity}</span>
+                  {(item.selectedFlavor || item.selectedWeight) && (
+                    <div className="text-[#F9A245] font-medium mt-1">
+                      {item.selectedFlavor && `${item.selectedFlavor}`}
+                      {item.selectedFlavor && item.selectedWeight && ' • '}
+                      {item.selectedWeight && `${item.selectedWeight}`}
+                    </div>
+                  )}
+                </div>
               </div>
               <p className="text-sm font-medium text-gray-900">₹{item.price}</p>
             </div>

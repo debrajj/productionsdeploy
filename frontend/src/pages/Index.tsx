@@ -692,7 +692,7 @@ const Index: React.FC = () => {
 
         {/* Subscribe CTA Section */}
         <section
-          className="py-6 sm:py-10 bg-gradient-to-b from-[#f8fafc] via-[#fff9f2] to-[#f8fafc] relative overflow-hidden"
+          className="py-12 sm:py-16 bg-gradient-to-b from-[#f8fafc] via-[#fff9f2] to-[#f8fafc] relative overflow-hidden"
           style={{
             width: '100vw',
             marginLeft: 'calc(-50vw + 50%)',
@@ -709,12 +709,26 @@ const Index: React.FC = () => {
             }}>
               <div className="absolute inset-0 bg-black bg-opacity-60"></div>
               
-              <div className="relative z-10 py-4 sm:py-8 px-3 sm:px-6">
-                <div className="text-center mb-3 sm:mb-5">
-                  <h2 className="text-lg sm:text-3xl font-bold mb-1 sm:mb-2 tracking-tight text-white">🚀 Join 10,000+ Athletes!</h2>
-                  <p className="text-xs sm:text-base text-white/90 font-medium">
-                    Exclusive deals • Pro tips • Early access
+              <div className="relative z-10 py-8 sm:py-12 px-4 sm:px-8">
+                <div className="text-center mb-6 sm:mb-8">
+                  <h2 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-3 tracking-tight text-[#F9A245]">🚀 Join 10,000+ Athletes!</h2>
+                  <p className="text-sm sm:text-lg text-white/90 font-medium">
+                    Exclusive deals | Pro tips | Early access
                   </p>
+                  <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 mt-4 text-sm text-white/80">
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-400">✓</span>
+                      <span>No spam</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-400">✓</span>
+                      <span>Unsubscribe anytime</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-400">✓</span>
+                      <span>Exclusive deals</span>
+                    </div>
+                  </div>
                 </div>
                 <div className="max-w-lg sm:max-w-2xl mx-auto">
                   <SubscribeCTA 

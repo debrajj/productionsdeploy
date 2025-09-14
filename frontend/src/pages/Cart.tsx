@@ -156,8 +156,8 @@ const Cart: React.FC = () => {
             </CardHeader>
             <CardContent className="p-0">
               <div className="divide-y divide-gray-200">
-                {state.items.map((item) => (
-                  <div key={item.id} className="p-3 sm:p-4">
+                {state.items.map((item, index) => (
+                  <div key={`${item.id}-${item.selectedFlavor || ''}-${item.selectedWeight || ''}-${item.variantId || ''}-${index}`} className="p-3 sm:p-4">
                     <div className="flex items-start space-x-3 overflow-hidden">
                       {/* Product Image */}
                       <div className="flex-shrink-0">
@@ -176,9 +176,18 @@ const Cart: React.FC = () => {
                         >
                           {item.name}
                         </h3>
-                        <p className="text-xs text-gray-500 truncate">
-                          {item.brand} • ₹{item.price.toLocaleString()} each
-                        </p>
+                        <div className="text-xs text-gray-500 space-y-1">
+                          <p className="truncate">
+                            ₹{item.price.toLocaleString()} each
+                          </p>
+                          {(item.selectedFlavor || item.selectedWeight) && (
+                            <p className="text-[#F9A245] font-medium">
+                              {item.selectedFlavor && `Flavor: ${item.selectedFlavor}`}
+                              {item.selectedFlavor && item.selectedWeight && ' • '}
+                              {item.selectedWeight && `Weight: ${item.selectedWeight}`}
+                            </p>
+                          )}
+                        </div>
 
                         {/* Mobile: Quantity and Total in same row */}
                         <div className="flex items-center justify-between mt-2">
@@ -187,9 +196,10 @@ const Cart: React.FC = () => {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity - 1)
-                              }
+                              onClick={() => {
+                                const itemKey = `${item.id}-${item.selectedFlavor || ''}-${item.selectedWeight || ''}-${item.variantId || ''}`;
+                                updateQuantity(itemKey, item.quantity - 1);
+                              }}
                               disabled={item.quantity <= 1}
                               className="h-7 w-7 p-0 text-xs"
                             >
@@ -201,9 +211,10 @@ const Cart: React.FC = () => {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() =>
-                                updateQuantity(item.id, item.quantity + 1)
-                              }
+                              onClick={() => {
+                                const itemKey = `${item.id}-${item.selectedFlavor || ''}-${item.selectedWeight || ''}-${item.variantId || ''}`;
+                                updateQuantity(itemKey, item.quantity + 1);
+                              }}
                               className="h-7 w-7 p-0 text-xs"
                             >
                               <Plus className="h-3 w-3" />
@@ -218,7 +229,10 @@ const Cart: React.FC = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => removeFromCart(item.id)}
+                              onClick={() => {
+                                const itemKey = `${item.id}-${item.selectedFlavor || ''}-${item.selectedWeight || ''}-${item.variantId || ''}`;
+                                removeFromCart(itemKey);
+                              }}
                               className="text-[#F9A245] hover:text-[#e8913d] hover:bg-orange-50 h-7 w-7 p-0"
                             >
                               <Trash2 className="h-3 w-3" />

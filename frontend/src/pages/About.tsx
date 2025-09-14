@@ -1,4 +1,5 @@
 import React from "react";
+import ProductVariantDemo from "@/components/ProductVariantDemo";
 
 const About: React.FC = () => {
   return (
@@ -83,6 +84,13 @@ const About: React.FC = () => {
               <p className="text-lg mb-2">We are a family, a movement, a partner in your journey.</p>
               <p className="mb-4">With ~ every product, every consultation, every step forward, we stand by one promise:</p>
               <p className="text-xl font-bold">O² Nutrition – Authentic Fuel. Real Results. Trusted Nationwide.</p>
+            </div>
+            
+            {/* Product Variant Selector Demo */}
+            <div className="mt-12">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Product Selection Experience</h2>
+              <p className="text-center text-gray-600 mb-8">Experience how customers can easily select their preferred flavors and sizes</p>
+              <ProductVariantDemo />
             </div>
           </div>
         </div>

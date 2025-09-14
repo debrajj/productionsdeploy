@@ -33,43 +33,7 @@ const TrackOrder: React.FC = () => {
       carrier: "FedEx",
       trackingNumber: "FX123456789US",
     },
-    timeline: [
-      {
-        status: "confirmed",
-        title: "Order Confirmed",
-        description: "Your order has been confirmed and is being prepared.",
-        date: "2024-01-25",
-        completed: true,
-      },
-      {
-        status: "processing",
-        title: "Processing",
-        description: "Your order is being prepared for shipment.",
-        date: "2024-01-25",
-        completed: true,
-      },
-      {
-        status: "shipped",
-        title: "Shipped",
-        description: "Your order has been shipped and is on its way.",
-        date: "2024-01-26",
-        completed: true,
-      },
-      {
-        status: "in_transit",
-        title: "In Transit",
-        description: "Your package is currently in transit to your address.",
-        date: "2024-01-27",
-        completed: true,
-      },
-      {
-        status: "delivered",
-        title: "Delivered",
-        description: "Your order has been delivered.",
-        date: "2024-01-28",
-        completed: false,
-      },
-    ],
+
   };
 
   const handleTrackOrder = async (e: React.FormEvent) => {
@@ -142,7 +106,14 @@ const TrackOrder: React.FC = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 relative" style={{
+        backgroundImage: 'url("https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}>
+        <div className="absolute inset-0 bg-white/95"></div>
+        <div className="relative z-10">
         {/* Search Form */}
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
@@ -219,30 +190,29 @@ const TrackOrder: React.FC = () => {
                             key={item.id || index}
                             className="flex items-center space-x-3"
                           >
-                            <img
-                              src={item.image || '/placeholder-product.jpg'}
-                              alt={item.name || 'Product'}
-                              className="w-12 h-12 object-cover rounded"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = '/placeholder-product.jpg';
-                              }}
-                            />
+                            <div className="w-12 h-12 bg-[#F9A245] rounded flex items-center justify-center">
+                              <span className="text-white text-xs font-bold">
+                                {(item.name || 'P').charAt(0).toUpperCase()}
+                              </span>
+                            </div>
                             <div className="flex-1">
                               <p className="font-medium text-sm">
                                 {item.name || 'Unnamed Product'}
-                                {item.variant && (
-                                  <span className="text-muted-foreground text-xs ml-2">
-                                    ({item.variant})
-                                  </span>
-                                )}
                               </p>
+                              {(item.selectedFlavor || item.selectedWeight || item.variant) && (
+                                <p className="text-[#F9A245] text-xs">
+                                  {item.selectedFlavor && `Flavor: ${item.selectedFlavor}`}
+                                  {item.selectedFlavor && item.selectedWeight && ' • '}
+                                  {item.selectedWeight && `Weight: ${item.selectedWeight}`}
+                                  {!item.selectedFlavor && !item.selectedWeight && item.variant && item.variant}
+                                </p>
+                              )}
                               <div className="flex justify-between items-center">
                                 <p className="text-muted-foreground text-sm">
                                   Qty: {item.quantity || 1}
                                 </p>
                                 <p className="font-medium text-sm">
-                                  ${(item.price || 0).toFixed(2)}
+                                  ₹{(item.price || 0).toLocaleString()}
                                 </p>
                               </div>
                               {item.sku && (
@@ -285,64 +255,7 @@ const TrackOrder: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Timeline */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Order Timeline</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {orderData.timeline?.map((step: any, index: number) => (
-                    <div key={index} className="flex items-start space-x-4">
-                      <div
-                        className={`w-3 h-3 rounded-full mt-2 ${
-                          step.completed
-                            ? getStatusColor(step.status)
-                            : "bg-muted-foreground"
-                        }`}
-                      />
 
-                      <div className="flex-1 space-y-1">
-                        <div className="flex items-center space-x-3">
-                          {getStatusIcon(step.status, step.completed)}
-                          <h3
-                            className={`font-semibold ${
-                              step.completed
-                                ? "text-foreground"
-                                : "text-muted-foreground"
-                            }`}
-                          >
-                            {step.title}
-                          </h3>
-                          <span className="text-sm text-muted-foreground">
-                            {step.timestamp
-                              ? new Date(step.timestamp).toLocaleDateString()
-                              : "N/A"}
-                          </span>
-                        </div>
-                        <p
-                          className={`text-sm ${
-                            step.completed
-                              ? "text-muted-foreground"
-                              : "text-muted-foreground/70"
-                          }`}
-                        >
-                          {step.description}
-                        </p>
-                      </div>
-                    </div>
-                  )) || (
-                    <div className="text-center py-8 text-muted-foreground">
-                      <Clock className="h-12 w-12 mx-auto mb-4" />
-                      <p>
-                        Timeline information will be updated as your order
-                        progresses.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
           </div>
         )}
 
@@ -384,6 +297,7 @@ const TrackOrder: React.FC = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
         </div>
       </div>
     </div>

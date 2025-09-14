@@ -87,7 +87,15 @@ const Checkout: React.FC = () => {
           image: item.image,
           price: item.price,
           quantity: item.quantity,
-          variant: item.variant || item.weight || undefined,
+          // Variant details
+          selectedFlavor: item.selectedFlavor,
+          selectedWeight: item.selectedWeight,
+          variantId: item.variantId,
+          variantType: item.variantType,
+          // Legacy support
+          variant: item.selectedFlavor || item.selectedWeight ? 
+            `${item.selectedFlavor || ''}${item.selectedFlavor && item.selectedWeight ? ' - ' : ''}${item.selectedWeight || ''}`.trim() : undefined,
+          // Upsell tracking
           isUpsell: item.isUpsell || false,
           upsellDiscount: item.upsellDiscount || 0,
           originalPrice: item.originalPrice || item.price,
@@ -756,8 +764,8 @@ const Checkout: React.FC = () => {
                       </p>
                       <p className="text-xs text-gray-600">
                         Qty: {item.quantity}
-                        {item.variant && ` • ${item.variant}`}
-                        {item.weight && ` • ${item.weight}`}
+                        {item.selectedFlavor && ` • ${item.selectedFlavor}`}
+                        {item.selectedWeight && ` • ${item.selectedWeight}`}
                       </p>
                     </div>
                     <p className="font-medium text-[#F9A245]">

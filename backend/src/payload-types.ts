@@ -442,6 +442,10 @@ export interface Product {
     calcium?: string | null;
   };
   /**
+   * Nutrition facts image
+   */
+  nutritionImage?: (string | null) | Media;
+  /**
    * Product ingredients list
    */
   ingredients?:
@@ -454,42 +458,20 @@ export interface Product {
       }[]
     | null;
   /**
-   * Subscription options
+   * Comma-separated flavors for simple variants (e.g., Chocolate, Vanilla, Strawberry)
    */
-  subscriptionOptions?: {
-    /**
-     * Check if subscription is available for this product
-     */
-    available?: boolean | null;
-    /**
-     * Subscription discount percentages
-     */
-    discounts?: {
-      /**
-       * Monthly subscription discount % (e.g., 10)
-       */
-      monthly?: number | null;
-      /**
-       * Quarterly subscription discount % (e.g., 15)
-       */
-      quarterly?: number | null;
-      /**
-       * 6-month subscription discount % (e.g., 20)
-       */
-      biannual?: number | null;
-    };
-  };
+  simpleFlavors?: string | null;
   /**
-   * Product variants (flavors, sizes, etc.)
+   * Product variants with individual pricing (flavors, sizes, etc.)
    */
   variants?:
     | {
         /**
-         * Flavor name (e.g., Chocolate, Vanilla)
+         * Flavor name (e.g., Chocolate, Vanilla, Strawberry)
          */
         flavor?: string | null;
         /**
-         * Size/weight (e.g., 1kg, 60 capsules)
+         * Weight (e.g., 250g, 500g, 1kg)
          */
         weight?: string | null;
         /**
@@ -497,22 +479,6 @@ export interface Product {
          */
         price?: number | null;
         id?: string | null;
-      }[]
-    | null;
-  bundledOffers?:
-    | {
-        id: string;
-        name: string;
-        description?: string | null;
-        productIds?:
-          | {
-              productId?: number | null;
-              id?: string | null;
-            }[]
-          | null;
-        originalPrice?: number | null;
-        bundlePrice?: number | null;
-        savings?: number | null;
       }[]
     | null;
   /**
@@ -1044,24 +1010,14 @@ export interface ProductsSelect<T extends boolean = true> {
         sodium?: T;
         calcium?: T;
       };
+  nutritionImage?: T;
   ingredients?:
     | T
     | {
         name?: T;
         id?: T;
       };
-  subscriptionOptions?:
-    | T
-    | {
-        available?: T;
-        discounts?:
-          | T
-          | {
-              monthly?: T;
-              quarterly?: T;
-              biannual?: T;
-            };
-      };
+  simpleFlavors?: T;
   variants?:
     | T
     | {
@@ -1069,22 +1025,6 @@ export interface ProductsSelect<T extends boolean = true> {
         weight?: T;
         price?: T;
         id?: T;
-      };
-  bundledOffers?:
-    | T
-    | {
-        id?: T;
-        name?: T;
-        description?: T;
-        productIds?:
-          | T
-          | {
-              productId?: T;
-              id?: T;
-            };
-        originalPrice?: T;
-        bundlePrice?: T;
-        savings?: T;
       };
   upsells?:
     | T
