@@ -39,6 +39,8 @@ const CategoryPage: React.FC = () => {
   const [currentSubcategory, setCurrentSubcategory] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<any[]>([]);
+  const [sortBy, setSortBy] = useState('default');
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -58,27 +60,53 @@ const CategoryPage: React.FC = () => {
         const category = apiCategories.find((cat) => cat.slug === categorySlug);
         setCurrentCategory(category);
 
-        if (category) {
-          const subcategory = subcategorySlug
-            ? category.subcategories?.find((sub) => sub.slug === subcategorySlug)
-            : null;
-          setCurrentSubcategory(subcategory);
-
-          // Fetch products from API using exact category name matching
-          const filters: any = {};
+        // First try to get all products
+        const allProductsResponse = await productApi.getProducts({ limit: 200 });
+        let allProducts = [];
+        
+        if (allProductsResponse.success) {
+          allProducts = allProductsResponse.data;
           
-          // Try different category matching strategies
-          if (subcategory) {
-            filters.subcategory = subcategory.name;
+          // Filter products based on category/subcategory
+          let filtered = allProducts;
+          
+          if (category) {
+            const subcategory = subcategorySlug
+              ? category.subcategories?.find((sub) => sub.slug === subcategorySlug)
+              : null;
+            setCurrentSubcategory(subcategory);
+            
+            // Filter by category name
+            filtered = allProducts.filter(product => 
+              product.category?.toLowerCase() === category.name?.toLowerCase()
+            );
+            
+            // Further filter by subcategory if specified
+            if (subcategory) {
+              filtered = filtered.filter(product => 
+                product.subcategory?.toLowerCase() === subcategory.name?.toLowerCase()
+              );
+            }
+          } else {
+            // Fallback: try to match by URL slugs
+            const categoryName = categorySlug?.replace(/-/g, ' ');
+            const subcategoryName = subcategorySlug?.replace(/-/g, ' ');
+            
+            filtered = allProducts.filter(product => {
+              const categoryMatch = !categoryName || 
+                product.category?.toLowerCase().includes(categoryName.toLowerCase()) ||
+                product.category?.toLowerCase().replace(/\s+/g, '-') === categorySlug;
+              
+              const subcategoryMatch = !subcategoryName || 
+                product.subcategory?.toLowerCase().includes(subcategoryName.toLowerCase()) ||
+                product.subcategory?.toLowerCase().replace(/\s+/g, '-') === subcategorySlug;
+              
+              return categoryMatch && subcategoryMatch;
+            });
           }
           
-          // Use category name for filtering
-          filters.category = category.name;
-          
-          const response = await productApi.getProducts(filters);
-          if (response.success) {
-            setFilteredProducts(response.data);
-          }
+          setAllProducts(filtered);
+          setFilteredProducts(filtered);
         }
       } catch (error) {
         console.error("Failed to load data:", error);
@@ -89,6 +117,31 @@ const CategoryPage: React.FC = () => {
 
     loadData();
   }, [categorySlug, subcategorySlug]);
+
+  // Sort products when sortBy changes
+  useEffect(() => {
+    let sorted = [...allProducts];
+    
+    switch (sortBy) {
+      case 'price-low':
+        sorted.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high':
+        sorted.sort((a, b) => b.price - a.price);
+        break;
+      case 'rating':
+        sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        break;
+      case 'name':
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      default:
+        // Keep original order
+        break;
+    }
+    
+    setFilteredProducts(sorted);
+  }, [sortBy, allProducts]);
 
   const handleProductClick = (product: Product) => {
     navigate(`/product/${product.slug}`);
@@ -106,20 +159,9 @@ const CategoryPage: React.FC = () => {
     );
   };
 
-  if (!currentCategory) {
-    return (
-      <div className="container mx-auto px-4 py-16 text-center">
-        <h1 className="font-heading font-bold text-2xl mb-4">
-          Category Not Found
-        </h1>
-        <Link to="/">
-          <button className="bg-[#F9A245] text-white px-6 py-2 rounded-lg hover:bg-[#e8913d] transition-colors">
-            Back to Home
-          </button>
-        </Link>
-      </div>
-    );
-  }
+  // Always show products even if category not found in API
+  const displayCategory = currentCategory || { name: categorySlug?.replace(/-/g, ' ').toUpperCase(), slug: categorySlug };
+  const displaySubcategory = currentSubcategory || (subcategorySlug ? { name: subcategorySlug.replace(/-/g, ' ').toUpperCase(), slug: subcategorySlug } : null);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -131,16 +173,16 @@ const CategoryPage: React.FC = () => {
           </Link>
           <span>/</span>
           <Link
-            to={`/category/${currentCategory.slug}`}
+            to={`/category/${displayCategory.slug}`}
             className="hover:text-[#F9A245] capitalize"
           >
-            {currentCategory.name}
+            {displayCategory.name}
           </Link>
-          {currentSubcategory && (
+          {displaySubcategory && (
             <>
               <span>/</span>
               <span className="text-gray-900 font-medium capitalize">
-                {currentSubcategory.name}
+                {displaySubcategory.name}
               </span>
             </>
           )}
@@ -149,23 +191,43 @@ const CategoryPage: React.FC = () => {
 
       {/* Page Header */}
       <div className="mb-6">
-        <h1 className="font-heading font-bold text-2xl lg:text-3xl text-gray-900 mb-1">
-          {currentSubcategory ? currentSubcategory.name : currentCategory.name}
-        </h1>
-        <p className="text-gray-600 text-sm">
-          {filteredProducts.length} products found
-        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="font-heading font-bold text-2xl lg:text-3xl text-gray-900 mb-1">
+              {displaySubcategory ? displaySubcategory.name : displayCategory.name}
+            </h1>
+            <p className="text-gray-600 text-sm">
+              {filteredProducts.length} products found
+            </p>
+          </div>
+          
+          {/* Sort Filter */}
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-gray-600">Sort by:</label>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#F9A245] focus:border-transparent"
+            >
+              <option value="default">Default</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Highest Rated</option>
+              <option value="name">Name: A to Z</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       {/* Subcategories (if viewing main category) */}
-      {!currentSubcategory && currentCategory.subcategories && (
+      {!displaySubcategory && currentCategory?.subcategories && (
         <div className="mb-6">
           <h2 className="font-semibold text-lg mb-3">Browse by Subcategory</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {currentCategory.subcategories.map((subcategory: any) => (
               <Link
                 key={subcategory.slug}
-                to={`/category/${currentCategory.slug}/${subcategory.slug}`}
+                to={`/category/${displayCategory.slug}/${subcategory.slug}`}
                 className="p-3 border border-gray-200 rounded-lg hover:border-[#F9A245] hover:shadow-md transition-all"
               >
                 <h3 className="font-medium text-gray-900 text-sm">

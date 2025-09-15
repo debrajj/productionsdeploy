@@ -1,20 +1,9 @@
 import { formatSlug } from '@/lib/Globals/Slug'
 import type { CollectionConfig } from 'payload'
 
-// All brands from brands page - exact same as frontend
-const allBrands = [
-  'ALPINO', 'AS-IT-IS', 'AVVATAR', 'AESTHETIC NUTRITION', 'BOLT', 'BPI', 'BEAST LIFE', 'DYMATIZE',
-  'FAST AND UP', 'GASPARI', 'GAT', 'GNC', 'GHOST', 'HEALTH FARM', 'INTERNATIONAL PROTEIN', 'ISOPURE',
-  'KAGED', 'KEVIN LEVRONE', 'LABRADA', 'MONSTER LAB', 'MUSCLE BLAZE', 'MUSCLETECH', 'MUTANT', 'MYFITNESS',
-  'MYFITNESS PEANUT BUTTER', 'NEUHERBS', 'NAKPRO', 'ONE SCIENCE', 'ON (OPTIMUM NUTRITION)', 'POLE NUTRITION',
-  'PROSUPPS', 'PINTOLA', 'RONNIE COLEMAN', 'RAW NUTRITION', 'RYSE', 'THE WHOLE TRUTH NUTRITION', 'WELLBEING',
-  'XTEND', 'YOGABAR', 'RANBDS', 'APPLIED NUTRITION', 'BSN', 'DENIS JAMES', 'DEXTER JACKSON', 'EXALT',
-  'INSANE LABZ', 'MHP', 'MI (MUSCLE IMPACT NUTRITION) 02 BRAND', 'NOW', 'NUTREX', 'NUTRAMARC', 'REDCON',
-  'RULE ONE', 'UNIVERSAL', 'ATOM', 'TRUE BASICS', 'CLOMA PHARMA', 'CENTRUM', 'CONDEMNED', 'MUSCLEMEDS', 
-  'ULTIMATE NUTRITION', 'FA ICE HYDRO', 'ANDROPIQUE', 'CUREGARDEN', 'TATA 1MG', 'ACE BLEND', 'NATUREYZ', 
-  'HEALTHYHEY NUTRITION', 'MIDUTY', 'WHATS UP WELLNESS', 'MYODROL', 'CARBAMIDE FORTE', 'BEAUTYWISE', 
-  'FUEL ONE', 'NAKPRO PROTEIN'
-]
+// Import shared brands configuration
+const { ALL_BRANDS } = require('../../../shared-brands.js')
+const allBrands = ALL_BRANDS
 
 // Categories from homeproduct.json
 const categories = [
@@ -57,6 +46,7 @@ export const Products: CollectionConfig = {
   slug: 'products',
   admin: {
     useAsTitle: 'name',
+    description: 'Manage products. Use /api/download-template for bulk import template and POST /api/bulk-import to upload Excel files.',
   },
 
   access: {

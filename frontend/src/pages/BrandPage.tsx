@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
 import { productApi, Product } from '@/services/api';
+import { getBrandFromSlug } from '../../../shared-brands.js';
 
 const BrandPage: React.FC = () => {
   const { brandSlug } = useParams<{ brandSlug: string }>();
@@ -17,13 +18,8 @@ const BrandPage: React.FC = () => {
       
       try {
         setLoading(true);
-        // Decode brand name to match exact backend format
-        let decodedBrandName = brandSlug.replace(/-/g, ' ');
-        
-        // Handle special cases like AS-IT-IS
-        if (brandSlug === 'as-it-is') {
-          decodedBrandName = 'AS-IT-IS';
-        }
+        // Decode brand name using shared function
+        const decodedBrandName = getBrandFromSlug(brandSlug);
         setBrandName(decodedBrandName);
         
         let allProducts: Product[] = [];

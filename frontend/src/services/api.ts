@@ -236,13 +236,10 @@ export const productApi = {
     id: string
   ): Promise<{ success: boolean; data?: Product; error?: string }> {
     try {
-      console.log("Fetching product from:", `${PAYLOAD_API_BASE}/products/${id}`);
       const response = await fetch(`${PAYLOAD_API_BASE}/products/${id}?depth=2`);
-      console.log("Product fetch response status:", response.status);
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Product fetch error:", errorText);
         return {
           success: false,
           error: `Failed to fetch product: ${response.status} ${response.statusText}`,
@@ -250,7 +247,6 @@ export const productApi = {
       }
 
       const data = await response.json();
-      console.log("Product fetch data:", data);
 
       // Transform image URLs and return plain object
       const transformedProduct = {
@@ -304,7 +300,6 @@ export const productApi = {
         data: transformedProduct,
       };
     } catch (error) {
-      console.error("Product fetch network error:", error);
       return {
         success: false,
         error: "Network error while fetching product",
@@ -572,7 +567,6 @@ export const goalApi = {
         },
       };
     } catch (error) {
-      console.error("Goals fetch error:", error);
       return {
         success: false,
         data: [],
@@ -645,7 +639,6 @@ export const categoryApi = {
         },
       };
     } catch (error) {
-      console.error("Categories fetch error:", error);
       return {
         success: false,
         data: [],
@@ -746,7 +739,6 @@ export const brandApi = {
         count: brandNames.length,
       };
     } catch (error) {
-      console.error("Brands fetch error:", error);
       return {
         success: false,
         data: [],
@@ -787,12 +779,10 @@ export const heroBannerApi = {
   }> {
     try {
       const url = `${PAYLOAD_API_BASE}/globals/hero-banner-global?depth=2&t=${Date.now()}`;
-      console.log('Fetching hero banner from:', url);
       const response = await fetch(url);
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Hero banners fetch error:", errorText);
         return {
           success: false,
           error: `Failed to fetch hero banners: ${response.status}`,
@@ -800,7 +790,6 @@ export const heroBannerApi = {
       }
 
       const data = await response.json();
-      console.log('Hero banner raw data:', data);
 
       // Always return the banner data, let the component decide what to show
       const transformedBanner = {
@@ -825,7 +814,6 @@ export const heroBannerApi = {
         data: [transformedBanner],
       };
     } catch (error) {
-      console.error('Hero banner fetch error:', error);
       return {
         success: false,
         error: "Network error while fetching hero banners",
@@ -1028,7 +1016,6 @@ export const searchApi = {
 
       return { success: true, data: suggestions };
     } catch (error) {
-      console.error("Search suggestions error:", error);
       return { success: false, data: [] };
     }
   },

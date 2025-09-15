@@ -25,8 +25,25 @@ export const AddressSaver: React.FC<AddressSaverProps> = ({ formData, onAddressS
   const [saveAddress, setSaveAddress] = useState(false);
   const [setAsDefault, setSetAsDefault] = useState(addresses.length === 0);
 
+  // Check if address already exists
+  const addressExists = addresses.some(addr => 
+    addr.address.toLowerCase() === formData.address.toLowerCase() &&
+    addr.zipCode === formData.zipCode &&
+    addr.city.toLowerCase() === formData.city.toLowerCase()
+  );
+
   const handleSaveAddress = async () => {
     if (!user || !saveAddress) return;
+
+    // Check for duplicate before saving
+    if (addressExists) {
+      toast({
+        title: "Address Already Exists",
+        description: "This address is already saved in your address book.",
+        variant: "destructive"
+      });
+      return;
+    }
 
     const addressData = {
       type: 'home' as const,
@@ -54,7 +71,10 @@ export const AddressSaver: React.FC<AddressSaverProps> = ({ formData, onAddressS
   if (!user) return null;
 
   return (
-    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
+    <div 
+      className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3"
+      data-save-address={saveAddress}
+    >
       <div className="flex items-center space-x-2">
         <MapPin className="h-4 w-4 text-blue-600" />
         <span className="text-sm font-medium text-blue-900">Save Address</span>
@@ -68,8 +88,11 @@ export const AddressSaver: React.FC<AddressSaverProps> = ({ formData, onAddressS
             onCheckedChange={(checked) => setSaveAddress(checked as boolean)}
           />
           <label htmlFor="saveAddress" className="text-sm text-blue-800">
-            Save this address for future orders
+            {addressExists ? "Address already saved" : "Save this address for future orders"}
           </label>
+          {addressExists && (
+            <span className="text-xs text-orange-600 ml-2">✓ Already in address book</span>
+          )}
         </div>
         
         {saveAddress && (

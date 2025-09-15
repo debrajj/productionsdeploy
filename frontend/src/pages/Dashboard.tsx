@@ -49,6 +49,7 @@ const Dashboard: React.FC = () => {
     logout,
     updateProfile,
     addAddress,
+    refreshOrders,
   } = useAuth();
   const { addToCart } = useCart();
   const { wishlist, removeFromWishlist } = useWishlist();
@@ -65,6 +66,19 @@ const Dashboard: React.FC = () => {
     email: user?.email || "",
     phone: user?.phone || "",
   });
+
+  // Refresh orders when component mounts or when switching to orders tab
+  useEffect(() => {
+    if (user && refreshOrders) {
+      refreshOrders();
+    }
+  }, [user, refreshOrders]);
+
+  useEffect(() => {
+    if (activeTab === 'orders' && user && refreshOrders) {
+      refreshOrders();
+    }
+  }, [activeTab, user, refreshOrders]);
 
   const handleLogout = () => {
     logout();

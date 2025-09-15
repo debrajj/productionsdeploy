@@ -48,7 +48,6 @@ const BrandsMegaMenu: React.FC<BrandsMegaMenuProps> = ({ isMobile = false, onClo
             .map(name => {
               const upperName = name.toUpperCase();
               const productCount = apiBrandMap.get(upperName) || 0;
-              console.log(`Brand: ${name}, Count: ${productCount}`);
               return {
                 name,
                 productCount,
@@ -64,12 +63,9 @@ const BrandsMegaMenu: React.FC<BrandsMegaMenuProps> = ({ isMobile = false, onClo
               return b.productCount - a.productCount;
             });
           
-          console.log('All brands with counts:', allBrands.slice(0, 5));
-          
           setBrandsWithData(allBrands);
         }
       } catch (error) {
-        console.error('Failed to load brands:', error);
       } finally {
         if (isMounted) {
           setLoading(false);

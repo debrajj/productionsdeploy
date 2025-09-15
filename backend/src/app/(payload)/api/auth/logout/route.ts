@@ -1,25 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { getPayloadHMR } from '@payloadcms/next/utilities'
+import configPromise from '@payload-config'
 
-// POST /api/auth/logout - Logout user
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
+  const payload = await getPayloadHMR({ config: configPromise })
+  
   try {
-    const response = NextResponse.json({
-      success: true,
-      message: 'Logout successful',
-    })
-
-    // Clear the authentication cookie
-    response.cookies.set('payload-token', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 0, // Expire immediately
-      path: '/',
-    })
-
-    return response
+    const result = await payload.logout(request)
+    return Response.json(result)
   } catch (error) {
-    console.error('Error logging out:', error)
-    return NextResponse.json({ success: false, error: 'Failed to logout' }, { status: 500 })
+    return Response.json({ error: 'Logout failed' }, { status: 500 })
   }
 }

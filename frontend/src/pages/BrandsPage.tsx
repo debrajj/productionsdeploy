@@ -3,17 +3,9 @@ import { Link } from 'react-router-dom';
 import { Search, X, ChevronDown, Filter } from 'lucide-react';
 import { productApi, Product } from '@/services/api';
 
-// Static brands list - keeping existing names
-const staticBrands = [
-  'ALPINO', 'AS-IT-IS', 'AVVATAR', 'AESTHETIC NUTRTION', 'BOLT', 'BPI', 'BEAST LIFE', 'DYMATIZE',
-  'FAST AND UP', 'GASPARI', 'GAT', 'GNC', 'GHOST', 'HEALTH FARM', 'INTERNATIONAL PROTEIN', 'ISOPURE',
-  'KAGED', 'KEVIN LEVRONE', 'LABRADA', 'MONSTER LAB', 'MUSCLE BLAZE', 'MUSCLETECH', 'MUTANT', 'MYFITNESS',
-  'MYFITNESS PEANUT BUTTER', 'NEUHERBS', 'NAKPRO', 'ONE SCIENCE', 'ON (OPTIMUM NUTRITION)', 'POLE NUTRITION',
-  'PROSUPPS', 'PINTOLA', 'RONNIE COLEMAN', 'RAW NUTRTION', 'RYSE', 'THE WHOLE TRUTH NUTRITION', 'WELLBEING',
-  'XTEND', 'YOGABAR', 'RANBDS', 'APPLIED NUTRTION', 'BSN', 'DENIS JAMES', 'DEXTER JACKSON', 'EXALT',
-  'INSANE LABZ', 'MHP', 'MI (MUSCLE IMPACT NUTRITION) 02 BRAND', 'NOW', 'NUTREX', 'NUTRAMARC', 'REDCON',
-  'RULE ONE', 'UNIVERSAL', 'ATOM', 'TRUE BASICS', 'CLOMA PHARMA', 'CENTRUM', 'CONDEMNED', 'MUSCLEMEDS', 'ULTIMATE NUTRITION', 'FA ICE HYDRO', 'ANDROPIQUE', 'CUREGARDEN', 'TATA 1MG', 'ACE BLEND', 'NATUREYZ', 'HEALTHYHEY NUTRITION', 'MIDUTY', 'WHATS UP WELLNESS', 'MYODROL', 'CARBAMIDE FORTE', 'BEAUTYWISE', 'FUEL ONE', 'NAKPRO PROTEIN'
-];
+// Import shared brands configuration
+import { ALL_BRANDS, getBrandSlug } from '../../../shared-brands.js';
+const staticBrands = ALL_BRANDS;
 
 const BrandsPage: React.FC = () => {
   const [selectedLetter, setSelectedLetter] = useState<string>('ALL');
@@ -115,11 +107,7 @@ const BrandsPage: React.FC = () => {
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
   }, [selectedLetter, searchQuery, brandsWithData]);
 
-  const getBrandSlug = (brand: string) => {
-    // Handle special cases
-    if (brand === 'AS-IT-IS') return 'as-it-is';
-    return brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-  };
+
 
   return (
     <div className="min-h-screen bg-white">

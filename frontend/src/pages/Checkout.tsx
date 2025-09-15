@@ -38,7 +38,7 @@ import { GuestCheckoutSaver } from "@/components/GuestCheckoutSaver";
 
 const Checkout: React.FC = () => {
   const { state, clearCart } = useCart();
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, addAddress, addresses } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const checkout = useCheckout();
@@ -164,6 +164,41 @@ const Checkout: React.FC = () => {
           isDefault: true
         }
       };
+
+      // Save address if checkbox is checked (before creating order)
+      const addressSaverElement = document.querySelector('[data-save-address="true"]');
+      if (addressSaverElement && user) {
+        // Check if address already exists
+        const addressExists = addresses.some(addr => 
+          addr.address.toLowerCase() === checkout.formData.address.toLowerCase() &&
+          addr.zipCode === checkout.formData.zipCode &&
+          addr.city.toLowerCase() === checkout.formData.city.toLowerCase()
+        );
+        
+        if (!addressExists) {
+          const addressData = {
+            type: 'home' as const,
+            firstName: checkout.formData.firstName,
+            lastName: checkout.formData.lastName,
+            address: checkout.formData.address,
+            apartment: checkout.formData.apartment,
+            city: checkout.formData.city,
+            state: checkout.formData.state,
+            zipCode: checkout.formData.zipCode,
+            phone: checkout.formData.phone,
+            isDefault: addresses.length === 0
+          };
+          
+          try {
+            await addAddress(addressData);
+            console.log('Address saved successfully');
+          } catch (error) {
+            console.error('Failed to save address:', error);
+          }
+        } else {
+          console.log('Address already exists, skipping save');
+        }
+      }
 
       // Send order to Payload backend
       const API_URL = import.meta.env.VITE_API_ENDPOINT;

@@ -9,14 +9,16 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-import { Products } from './collections/products'
-import { Category } from './collections/category'
-import { Announcements } from './collections/announcements'
-import { HeroBanner } from './collections/hero-banner'
-import { Coupons } from './collections/coupons'
-import { Subscribers } from './collections/subscribers'
+import { Products } from './collections/products/index'
+import { Category } from './collections/category/index'
+import { Announcements } from './collections/announcements/index'
+import { HeroBanner } from './collections/hero-banner/index'
+import { Coupons } from './collections/coupons/index'
+import { Subscribers } from './collections/subscribers/index'
 import { Orders } from './collections/orders/index'
-import { Goals } from './collections/goals'
+import { Goals } from './collections/goals/index'
+import { Brands } from './collections/brands/index'
+import { BulkUpload } from './collections/bulk-upload/index'
 import { HeroBanner as HeroBannerGlobal } from './globals/HeroBanner'
 
 const filename = fileURLToPath(import.meta.url)
@@ -50,6 +52,8 @@ export default buildConfig({
     Media,
     Products,
     Category,
+    Brands,
+    BulkUpload,
     Announcements,
     Coupons,
     Subscribers,
@@ -81,4 +85,5 @@ export default buildConfig({
   plugins: [
     // storage-adapter-placeholder
   ],
+  
 })

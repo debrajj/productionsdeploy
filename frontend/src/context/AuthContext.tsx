@@ -82,6 +82,7 @@ interface AuthContextType {
   removeFromWishlist: (productId: string) => void;
   isInWishlist: (productId: string) => boolean;
   createOrder: (orderData: any) => Promise<boolean>;
+  refreshOrders: () => Promise<void>;
 }
 
 interface RegisterData {
@@ -409,6 +410,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return wishlist.some((item) => item.id === productId);
   };
 
+  const refreshOrders = async (): Promise<void> => {
+    if (!user) return;
+    try {
+      await fetchUserOrders(user.id);
+    } catch (error) {
+      console.error('Error refreshing orders:', error);
+    }
+  };
+
   const createOrder = async (orderData: any): Promise<boolean> => {
     try {
       // Try API first
@@ -471,6 +481,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       };
       
       setOrders(prev => [newOrder, ...prev]);
+      
+      // Refresh orders from API after creating
+      setTimeout(() => {
+        refreshOrders();
+      }, 1000);
+      
       return true;
     } catch (error) {
       console.error('Error creating order:', error);
@@ -495,6 +511,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     removeFromWishlist,
     isInWishlist,
     createOrder,
+    refreshOrders,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

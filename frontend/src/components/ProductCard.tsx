@@ -48,25 +48,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )}
       </div>
       
-      <div className="text-sm text-gray-600 mb-2">
-        <div>Brand: {product.customBrand || product.brand}</div>
-        <div>Category: {product.customCategory || product.category}</div>
-      </div>
-      
-      <div className="flex space-x-2">
-        {product.featured && (
-          <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Featured</span>
-        )}
-        {product.trending && (
-          <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Trending</span>
-        )}
-        {product.bestSeller && (
-          <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Best Seller</span>
-        )}
-        {product.lovedByExperts && (
-          <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Expert Choice</span>
-        )}
-      </div>
+
     </div>
   );
 };

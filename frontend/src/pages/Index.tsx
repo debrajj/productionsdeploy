@@ -986,13 +986,13 @@ const Index: React.FC = () => {
                   PASSION
                 </h3>
 
-                <p className="mt-1.5 xs:mt-1.5 sm:mt-4 text-[clamp(0.75rem,2.8vw,1.2rem)] leading-tight xs:leading-tight sm:leading-relaxed opacity-90 font-light">
+                <p className="mt-1 xs:mt-1 sm:mt-2 text-[clamp(0.75rem,2.8vw,1.2rem)] leading-tight opacity-90 font-light">
                   Elevate your fitness journey with goal-based supplement
                   bundles. Whether you're bulking, shredding, or staying fit —
                   we've got your back.
                 </p>
 
-                <p className="mt-1 xs:mt-1 sm:mt-3 text-[clamp(0.75rem,2.8vw,1.2rem)] leading-tight xs:leading-tight sm:leading-relaxed opacity-90 font-light hidden xs:hidden sm:block">
+                <p className="mt-0.5 xs:mt-0.5 sm:mt-1 text-[clamp(0.75rem,2.8vw,1.2rem)] leading-tight opacity-90 font-light hidden xs:hidden sm:block">
                   Shop by goal and discover tailored nutritional solutions
                   trusted by athletes across the globe. Quality. Power. Results.
                 </p>
@@ -1002,7 +1002,7 @@ const Index: React.FC = () => {
               <div className="absolute right-1.5 xs:right-1.5 sm:right-3 bottom-1.5 xs:bottom-1.5 sm:bottom-3 z-20">
                 <button
                   onClick={() => navigate("/goal/build-muscle")}
-                  className="inline-flex items-center gap-1 xs:gap-1 sm:gap-2 rounded-lg bg-[#F9A245] hover:bg-transparent hover:text-gray-800 text-white font-medium px-3 py-2 text-xs sm:text-sm transition-all duration-300 border border-[#F9A245]"
+                  className="inline-flex items-center gap-1 xs:gap-1 sm:gap-2 rounded-lg bg-[#F9A245] hover:bg-white hover:text-black text-white font-medium px-3 py-2 text-xs sm:text-sm transition-all duration-300 border border-[#F9A245]"
                 >
                   VIEW PRODUCTS
                   <svg

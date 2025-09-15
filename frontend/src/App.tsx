@@ -60,7 +60,12 @@ const App = () => {
               <Toaster />
               <Sonner />
               <AppLoader isLoading={isLoading} />
-              <BrowserRouter>
+              <BrowserRouter
+                future={{
+                  v7_startTransition: true,
+                  v7_relativeSplatPath: true
+                }}
+              >
                 <ScrollToTop />
                 <div className="min-h-screen flex flex-col bg-background font-body">
                   <Header />
