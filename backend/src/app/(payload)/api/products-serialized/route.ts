@@ -46,22 +46,9 @@ export async function GET(request: NextRequest) {
           })
         }
         
-        // Handle nutritionImage serialization
-        if (serialized.nutritionImage && typeof serialized.nutritionImage === 'object') {
-          if (serialized.nutritionImage.filename) {
-            serialized.nutritionImage = `/media/${serialized.nutritionImage.filename}`
-          } else if (serialized.nutritionImage.url) {
-            serialized.nutritionImage = serialized.nutritionImage.url
-          } else {
-            serialized.nutritionImage = null
-          }
-        }
-        
         delete serialized.imageUpload
-        delete serialized.nutritionImageUpload
         delete serialized._isLocked
         delete serialized._userEditing
-        delete serialized.nutritionImageType
         
         return serialized
       })

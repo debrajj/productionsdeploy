@@ -8,7 +8,7 @@ const ThankYou: React.FC = () => {
   const [giftCode, setGiftCode] = useState('');
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const orderNumber = location.state?.orderNumber || sessionStorage.getItem('orderNumber') || `ORD-${Date.now()}`;
+  const orderNumber = location.state?.orderNumber || 'ORDER-ERROR';
   const estimatedDelivery = '15/09/2025';
 
   useEffect(() => {

@@ -5,6 +5,12 @@ export const Media: CollectionConfig = {
   access: {
     read: () => true,
   },
-  fields: [],
+  fields: [
+    {
+      name: 'alt',
+      type: 'text',
+      required: true,
+    },
+  ],
   upload: true,
 }

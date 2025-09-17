@@ -1,17 +1,16 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
 }
 
-class ErrorBoundary extends React.Component<
-  React.PropsWithChildren<{}>,
-  ErrorBoundaryState
-> {
-  constructor(props: React.PropsWithChildren<{}>) {
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
@@ -21,33 +20,22 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Product loading error:', error, errorInfo);
+    console.error('Error caught by boundary:', error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-center max-w-md mx-auto px-4">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
-              Something went wrong
-            </h1>
-            <p className="text-gray-600 mb-6">
-              We're sorry, but something unexpected happened while loading this product.
-            </p>
-            <div className="space-y-3">
-              <Button
-                onClick={() => window.location.reload()}
-                className="w-full"
-              >
-                Reload Page
-              </Button>
-              <Link to="/" className="block">
-                <Button variant="outline" className="w-full">
-                  Back to Home
-                </Button>
-              </Link>
-            </div>
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="text-center p-8">
+            <h1 className="text-2xl font-bold text-foreground mb-4">Something went wrong</h1>
+            <p className="text-muted-foreground mb-4">We're sorry, but something unexpected happened.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary-hover"
+            >
+              Reload Page
+            </button>
           </div>
         </div>
       );

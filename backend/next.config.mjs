@@ -27,13 +27,46 @@ const nextConfig = {
   },
   serverExternalPackages: ['sharp', 'mongodb', 'mongoose', 'mongoose-paginate-v2'],
   webpack: (config, { isServer }) => {
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          payload: {
+            name: 'payload',
+            chunks: 'all',
+            test: /[\/\\]node_modules[\/\\](@payloadcms|payload)[\/\\]/,
+            priority: 20,
+          },
+        },
+      },
+    }
     
-    if (!isServer) {
+    if (isServer) {
+      config.externals = [...(config.externals || []), 'date-fns', 'mongoose', 'mongoose-paginate-v2']
+    } else {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
         net: false,
         tls: false,
+        crypto: false,
+        stream: false,
+        util: false,
+        url: false,
+        zlib: false,
+        http: false,
+        https: false,
+        assert: false,
+        os: false,
+        path: false,
+      }
+      
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'react/compiler-runtime': 'react-compiler-runtime',
       }
     }
     
@@ -58,7 +91,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: '*',
+            value: process.env.CORS_ORIGINS || 'http://localhost:8080,http://localhost:3000',
           },
           {
             key: 'Access-Control-Allow-Methods',

@@ -8,7 +8,7 @@ import {
   ChevronDown,
   MapPin,
 } from "lucide-react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import MegaMenu from "./MegaMenu";
@@ -124,22 +124,6 @@ const Header: React.FC = () => {
   const { state } = useCart();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  
-  // Force re-render when location changes
-  useEffect(() => {
-    // This ensures header updates when navigation occurs
-  }, [location.pathname]);
-  
-  // Fallback navigation for when React Router fails
-  const handleNavigation = (path: string) => {
-    try {
-      navigate(path);
-    } catch (error) {
-      // If React Router fails, use window.location
-      window.location.href = path;
-    }
-  };
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
@@ -686,10 +670,10 @@ const Header: React.FC = () => {
                     <div className="flex items-center space-x-4">
                       <Link
                         to="/dashboard"
-                        className="flex items-center space-x-2 text-gray-700 hover:text-[#F9A246] transition-colors cursor-pointer"
+                        className="flex items-center space-x-2 text-gray-700 hover:text-[#F9A246] transition-colors"
                       >
                         <User className="h-5 w-5" />
-                        <span className="font-medium">{user.firstName || 'User'}</span>
+                        <span className="font-medium">{user.firstName}</span>
                       </Link>
                       <button
                         onClick={logout}
@@ -911,7 +895,7 @@ const Header: React.FC = () => {
 
             <Link
               to="/"
-              className="flex items-center flex-1 justify-center px-4 cursor-pointer"
+              className="flex items-center flex-1 justify-center px-4"
             >
               <img
                 src={logoImage}
@@ -935,7 +919,7 @@ const Header: React.FC = () => {
 
               <Link
                 to="/cart"
-                className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+                className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <ShoppingCart className="h-5 w-5 text-gray-700" />
                 {state.itemCount > 0 && (
@@ -1254,7 +1238,7 @@ const Header: React.FC = () => {
                   </h3>
 
                   <Link
-                    to="/dashboard"
+                    to="/account"
                     onClick={closeMobileMenu}
                     className="flex items-center space-x-4 text-gray-700 py-2 px-4 hover:bg-gray-50 hover:text-[#F9A246] transition-all duration-200 rounded-lg"
                   >
@@ -1263,12 +1247,12 @@ const Header: React.FC = () => {
                   </Link>
 
                   <Link
-                    to="/cart"
+                    to="/orders"
                     onClick={closeMobileMenu}
                     className="flex items-center space-x-4 text-gray-700 py-2 px-4 hover:bg-gray-50 hover:text-[#F9A246] transition-all duration-200 rounded-lg"
                   >
                     <ShoppingCart className="h-5 w-5 text-gray-500" />
-                    <span>View Cart</span>
+                    <span>My Orders</span>
                   </Link>
 
                   <Link
@@ -1300,7 +1284,7 @@ const Header: React.FC = () => {
                       className="flex items-center justify-center w-full bg-[#F9A246] text-white py-3 rounded-lg font-medium hover:bg-[#e8933a] transition-colors"
                     >
                       <User className="h-5 w-5 mr-2" />
-                      {user.firstName || 'User'}
+                      {user.firstName}
                     </Link>
                     <button
                       onClick={() => {

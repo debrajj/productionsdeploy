@@ -75,15 +75,6 @@ export const BulkUpload: CollectionConfig = {
         readOnly: true,
       },
     },
-    {
-      name: 'processButton',
-      type: 'ui',
-      admin: {
-        components: {
-          Field: '@/components/SimpleProcessButton#SimpleProcessButton'
-        }
-      }
-    },
 
   ],
   // hooks: {

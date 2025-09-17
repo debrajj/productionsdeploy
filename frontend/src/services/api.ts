@@ -1,6 +1,6 @@
 import { API_CONFIG, getImageUrl } from '../config/api';
 
-const PAYLOAD_API_BASE = 'http://localhost:3000/api';
+const PAYLOAD_API_BASE = API_CONFIG.BASE_URL;
 
 export interface Product {
   id: string;
@@ -54,7 +54,6 @@ export interface Product {
     price?: number;
   }[];
   simpleFlavors?: string;
-  simpleWeights?: string;
   bundledOffers?: any[];
   upsells?: Array<{
     upsellProduct: Product;
@@ -255,7 +254,7 @@ export const productApi = {
         name: data.name,
         slug: data.slug,
         image: typeof data.image === 'string' && data.image.startsWith('/') 
-          ? `http://localhost:3000${data.image}` 
+          ? getImageUrl(data.image) 
           : (typeof data.image === 'string' ? data.image : null),
         images: data.images?.map((img: any) => ({
           url: img.url && img.url.startsWith('/') 
@@ -312,16 +311,8 @@ export const productApi = {
     slug: string
   ): Promise<{ success: boolean; data?: Product; error?: string }> {
     try {
-      // Check if slug is empty or invalid
-      if (!slug || slug.trim() === '') {
-        return {
-          success: false,
-          error: "Invalid slug provided",
-        };
-      }
-
       // Use Payload's query format to find by slug
-      const response = await fetch(`${PAYLOAD_API_BASE}/products?where[slug][equals]=${encodeURIComponent(slug.trim())}&depth=2&limit=1`);
+      const response = await fetch(`${PAYLOAD_API_BASE}/products?where[slug][equals]=${slug}&depth=2&limit=1`);
       
       if (!response.ok) {
         return {
@@ -336,7 +327,7 @@ export const productApi = {
       if (!product) {
         return {
           success: false,
-          error: "Product not found with this slug",
+          error: "Product not found",
         };
       }
 
@@ -346,7 +337,7 @@ export const productApi = {
         name: product.name,
         slug: product.slug,
         image: typeof product.image === 'string' && product.image.startsWith('/') 
-          ? `http://localhost:3000${product.image}` 
+          ? getImageUrl(product.image) 
           : (typeof product.image === 'string' ? product.image : null),
         images: product.images?.map((img: any) => ({
           url: img.url && img.url.startsWith('/') 
