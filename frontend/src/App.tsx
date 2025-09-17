@@ -4,6 +4,42 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+
+const AppRoutes = () => {
+  const location = useLocation();
+  return (
+    <Routes key={location.pathname}>
+      <Route path="/" element={<Index />} />
+      <Route path="/category/:categorySlug" element={<CategoryPage />} />
+      <Route path="/category/:categorySlug/:subcategorySlug" element={<CategoryPage />} />
+      <Route path="/product/:slug" element={<ProductDetail />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout" element={<Checkout />} />
+      <Route path="/thank-you" element={<ThankYou />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/register" element={<Signup />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/track-order" element={<TrackOrder />} />
+      <Route path="/offers" element={<Offers />} />
+      <Route path="/gift-card" element={<GiftCard />} />
+      <Route path="/shipping-returns" element={<ShippingReturns />} />
+      <Route path="/faqs" element={<FAQs />} />
+      <Route path="/disclaimer" element={<Disclaimer />} />
+      <Route path="/store-locator" element={<StoreLocator />} />
+      <Route path="/brands" element={<BrandsPage />} />
+      <Route path="/brand/:brandSlug" element={<BrandPage />} />
+      <Route path="/goal/:slug" element={<GoalPage />} />
+      <Route path="/api-products" element={<ApiProducts />} />
+      <Route path="/search" element={<SearchPage />} />
+      <Route path="/dubai-import" element={<DubaiImport />} />
+      <Route path="/terms-conditions" element={<TermsConditions />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { GiftCardProvider } from "@/context/GiftCardContext";
@@ -60,48 +96,12 @@ const App = () => {
               <Toaster />
               <Sonner />
               <AppLoader isLoading={isLoading} />
-              <BrowserRouter
-                future={{
-                  v7_startTransition: true,
-                  v7_relativeSplatPath: true
-                }}
-              >
+              <BrowserRouter>
                 <ScrollToTop />
                 <div className="min-h-screen flex flex-col bg-background font-body">
                   <Header />
                   <main className="flex-1">
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/category/:categorySlug" element={<CategoryPage />} />
-                      <Route path="/category/:categorySlug/:subcategorySlug" element={<CategoryPage />} />
-                      <Route path="/product/:slug" element={<ProductDetail />} />
-                      <Route path="/cart" element={<Cart />} />
-                      <Route path="/checkout" element={<Checkout />} />
-                      <Route path="/thank-you" element={<ThankYou />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/signup" element={<Signup />} />
-                      <Route path="/register" element={<Signup />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/about" element={<About />} />
-                      <Route path="/contact" element={<Contact />} />
-                      <Route path="/track-order" element={<TrackOrder />} />
-                      <Route path="/offers" element={<Offers />} />
-                      <Route path="/gift-card" element={<GiftCard />} />
-                      <Route path="/shipping-returns" element={<ShippingReturns />} />
-                      <Route path="/faqs" element={<FAQs />} />
-                      <Route path="/disclaimer" element={<Disclaimer />} />
-                      <Route path="/store-locator" element={<StoreLocator />} />
-                      <Route path="/brands" element={<BrandsPage />} />
-                      <Route path="/brand/:brandSlug" element={<BrandPage />} />
-                      <Route path="/goal/:slug" element={<GoalPage />} />
-                      <Route path="/api-products" element={<ApiProducts />} />
-                      <Route path="/search" element={<SearchPage />} />
-
-                      <Route path="/dubai-import" element={<DubaiImport />} />
-                      <Route path="/terms-conditions" element={<TermsConditions />} />
-                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
+                    <AppRoutes />
                   </main>
                   <Footer />
                   <ContactFloat onChatbotToggle={() => setIsChatbotOpen(!isChatbotOpen)} />

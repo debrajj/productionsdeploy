@@ -103,17 +103,17 @@ const Dashboard: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "delivered":
-        return "text-green-600 bg-green-50";
+        return "text-green-700 bg-green-100 border-green-200";
       case "shipped":
-        return "text-blue-600 bg-blue-50";
+        return "text-blue-700 bg-blue-100 border-blue-200";
       case "confirmed":
-        return "text-orange-600 bg-orange-50";
+        return "text-[#F9A245] bg-orange-100 border-orange-200";
       case "pending":
-        return "text-yellow-600 bg-yellow-50";
+        return "text-amber-700 bg-amber-100 border-amber-200";
       case "cancelled":
-        return "text-red-600 bg-red-50";
+        return "text-red-700 bg-red-100 border-red-200";
       default:
-        return "text-gray-600 bg-gray-50";
+        return "text-gray-700 bg-gray-100 border-gray-200";
     }
   };
 
@@ -225,7 +225,7 @@ const Dashboard: React.FC = () => {
                     Dashboard
                   </h1>
                   <p className="text-gray-600">
-                    Welcome back, {user.firstName}!
+                    Welcome back{user.firstName ? `, ${user.firstName}` : ''}!
                   </p>
                 </div>
 
@@ -256,7 +256,7 @@ const Dashboard: React.FC = () => {
                                 </p>
                               </div>
                               <div className="text-right">
-                                <div className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(lastOrder.status)}`}>
+                                <div className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(lastOrder.status)}`}>
                                   {getStatusIcon(lastOrder.status)}
                                   <span className="capitalize">{lastOrder.status}</span>
                                 </div>
@@ -352,7 +352,7 @@ const Dashboard: React.FC = () => {
                             </div>
                             <div className="text-right">
                               <div
-                                className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}
+                                className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(order.status)}`}
                               >
                                 {getStatusIcon(order.status)}
                                 <span className="capitalize">
@@ -407,7 +407,7 @@ const Dashboard: React.FC = () => {
                               </p>
                             </div>
                             <div
-                              className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}
+                              className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(order.status)}`}
                             >
                               {getStatusIcon(order.status)}
                               <span className="capitalize">{order.status}</span>

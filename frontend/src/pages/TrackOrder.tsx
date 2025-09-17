@@ -76,18 +76,20 @@ const TrackOrder: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "confirmed":
-        return "bg-blue-500";
-      case "processing":
-        return "bg-yellow-500";
-      case "shipped":
-        return "bg-orange-500";
-      case "in_transit":
-        return "bg-primary";
       case "delivered":
-        return "bg-secondary";
+        return "bg-green-600 text-white";
+      case "shipped":
+      case "in_transit":
+        return "bg-blue-600 text-white";
+      case "confirmed":
+      case "processing":
+        return "bg-[#F9A245] text-white";
+      case "pending":
+        return "bg-amber-600 text-white";
+      case "cancelled":
+        return "bg-red-600 text-white";
       default:
-        return "bg-muted-foreground";
+        return "bg-gray-600 text-white";
     }
   };
 
@@ -171,7 +173,7 @@ const TrackOrder: React.FC = () => {
                         : "Calculating..."}
                     </p>
                   </div>
-                  <Badge className="bg-primary text-primary-foreground">
+                  <Badge className={getStatusColor(orderData.status || 'pending')}>
                     {orderData.status?.replace("_", " ").toUpperCase() ||
                       "PENDING"}
                   </Badge>

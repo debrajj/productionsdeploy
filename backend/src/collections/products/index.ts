@@ -47,6 +47,14 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     description: 'Manage products. Use /api/download-template for bulk import template and POST /api/bulk-import to upload Excel files.',
+    components: {
+      BeforeList: [
+        {
+          path: '@/components/BulkImport',
+          exportName: 'BulkImport'
+        }
+      ]
+    }
   },
 
   access: {
@@ -65,6 +73,14 @@ export const Products: CollectionConfig = {
         } else if (data.imageType === 'url' && data.imageUrl) {
           data.image = data.imageUrl
         }
+        
+        // Set nutrition image based on type
+        if (data.nutritionImageType === 'upload' && data.nutritionImageUpload) {
+          data.nutritionImage = data.nutritionImageUpload
+        } else if (data.nutritionImageType === 'url' && data.nutritionImageUrl) {
+          data.nutritionImage = data.nutritionImageUrl
+        }
+        
         return data
       },
     ],
@@ -107,13 +123,20 @@ export const Products: CollectionConfig = {
           })
         }
         
-        // Convert nutrition image
+        // Convert nutrition image - ensure it's always a string or null
         if (doc.nutritionImage) {
-          if (typeof doc.nutritionImage === 'object' && doc.nutritionImage.filename) {
-            doc.nutritionImage = `/media/${doc.nutritionImage.filename}`
+          if (typeof doc.nutritionImage === 'object') {
+            if (doc.nutritionImage.filename) {
+              doc.nutritionImage = `/media/${doc.nutritionImage.filename}`
+            } else if (doc.nutritionImage.url) {
+              doc.nutritionImage = doc.nutritionImage.url
+            } else {
+              doc.nutritionImage = null
+            }
           } else if (typeof doc.nutritionImage === 'string') {
-            // If it's just an ID, we need to populate it
-            // This will be handled by the populate in the API call
+            // Keep as is if it's already a string
+          } else {
+            doc.nutritionImage = null
           }
         }
         
@@ -439,94 +462,59 @@ export const Products: CollectionConfig = {
     },
     {
       name: 'nutritionInfo',
-      type: 'group',
+      type: 'textarea',
       admin: {
-        description: 'Nutrition facts per serving',
+        description: 'Simple nutrition facts description (e.g., Per serving (30g): 25g Protein, 110 Calories, 2g Carbs, 0.5g Fat)',
       },
-      fields: [
-        {
-          name: 'servingSize',
-          type: 'text',
-          admin: {
-            description: 'Serving size (e.g., 30g (1 scoop))',
-          },
-        },
-        {
-          name: 'servingsPerContainer',
-          type: 'number',
-          min: 0,
-          admin: {
-            description: 'Number of servings per container (e.g., 33)',
-          },
-        },
-        {
-          name: 'protein',
-          type: 'text',
-          admin: {
-            description: 'Protein content (e.g., 25g)',
-          },
-        },
-        {
-          name: 'carbohydrates',
-          type: 'text',
-          admin: {
-            description: 'Carbs content (e.g., 2g)',
-          },
-        },
-        {
-          name: 'fat',
-          type: 'text',
-          admin: {
-            description: 'Fat content (e.g., 0.5g)',
-          },
-        },
-        {
-          name: 'calories',
-          type: 'number',
-          min: 0,
-          admin: {
-            description: 'Calories per serving (e.g., 110)',
-          },
-        },
-        {
-          name: 'sodium',
-          type: 'text',
-          admin: {
-            description: 'Sodium content (e.g., 50mg)',
-          },
-        },
-        {
-          name: 'calcium',
-          type: 'text',
-          admin: {
-            description: 'Calcium content (e.g., 120mg)',
-          },
-        },
-      ],
     },
     {
-      name: 'nutritionImage',
+      name: 'nutritionImageType',
+      type: 'radio',
+      defaultValue: 'url',
+      options: [
+        {
+          label: 'Upload Image',
+          value: 'upload',
+        },
+        {
+          label: 'Image URL',
+          value: 'url',
+        },
+      ],
+      admin: {
+        description: 'Choose how to add nutrition image',
+      },
+    },
+    {
+      name: 'nutritionImageUpload',
       type: 'upload',
       relationTo: 'media',
       admin: {
-        description: 'Nutrition facts image',
+        condition: (data) => data.nutritionImageType === 'upload',
+        description: 'Upload nutrition facts image',
+      },
+    },
+    {
+      name: 'nutritionImageUrl',
+      type: 'text',
+      admin: {
+        condition: (data) => data.nutritionImageType === 'url',
+        description: 'Nutrition facts image URL',
+      },
+    },
+    {
+      name: 'nutritionImage',
+      type: 'text',
+      admin: {
+        hidden: true,
       },
     },
     {
       name: 'ingredients',
-      type: 'array',
+      type: 'textarea',
       admin: {
-        description: 'Product ingredients list',
+        description: 'Simple ingredients list (e.g., Whey Protein Isolate, Natural Flavors, Stevia Extract)',
       },
-      fields: [
-        {
-          name: 'name',
-          type: 'text',
-          admin: {
-            description: 'Ingredient name (e.g., Whey Protein Isolate)',
-          },
-        },
-      ],
     },
 
     {
@@ -534,6 +522,14 @@ export const Products: CollectionConfig = {
       type: 'text',
       admin: {
         description: 'Comma-separated flavors for simple variants (e.g., Chocolate, Vanilla, Strawberry)',
+      },
+    },
+
+    {
+      name: 'simpleWeights',
+      type: 'text',
+      admin: {
+        description: 'Comma-separated weights for simple variants (e.g., 250g, 500g, 1kg)',
       },
     },
 

@@ -42,6 +42,9 @@ export async function importProductsFromExcel(
 ): Promise<ImportResult> {
   const fs = require('fs')
   
+  console.log('Importing from file:', filePath)
+  console.log('File exists:', fs.existsSync(filePath))
+  
   if (!fs.existsSync(filePath)) {
     throw new Error(`File not found: ${filePath}`)
   }
@@ -86,33 +89,26 @@ export async function importProductsFromExcel(
         name: row.name,
         slug: generateSlug(row.name),
         imageType: 'url',
-        imageUrl: row.imageUrl,
+        imageUrl: row.mainImage || row.imageUrl,
         additionalImages,
         price: row.price,
         originalPrice: row.originalPrice,
-        onSale: row.onSale || false,
+        onSale: row.onSale === 'TRUE' || row.onSale === true,
         category: row.category,
         subcategory: row.subcategory,
         brand: row.brand,
         description: row.description,
         rating: row.rating,
         reviews: row.reviews,
-        featured: row.featured || false,
-        trending: row.trending || false,
-        bestSeller: row.bestSeller || false,
-        lovedByExperts: row.lovedByExperts || false,
+        featured: row.featured === 'TRUE' || row.featured === true,
+        trending: row.trending === 'TRUE' || row.trending === true,
+        bestSeller: row.bestSeller === 'TRUE' || row.bestSeller === true,
+        lovedByExperts: row.lovedByExperts === 'TRUE' || row.lovedByExperts === true,
         shopByGoal: row.shopByGoal,
         simpleFlavors: row.simpleFlavors,
         variants,
         ingredients,
-        nutritionInfo: {
-          servingSize: row.servingSize,
-          servingsPerContainer: row.servingsPerContainer,
-          protein: row.protein,
-          carbohydrates: row.carbohydrates,
-          fat: row.fat,
-          calories: row.calories,
-        },
+        nutritionInfo: row.nutritionInfo ? JSON.parse(row.nutritionInfo) : {},
       }
 
       await payload.create({

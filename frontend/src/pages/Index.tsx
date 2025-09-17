@@ -222,8 +222,11 @@ const Index: React.FC = () => {
           productApi.getLovedByExpertsProducts(4),
         ]);
 
+        let transformedBestSellers: Product[] = [];
+        let transformedExperts: Product[] = [];
+
         if (bestSellersResponse.success) {
-          const transformedBestSellers = bestSellersResponse.data.map(
+          transformedBestSellers = bestSellersResponse.data.map(
             (apiProduct: ApiProduct) => ({
               id: apiProduct.id,
               name: apiProduct.name,
@@ -245,14 +248,14 @@ const Index: React.FC = () => {
               lovedByExperts: apiProduct.lovedByExperts,
               description: apiProduct.description,
               nutritionInfo: apiProduct.nutritionInfo,
-              ingredients: apiProduct.ingredients?.map((ing) => ing.name) || [],
+              ingredients: Array.isArray(apiProduct.ingredients) ? apiProduct.ingredients.map((ing) => typeof ing === 'string' ? ing : ing?.name || ing) : [],
             })
           );
           setBestSellers(transformedBestSellers);
         }
 
         if (expertsResponse.success) {
-          const transformedExperts = expertsResponse.data.map(
+          transformedExperts = expertsResponse.data.map(
             (apiProduct: ApiProduct) => ({
               id: apiProduct.id,
               name: apiProduct.name,
@@ -274,7 +277,7 @@ const Index: React.FC = () => {
               lovedByExperts: apiProduct.lovedByExperts,
               description: apiProduct.description,
               nutritionInfo: apiProduct.nutritionInfo,
-              ingredients: apiProduct.ingredients?.map((ing) => ing.name) || [],
+              ingredients: Array.isArray(apiProduct.ingredients) ? apiProduct.ingredients.map((ing) => typeof ing === 'string' ? ing : ing?.name || ing) : [],
             })
           );
           setLovedByExperts(transformedExperts);
@@ -306,10 +309,11 @@ const Index: React.FC = () => {
             lovedByExperts: apiProduct.lovedByExperts,
             description: apiProduct.description,
             nutritionInfo: apiProduct.nutritionInfo,
-            ingredients: apiProduct.ingredients?.map((ing) => ing.name) || [],
+            ingredients: Array.isArray(apiProduct.ingredients) ? apiProduct.ingredients.map((ing) => typeof ing === 'string' ? ing : ing?.name || ing) : [],
           })
         );
         setProducts(transformedAllProducts);
+        
       } catch (error) {
         console.error("Failed to load products from API:", error);
       } finally {
@@ -355,7 +359,7 @@ const Index: React.FC = () => {
   };
 
   const handleProductClick = (product: Product) => {
-    navigate(`/product/${product.slug || product.id}`);
+    navigate(`/product/${product.slug}`);
   };
 
   const features = [
@@ -459,6 +463,8 @@ const Index: React.FC = () => {
 
   return (
     <>
+
+      
       {/* Hero Section */}
       <section
         className={`relative bg-gradient-to-b from-[#f8fafc] via-[#fff9f2] to-[#f8fafc] ${isDesktop ? "min-h-[500px]" : ""}`}

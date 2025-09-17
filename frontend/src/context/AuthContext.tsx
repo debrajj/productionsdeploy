@@ -119,18 +119,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const initializeAuth = () => {
       try {
         const storedUser = localStorage.getItem("nutri_user");
+        const storedToken = localStorage.getItem("nutri_token");
         const storedOrders = localStorage.getItem("nutri_orders");
         const storedAddresses = localStorage.getItem("nutri_addresses");
         const storedWishlist = localStorage.getItem("nutri_wishlist");
 
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
-        }
-        if (storedOrders && storedUser) {
-          setOrders(JSON.parse(storedOrders));
-        }
-        if (storedAddresses) {
-          setAddresses(JSON.parse(storedAddresses));
+        // Only set user if both user data and token exist
+        if (storedUser && storedToken) {
+          const userData = JSON.parse(storedUser);
+          setUser(userData);
+          
+          // Load user-specific data
+          if (storedOrders) {
+            setOrders(JSON.parse(storedOrders));
+          }
+          if (storedAddresses) {
+            setAddresses(JSON.parse(storedAddresses));
+          }
         }
         if (storedWishlist) {
           const parsedWishlist = JSON.parse(storedWishlist);
@@ -154,12 +159,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       } catch (error) {
         console.error("Error loading auth data:", error);
+        // Clear corrupted data
+        localStorage.removeItem("nutri_user");
+        localStorage.removeItem("nutri_token");
       }
       setIsLoading(false);
     };
 
-    // Use setTimeout to prevent blocking
-    setTimeout(initializeAuth, 0);
+    initializeAuth();
   }, []);
 
   // Save to localStorage whenever state changes
@@ -176,12 +183,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [orders]);
 
   useEffect(() => {
-    localStorage.setItem("nutri_addresses", JSON.stringify(addresses));
-  }, [addresses]);
+    if (user) {
+      localStorage.setItem(`nutri_addresses_${user.id}`, JSON.stringify(addresses));
+    }
+  }, [addresses, user]);
 
   useEffect(() => {
     localStorage.setItem("nutri_wishlist", JSON.stringify(wishlist));
   }, [wishlist]);
+
+  const fetchUserAddresses = async (userId: string) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/addresses/${userId}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.addresses && Array.isArray(data.addresses)) {
+          setAddresses(data.addresses);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch addresses:', error);
+    }
+  };
 
   const fetchUserOrders = async (userId: string) => {
     try {
@@ -241,14 +264,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const response = await loginAPI(email, password);
 
-      if (response.success) {
+      if (response.user) {
         const userData: User = {
-          id: response.data.user.id || response.data.user._id,
-          email: response.data.user.email,
-          firstName: response.data.user.firstName || "",
-          lastName: response.data.user.lastName || "",
-          phone: response.data.user.phone,
-          createdAt: response.data.user.createdAt || new Date().toISOString(),
+          id: response.user.id || response.user._id,
+          email: response.user.email,
+          firstName: response.user.firstName || "",
+          lastName: response.user.lastName || "",
+          phone: response.user.phone,
+          createdAt: response.user.createdAt || new Date().toISOString(),
         };
         
         // Save for order auto-fill
@@ -256,20 +279,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         setUser(userData);
 
-        if (response.data.token) {
-          localStorage.setItem("nutri_token", response.data.token);
+        if (response.token) {
+          localStorage.setItem("nutri_token", response.token);
         }
 
-        // Fetch real orders
+        // Fetch real orders and addresses
         await fetchUserOrders(userData.id);
+        await fetchUserAddresses(userData.id);
         
-        // Don't auto-create empty addresses
-
-        // Fetch orders once on login
-        // No auto-polling
         return true;
       } else {
-        console.error("Login failed:", response.error);
+        console.error("Login failed:", response.error || 'Invalid credentials');
         return false;
       }
     } catch (error) {
@@ -344,11 +364,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const addAddress = async (address: Omit<Address, "id">): Promise<boolean> => {
     try {
+      if (!user) return false;
+      
+      // Try to save to database first
+      const addressData = { ...address, userId: user.id };
+      
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/addresses`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(addressData),
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const newAddress: Address = {
+            id: data.address._id || data.address.id || Date.now().toString(),
+            ...address,
+          };
+          setAddresses((prev) => [...prev, newAddress]);
+          return true;
+        }
+      } catch (apiError) {
+        console.warn('API failed, saving locally:', apiError);
+      }
+      
+      // Fallback to local storage
       const newAddress: Address = {
         ...address,
         id: Date.now().toString(),
       };
-
       setAddresses((prev) => [...prev, newAddress]);
       return true;
     } catch (error) {
@@ -421,32 +466,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const createOrder = async (orderData: any): Promise<boolean> => {
     try {
-      // Try API first
-      const apiOrder = await orderService.createOrder({
-        orderNumber: orderData.orderNumber,
-        customerEmail: orderData.customerEmail || user?.email || 'guest@example.com',
-        userId: user?.id, // Add userId to link order with user
-        items: orderData.items.map((item: any) => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          flavor: item.flavor,
-          weight: item.weight,
-          variant: item.variant
-        })),
-        subtotal: orderData.subtotal || orderData.total,
-        total: orderData.total,
-        shippingCost: orderData.shippingCost || 0,
-        shippingAddress: orderData.shippingAddress,
-        deliveryMethod: orderData.deliveryMethod || 'standard',
-        paymentMethod: orderData.paymentMethod || 'COD'
-      });
-      
-      // Auto-save shipping address if not already saved
+      // Auto-save shipping address if not already saved and user is logged in
       if (orderData.shippingAddress && user) {
         const addressExists = addresses.some(addr => 
-          addr.address === orderData.shippingAddress.address &&
+          addr.address.toLowerCase() === orderData.shippingAddress.address.toLowerCase() &&
           addr.zipCode === orderData.shippingAddress.zipCode
         );
         
@@ -482,15 +505,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       setOrders(prev => [newOrder, ...prev]);
       
-      // Refresh orders from API after creating
-      setTimeout(() => {
-        refreshOrders();
-      }, 1000);
+      // Try API call but don't fail if it doesn't work
+      try {
+        await orderService.createOrder({
+          orderNumber: orderData.orderNumber,
+          customerEmail: orderData.customerEmail || user?.email || 'guest@example.com',
+          userId: user?.id,
+          items: orderData.items.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            flavor: item.flavor,
+            weight: item.weight,
+            variant: item.variant
+          })),
+          subtotal: orderData.subtotal || orderData.total,
+          total: orderData.total,
+          shippingCost: orderData.shippingCost || 0,
+          shippingAddress: orderData.shippingAddress,
+          deliveryMethod: orderData.deliveryMethod || 'standard',
+          paymentMethod: orderData.paymentMethod || 'COD'
+        });
+      } catch (apiError) {
+        console.warn('API order creation failed, but local order saved:', apiError);
+      }
       
       return true;
     } catch (error) {
       console.error('Error creating order:', error);
-      return true;
+      return false;
     }
   };
 

@@ -1,42 +1,51 @@
 'use client'
 import React from 'react'
 
-export const ProcessButton: React.FC = () => {
+export const ProcessButton: React.FC<{ value?: any, path?: string }> = ({ value, path }) => {
   const [loading, setLoading] = React.useState(false)
   const [message, setMessage] = React.useState('')
-  const [uploadCount, setUploadCount] = React.useState(0)
-
-  React.useEffect(() => {
-    // Get upload count on load
-    fetch('/api/bulk-upload')
-      .then(res => res.json())
-      .then(data => setUploadCount(data.totalDocs || 0))
-      .catch(() => setUploadCount(0))
-  }, [])
+  
+  // Get the current document ID from the URL or path
+  const getDocumentId = () => {
+    if (typeof window !== 'undefined') {
+      const url = window.location.pathname
+      const match = url.match(/\/bulk-upload\/([^/]+)/)
+      return match ? match[1] : null
+    }
+    return null
+  }
 
   const handleProcess = async () => {
+    const docId = getDocumentId()
+    if (!docId) {
+      setMessage('❌ ERROR: No file selected')
+      return
+    }
+
     setLoading(true)
-    setMessage('🚀 Creating products...')
+    setMessage('🚀 Creating products from this file...')
     
     try {
-      const response = await fetch('/api/process-csv', {
+      const response = await fetch('/api/process-single-csv', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ uploadId: docId })
       })
       
       if (response.ok) {
         const result = await response.json()
-        setMessage(`✅ SUCCESS: ${result.message}`)
-        setLoading(false)
-        // Don't auto-refresh, let user see the result
+        setMessage(`✅ SUCCESS: Created ${result.imported} products!`)
+        // Refresh page to show updated status
+        setTimeout(() => window.location.reload(), 2000)
       } else {
-        setMessage('❌ FAILED: Could not create products')
-        setLoading(false)
+        const error = await response.json()
+        setMessage(`❌ FAILED: ${error.error || 'Could not create products'}`)
       }
     } catch (error) {
-      setMessage(`❌ ERROR: ${error.message}`)
+      setMessage(`❌ ERROR: ${error.message || 'Processing failed'}`)
+    } finally {
       setLoading(false)
     }
   }
@@ -44,7 +53,7 @@ export const ProcessButton: React.FC = () => {
   return (
     <div style={{ margin: '20px 0', padding: '20px', border: '2px solid #333', borderRadius: '8px', backgroundColor: '#1a1a1a' }}>
       <div style={{ marginBottom: '15px', fontSize: '14px', color: '#ccc' }}>
-        📁 <strong>Total CSV Files Uploaded:</strong> {uploadCount}
+        📁 <strong>Process this CSV file to create products</strong>
       </div>
       
       <button
@@ -63,7 +72,7 @@ export const ProcessButton: React.FC = () => {
           transition: 'all 0.3s ease'
         }}
       >
-        {loading ? '⏳ PROCESSING CSV...' : '🚀 PROCESS CSV & CREATE PRODUCTS'}
+        {loading ? '⏳ PROCESSING...' : '🚀 PROCESS THIS FILE'}
       </button>
       
       {message && (

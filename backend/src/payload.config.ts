@@ -27,15 +27,9 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     user: Users.slug,
-    importMap: {
-      baseDir: path.resolve(dirname),
-    },
     meta: {
       titleSuffix: '- O2 Nutrition Store Management',
-      favicon: '/favicon.ico',
-      ogImage: '/og-image.jpg',
     },
-    css: path.resolve(dirname, './app/(payload)/custom.scss'),
   },
   cookiePrefix: 'payload-admin',
   csrf: [

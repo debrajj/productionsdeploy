@@ -13,13 +13,34 @@ export const SavedAddresses: React.FC<SavedAddressesProps> = ({
   onSelectAddress, 
   selectedAddressId 
 }) => {
-  const { addresses } = useAuth();
+  const { addresses, user } = useAuth();
+
+  // Only show for logged-in users
+  if (!user) return null;
 
   const validAddresses = addresses.filter((addr, index, self) => 
     addr.address && addr.city && addr.zipCode && 
     self.findIndex(a => a.address === addr.address && a.zipCode === addr.zipCode) === index
   );
-  if (validAddresses.length === 0) return null;
+  
+  // Show placeholder if no addresses but user is logged in
+  if (validAddresses.length === 0) {
+    return (
+      <Card className="border-gray-200">
+        <CardHeader className="bg-gray-50">
+          <CardTitle className="flex items-center text-gray-700">
+            <MapPin className="h-5 w-5 mr-2" />
+            Saved Addresses
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-4">
+          <p className="text-sm text-gray-600">
+            No saved addresses yet. Your address will be saved after placing an order.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="border-blue-200">

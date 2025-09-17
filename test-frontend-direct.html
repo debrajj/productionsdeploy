@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Testing Frontend API Calls</h1>
+    <div id="results"></div>
+    
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+        const resultsDiv = document.getElementById('results');
+        
+        async function testAPIs() {
+            resultsDiv.innerHTML = '<p>Testing APIs...</p>';
+            
+            try {
+                // Test Best Sellers
+                console.log('🔍 Fetching best seller products...');
+                const bestSellersResponse = await fetch(`${API_BASE}/products?where%5BbestSeller%5D%5Bequals%5D=true&limit=8&depth=2`);
+                const bestSellersData = await bestSellersResponse.json();
+                
+                console.log('📊 Best seller products result:', bestSellersData.docs?.length, 'products found');
+                
+                // Test Loved by Experts
+                console.log('🔍 Fetching loved by experts products...');
+                const expertsResponse = await fetch(`${API_BASE}/products?where%5BlovedByExperts%5D%5Bequals%5D=true&limit=4&depth=2`);
+                const expertsData = await expertsResponse.json();
+                
+                console.log('📊 Loved by experts products result:', expertsData.docs?.length, 'products found');
+                
+                resultsDiv.innerHTML = `
+                    <h2>API Test Results:</h2>
+                    <p><strong>Best Sellers:</strong> ${bestSellersData.docs?.length || 0} products found</p>
+                    <p><strong>Loved by Experts:</strong> ${expertsData.docs?.length || 0} products found</p>
+                    <h3>Best Seller Products:</h3>
+                    <ul>
+                        ${bestSellersData.docs?.map(p => `<li>${p.name} (bestSeller: ${p.bestSeller})</li>`).join('') || '<li>No products found</li>'}
+                    </ul>
+                    <h3>Loved by Experts Products:</h3>
+                    <ul>
+                        ${expertsData.docs?.map(p => `<li>${p.name} (lovedByExperts: ${p.lovedByExperts})</li>`).join('') || '<li>No products found</li>'}
+                    </ul>
+                `;
+                
+            } catch (error) {
+                console.error('API Test Error:', error);
+                resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Run test when page loads
+        testAPIs();
+    </script>
+</body>
+</html>

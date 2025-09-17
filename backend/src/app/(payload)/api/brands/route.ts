@@ -1,10 +1,11 @@
-import { getPayloadClient } from '@/lib/payload'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import { NextRequest, NextResponse } from 'next/server'
 
 // GET /api/brands - Get all unique brands from products
 export async function GET(request: NextRequest) {
   try {
-    const payload = await getPayloadClient()
+    const payload = await getPayload({ config })
     
     // Get all products to extract unique brands
     const products = await payload.find({
