@@ -165,7 +165,8 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({ 
       success: true, 
-      message: `Created ${success} new products, skipped ${skipped} duplicates. Images: ✅ Variants: ✅ Nutrition: ✅` 
+      message: `✅ Created ${success} new products, skipped ${skipped} duplicates. Images: ✅ Variants: ✅ Nutrition: ✅`,
+      buttonColor: '#22c55e'
     })
     
   } catch (error) {

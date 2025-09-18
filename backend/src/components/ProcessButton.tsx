@@ -1,90 +1,91 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
-export const ProcessButton: React.FC = () => {
-  const [loading, setLoading] = React.useState(false)
-  const [message, setMessage] = React.useState('')
-  const [uploadCount, setUploadCount] = React.useState(0)
+const ProcessButton: React.FC = () => {
+  const [processing, setProcessing] = useState(false)
+  const [result, setResult] = useState('')
+  const [id, setId] = useState<string | null>(null)
 
-  React.useEffect(() => {
-    // Get upload count on load
-    fetch('/api/bulk-upload')
-      .then(res => res.json())
-      .then(data => setUploadCount(data.totalDocs || 0))
-      .catch(() => setUploadCount(0))
+  useEffect(() => {
+    // Get ID from current URL
+    const pathParts = window.location.pathname.split('/')
+    const currentId = pathParts[pathParts.length - 1]
+    setId(currentId)
   }, [])
 
   const handleProcess = async () => {
-    setLoading(true)
-    setMessage('🚀 Creating products...')
+    if (!id) {
+      setResult('Error: No ID found')
+      return
+    }
+    
+    setProcessing(true)
+    setResult('Starting CSV processing...')
     
     try {
-      const response = await fetch('/api/process-csv', {
+      const response = await fetch('/api/bulk-process', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ id }),
       })
       
-      if (response.ok) {
-        const result = await response.json()
-        setMessage(`✅ SUCCESS: ${result.message}`)
-        setLoading(false)
-        // Don't auto-refresh, let user see the result
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+      
+      const data = await response.json()
+      
+      if (data.success) {
+        setResult(`✅ Success! Created ${data.successCount || 0} products. Errors: ${data.errorCount || 0}`)
+        
+        // Show detailed results if available
+        if (data.details) {
+          setResult(prev => prev + '\n\nDetails:\n' + data.details)
+        }
+        
+        // Refresh page after 3 seconds to show new products
+        setTimeout(() => {
+          window.location.reload()
+        }, 3000)
       } else {
-        setMessage('❌ FAILED: Could not create products')
-        setLoading(false)
+        setResult('❌ Processing failed: ' + (data.error || 'Unknown error'))
       }
     } catch (error) {
-      setMessage(`❌ ERROR: ${error.message}`)
-      setLoading(false)
+      setResult('❌ Error: ' + (error?.message || 'Unknown error'))
+    } finally {
+      setProcessing(false)
     }
   }
 
+  if (!id) {
+    return <div>Loading...</div>
+  }
+
   return (
-    <div style={{ margin: '20px 0', padding: '20px', border: '2px solid #333', borderRadius: '8px', backgroundColor: '#1a1a1a' }}>
-      <div style={{ marginBottom: '15px', fontSize: '14px', color: '#ccc' }}>
-        📁 <strong>Total CSV Files Uploaded:</strong> {uploadCount}
-      </div>
-      
+    <div style={{ margin: '10px 0' }}>
       <button
         onClick={handleProcess}
-        disabled={loading}
+        disabled={processing}
         style={{
-          backgroundColor: loading ? '#555' : '#000',
+          padding: '10px 20px',
+          backgroundColor: processing ? '#ccc' : '#007cba',
           color: 'white',
-          padding: '12px 24px',
           border: 'none',
-          borderRadius: '6px',
-          cursor: loading ? 'not-allowed' : 'pointer',
-          fontSize: '16px',
-          fontWeight: 'bold',
-          width: '100%',
-          transition: 'all 0.3s ease'
+          borderRadius: '4px',
+          cursor: processing ? 'not-allowed' : 'pointer',
         }}
       >
-        {loading ? '⏳ PROCESSING CSV...' : '🚀 PROCESS CSV & CREATE PRODUCTS'}
+        {processing ? 'Processing...' : 'Start Creating Products from CSV'}
       </button>
-      
-      {message && (
-        <div style={{ 
-          marginTop: '15px', 
-          padding: '12px', 
-          backgroundColor: message.includes('✅') ? '#1a3d2e' : message.includes('❌') ? '#3d1a1a' : '#3d3d1a',
-          border: `2px solid ${message.includes('✅') ? '#00ff00' : message.includes('❌') ? '#ff0000' : '#ffff00'}`,
-          color: '#fff',
-          borderRadius: '6px',
-          fontWeight: 'bold',
-          fontSize: '14px',
-          textAlign: 'center'
-        }}>
-          {message}
+      {result && (
+        <div style={{ marginTop: '10px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
+          {result}
         </div>
       )}
-      
-      <div style={{ marginTop: '10px', fontSize: '12px', color: '#aaa', textAlign: 'center' }}>
-        📝 This will create products from your uploaded CSV files
-      </div>
     </div>
   )
 }
+
+export default ProcessButton

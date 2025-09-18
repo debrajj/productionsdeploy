@@ -1,112 +1,19 @@
 
-> dev
-> cross-env NODE_OPTIONS=--no-deprecation next dev -p ${PORT:-3000}
+> o2-nutrition-backend@1.0.0 dev
+> cross-env NODE_OPTIONS=--no-deprecation next dev
 
-   ▲ Next.js 15.0.3
-   - Local:        http://localhost:3000
+ ⚠ Port 3000 is in use, trying 3001 instead.
+   ▲ Next.js 15.0.2
+   - Local:        http://localhost:3001
    - Environments: .env
 
  ✓ Starting...
  ⚠ Duplicate page detected. src/app/api/orders/route.ts and src/app/(payload)/api/orders/route.ts resolve to /api/orders
  ⚠ Duplicate page detected. src/app/api/orders/route.ts and src/app/(payload)/api/orders/route.ts resolve to /api/orders
- ✓ Ready in 2.2s
- ✓ Compiled /src/middleware in 163ms (91 modules)
- ○ Compiling /api/[...slug] ...
- ✓ Compiled /api/[...slug] in 3s (2116 modules)
-[22:22:58] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
- GET /api/products?where[slug][equals]=atom-whey-protein-isolate-ultra-pure&depth=2&limit=1 200 in 7369ms
- GET /api/announcements?where[isActive][equals]=true&sort=-priority 200 in 7373ms
- GET /api/products?where%5BlovedByExperts%5D%5Bequals%5D=true&limit=4&depth=2 200 in 2123ms
- GET /api/products?limit=200&depth=2 200 in 2352ms
- GET /api/products?limit=100&depth=2 200 in 7373ms
- GET /api/products?where%5BbestSeller%5D%5Bequals%5D=true&limit=8&depth=2 200 in 2126ms
-Product after processing: { id: '68c6ba2756cf9eaefde66d7f', nutritionImage: undefined }
- GET /api/announcements?where[isActive][equals]=true&sort=-priority 200 in 706ms
-Product after processing: { id: '68c6bede56cf9eaefde66fc4', nutritionImage: undefined }
-Product after processing: {
-  id: '68c6be4656cf9eaefde66f43',
-  nutritionImage: '/media/Screenshot 2025-09-13 at 8.22.07 PM-1.png'
-}
-Product after processing: { id: '68c6bda656cf9eaefde66ed0', nutritionImage: undefined }
-Product after processing: { id: '68c6bbfd56cf9eaefde66e15', nutritionImage: undefined }
-Product after processing: { id: '68c6ba2756cf9eaefde66d7f', nutritionImage: undefined }
-Product after processing: { id: '68c6bede56cf9eaefde66fc4', nutritionImage: undefined }
-Product after processing: {
-  id: '68c6be4656cf9eaefde66f43',
-  nutritionImage: '/media/Screenshot 2025-09-13 at 8.22.07 PM-1.png'
-}
-Product after processing: { id: '68c6bda656cf9eaefde66ed0', nutritionImage: undefined }
-Product after processing: { id: '68c6bbfd56cf9eaefde66e15', nutritionImage: undefined }
-Product after processing: { id: '68c6ba2756cf9eaefde66d7f', nutritionImage: undefined }
-Product after processing: { id: '68c6bede56cf9eaefde66fc4', nutritionImage: undefined }
-Product after processing: {
-  id: '68c6be4656cf9eaefde66f43',
-  nutritionImage: '/media/Screenshot 2025-09-13 at 8.22.07 PM-1.png'
-}
-Product after processing: { id: '68c6bda656cf9eaefde66ed0', nutritionImage: undefined }
-Product after processing: { id: '68c6bbfd56cf9eaefde66e15', nutritionImage: undefined }
-Product after processing: { id: '68c6bede56cf9eaefde66fc4', nutritionImage: undefined }
-Product after processing: {
-  id: '68c6be4656cf9eaefde66f43',
-  nutritionImage: '/media/Screenshot 2025-09-13 at 8.22.07 PM-1.png'
-}
-Product after processing: { id: '68c6bda656cf9eaefde66ed0', nutritionImage: undefined }
-Product after processing: { id: '68c6bbfd56cf9eaefde66e15', nutritionImage: undefined }
-Product after processing: { id: '68c6ba2756cf9eaefde66d7f', nutritionImage: undefined }
- GET /api/products?limit=100&depth=2 200 in 966ms
-Product after processing: { id: '68c6bede56cf9eaefde66fc4', nutritionImage: undefined }
-Product after processing: {
-  id: '68c6be4656cf9eaefde66f43',
-  nutritionImage: '/media/Screenshot 2025-09-13 at 8.22.07 PM-1.png'
-}
-Product after processing: { id: '68c6bda656cf9eaefde66ed0', nutritionImage: undefined }
-Product after processing: { id: '68c6bbfd56cf9eaefde66e15', nutritionImage: undefined }
- GET /api/products?where%5BlovedByExperts%5D%5Bequals%5D=true&limit=4&depth=2 200 in 991ms
- GET /api/globals/hero-banner-global?depth=2&t=1757868778479 200 in 994ms
-Product after processing: { id: '68c6bede56cf9eaefde66fc4', nutritionImage: undefined }
-Product after processing: {
-  id: '68c6be4656cf9eaefde66f43',
-  nutritionImage: '/media/Screenshot 2025-09-13 at 8.22.07 PM-1.png'
-}
-Product after processing: { id: '68c6bda656cf9eaefde66ed0', nutritionImage: undefined }
-Product after processing: { id: '68c6bbfd56cf9eaefde66e15', nutritionImage: undefined }
-Product after processing: { id: '68c6ba2756cf9eaefde66d7f', nutritionImage: undefined }
-Product after processing: { id: '68c6bede56cf9eaefde66fc4', nutritionImage: undefined }
-Product after processing: {
-  id: '68c6be4656cf9eaefde66f43',
-  nutritionImage: '/media/Screenshot 2025-09-13 at 8.22.07 PM-1.png'
-}
-Product after processing: { id: '68c6bda656cf9eaefde66ed0', nutritionImage: undefined }
-Product after processing: { id: '68c6bbfd56cf9eaefde66e15', nutritionImage: undefined }
-Product after processing: { id: '68c6ba2756cf9eaefde66d7f', nutritionImage: undefined }
- GET /api/products?where%5BbestSeller%5D%5Bequals%5D=true&limit=8&depth=2 200 in 1368ms
-Product after processing: { id: '68c6bede56cf9eaefde66fc4', nutritionImage: undefined }
- GET /api/products?where%5BshopByGoal%5D%5Bequals%5D=WEIGHT_LOSS&limit=1&depth=2 200 in 85ms
- GET /api/products?where%5BshopByGoal%5D%5Bequals%5D=ENERGY_PERFORMANCE&limit=1&depth=2 200 in 94ms
-Product after processing: { id: '68c6ba2756cf9eaefde66d7f', nutritionImage: undefined }
- GET /api/products?where%5BshopByGoal%5D%5Bequals%5D=MUSCLE_GAIN&limit=1&depth=2 200 in 101ms
-Product after processing: {
-  id: '68c6be4656cf9eaefde66f43',
-  nutritionImage: '/media/Screenshot 2025-09-13 at 8.22.07 PM-1.png'
-}
- GET /api/products?where%5BshopByGoal%5D%5Bequals%5D=HEALTH_WELLNESS&limit=1&depth=2 200 in 162ms
-Product after processing: { id: '68c6ba2756cf9eaefde66d7f', nutritionImage: undefined }
- GET /api/products?where[slug][equals]=atom-whey-protein-isolate-ultra-pure&depth=2&limit=1 200 in 74ms
- ○ Compiling /api/product-variants ...
- ✓ Compiled /api/product-variants in 2.5s (2130 modules)
- GET /api/product-variants 500 in 2962ms
- ○ Compiling /admin/[[...segments]] ...
- ✓ Compiled /admin/[[...segments]] in 2.2s (3909 modules)
-Generating import map
-No new imports found, skipping writing import map
-Delete access check - User: authenticated
-User email: gainmode46@gmail.com
-Delete access check - User: authenticated
-User email: gainmode46@gmail.com
- GET /admin 200 in 6318ms
-Delete access check - User: authenticated
-User email: gainmode46@gmail.com
-Delete access check - User: authenticated
-User email: gainmode46@gmail.com
- GET /admin/collections/orders 200 in 300ms
+ ✓ Ready in 3.5s
+ ✓ Compiled /src/middleware in 440ms (91 modules)
+ ○ Compiling /api/products ...
+ ✓ Compiled /api/products in 5.2s (1804 modules)
+[13:49:50] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ GET /api/products?limit=100 200 in 8335ms
 [?25h

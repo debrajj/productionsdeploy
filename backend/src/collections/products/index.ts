@@ -56,78 +56,7 @@ export const Products: CollectionConfig = {
     delete: () => true,
   },
   
-  hooks: {
-    beforeChange: [
-      ({ data }) => {
-        // Set main image based on type
-        if (data.imageType === 'upload' && data.mainImage) {
-          data.image = data.mainImage
-        } else if (data.imageType === 'url' && data.imageUrl) {
-          data.image = data.imageUrl
-        }
-        return data
-      },
-    ],
-    afterRead: [
-      async ({ doc, req }) => {
-        // Convert main image based on type
-        if (doc.imageType === 'upload') {
-          if (doc.mainImage && typeof doc.mainImage === 'object' && doc.mainImage.filename) {
-            doc.image = `/media/${doc.mainImage.filename}`
-          } else if (doc.image && typeof doc.image === 'object' && doc.image.filename) {
-            doc.image = `/media/${doc.image.filename}`
-          }
-        } else if (doc.imageType === 'url' && doc.imageUrl) {
-          doc.image = doc.imageUrl
-        }
-        
-        // Ensure image is always a string
-        if (typeof doc.image === 'object') {
-          doc.image = doc.image?.filename ? `/media/${doc.image.filename}` : null
-        }
-        
-        // Convert additional images
-        if (doc.additionalImages && Array.isArray(doc.additionalImages)) {
-          doc.images = doc.additionalImages.map((item: any) => {
-            if (item.imageType === 'upload' && item.image && typeof item.image === 'object' && item.image.filename) {
-              return {
-                url: `/media/${item.image.filename}`,
-                imageType: 'upload'
-              }
-            } else if (item.imageType === 'url' && item.imageUrl) {
-              return {
-                url: item.imageUrl,
-                imageType: 'url'
-              }
-            }
-            return {
-              url: typeof item.image === 'string' ? item.image : (item.image?.filename ? `/media/${item.image.filename}` : item.imageUrl),
-              imageType: item.imageType || 'upload'
-            }
-          })
-        }
-        
-        // Convert nutrition image
-        if (doc.nutritionImage) {
-          if (typeof doc.nutritionImage === 'object' && doc.nutritionImage.filename) {
-            doc.nutritionImage = `/media/${doc.nutritionImage.filename}`
-          } else if (typeof doc.nutritionImage === 'string') {
-            // If it's just an ID, we need to populate it
-            // This will be handled by the populate in the API call
-          }
-        }
-        
-        // Clean up any remaining object references
-        delete doc.mainImage
-        delete doc.imageUrl
-        delete doc.additionalImages
-        
-        console.log('Product after processing:', { id: doc.id, nutritionImage: doc.nutritionImage })
-        
-        return doc
-      },
-    ],
-  },
+
   fields: [
     {
       name: 'name',
@@ -140,13 +69,8 @@ export const Products: CollectionConfig = {
     {
       name: 'slug',
       type: 'text',
-      required: true,
-      unique: true,
       admin: {
         position: 'sidebar',
-      },
-      hooks: {
-        beforeValidate: [formatSlug('name')],
       },
     },
     {
@@ -439,94 +363,24 @@ export const Products: CollectionConfig = {
     },
     {
       name: 'nutritionInfo',
-      type: 'group',
+      type: 'textarea',
       admin: {
-        description: 'Nutrition facts per serving',
+        description: 'Simple nutrition facts (e.g., Per serving: 25g Protein, 110 Calories)',
       },
-      fields: [
-        {
-          name: 'servingSize',
-          type: 'text',
-          admin: {
-            description: 'Serving size (e.g., 30g (1 scoop))',
-          },
-        },
-        {
-          name: 'servingsPerContainer',
-          type: 'number',
-          min: 0,
-          admin: {
-            description: 'Number of servings per container (e.g., 33)',
-          },
-        },
-        {
-          name: 'protein',
-          type: 'text',
-          admin: {
-            description: 'Protein content (e.g., 25g)',
-          },
-        },
-        {
-          name: 'carbohydrates',
-          type: 'text',
-          admin: {
-            description: 'Carbs content (e.g., 2g)',
-          },
-        },
-        {
-          name: 'fat',
-          type: 'text',
-          admin: {
-            description: 'Fat content (e.g., 0.5g)',
-          },
-        },
-        {
-          name: 'calories',
-          type: 'number',
-          min: 0,
-          admin: {
-            description: 'Calories per serving (e.g., 110)',
-          },
-        },
-        {
-          name: 'sodium',
-          type: 'text',
-          admin: {
-            description: 'Sodium content (e.g., 50mg)',
-          },
-        },
-        {
-          name: 'calcium',
-          type: 'text',
-          admin: {
-            description: 'Calcium content (e.g., 120mg)',
-          },
-        },
-      ],
     },
     {
       name: 'nutritionImage',
-      type: 'upload',
-      relationTo: 'media',
+      type: 'text',
       admin: {
-        description: 'Nutrition facts image',
+        description: 'Nutrition facts image URL',
       },
     },
     {
       name: 'ingredients',
-      type: 'array',
+      type: 'textarea',
       admin: {
-        description: 'Product ingredients list',
+        description: 'Comma-separated ingredients (e.g., Whey Protein Isolate, Natural Flavors)',
       },
-      fields: [
-        {
-          name: 'name',
-          type: 'text',
-          admin: {
-            description: 'Ingredient name (e.g., Whey Protein Isolate)',
-          },
-        },
-      ],
     },
 
     {
@@ -569,48 +423,6 @@ export const Products: CollectionConfig = {
       ],
     },
 
-    {
-      name: 'upsells',
-      type: 'array',
-      admin: {
-        description: 'Upsell offers - products that complement this product',
-      },
-      fields: [
-        {
-          name: 'upsellProduct',
-          type: 'relationship',
-          relationTo: 'products',
-          required: true,
-          admin: {
-            description: 'Select the product to offer as upsell',
-          },
-        },
-        {
-          name: 'discountPercentage',
-          type: 'number',
-          min: 0,
-          max: 100,
-          required: true,
-          admin: {
-            description: 'Discount percentage when both products are purchased together',
-          },
-        },
-        {
-          name: 'description',
-          type: 'text',
-          admin: {
-            description: 'Short description of why these products work well together',
-          },
-        },
-        {
-          name: 'active',
-          type: 'checkbox',
-          defaultValue: true,
-          admin: {
-            description: 'Enable/disable this upsell offer',
-          },
-        },
-      ],
-    },
+
   ],
 }

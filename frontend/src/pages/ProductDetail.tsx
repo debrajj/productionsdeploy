@@ -14,7 +14,7 @@ import SubscribeCTA from "@/components/SubscribeCTA";
 import ProductImageGallery from "@/components/ProductImageGallery";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/hooks/useWishlist";
-import { Product as ApiProduct, productApi } from "@/services/api";
+import { Product as ApiProduct, productApi } from "@/services/api-fixed";
 import {
   Award,
   CheckCircle,
@@ -131,8 +131,6 @@ const ProductDetail: React.FC = () => {
         setError(null);
         
         let response;
-        console.log("Loading product with identifier:", slug);
-        
         // Try by slug first, then by ID if slug fails
         try {
           response = await productApi.getProductBySlug(slug);
@@ -142,8 +140,6 @@ const ProductDetail: React.FC = () => {
         } catch {
           response = await productApi.getProductById(slug);
         }
-        
-        console.log("Product API response:", response);
         if (response.success && response.data) {
           setProduct(response.data);
           // Set initial price from variants or base price
@@ -156,16 +152,7 @@ const ProductDetail: React.FC = () => {
           setError(response.error || "Product not found");
         }
 
-        // Load variants from API
-        try {
-          const variantsResponse = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/product-variants`);
-          const variantsResult = await variantsResponse.json();
-          if (variantsResult.success) {
-            setApiVariants(variantsResult.data);
-          }
-        } catch (error) {
-          console.error('Failed to fetch variants:', error);
-        }
+        // Variants are handled directly from product data
       } catch (err) {
         console.error("Failed to load product:", err);
         setError("Failed to load product. Please try again.");
@@ -186,7 +173,6 @@ const ProductDetail: React.FC = () => {
   );
   const [selectedPrice, setSelectedPrice] = useState<number>(0);
   const [recentlyViewed, setRecentlyViewed] = useState<ApiProduct[]>([]);
-  const [apiVariants, setApiVariants] = useState<{flavors: string[], weights: string[]}>({ flavors: [], weights: [] });
 
   // Scroll to top when component loads
   useEffect(() => {
@@ -366,8 +352,9 @@ const ProductDetail: React.FC = () => {
     { icon: RotateCcw, text: "30-day return policy" },
   ];
 
-  const getCertificationIcon = (cert: string) => {
-    const certLower = cert.toLowerCase();
+  const getCertificationIcon = (cert: string | { name: string }) => {
+    const certText = typeof cert === 'string' ? cert : cert.name || '';
+    const certLower = certText.toLowerCase();
     if (certLower.includes("organic") || certLower.includes("natural"))
       return Leaf;
     if (certLower.includes("gmp") || certLower.includes("iso")) return Award;
@@ -485,76 +472,52 @@ const ProductDetail: React.FC = () => {
                 <p className="text-sm text-gray-600">Inclusive of all taxes</p>
               </div>
 
-              {/* Variant Selectors */}
+              {/* Variant Selectors - Priority: Simple Flavors first, then Variants */}
               {(() => {
-                // Option 1: Simple Flavors & Weights (mutually exclusive with variants)
-                if (product?.simpleFlavors || product?.simpleWeights) {
+                // Debug logging
+                console.log('Product variant debug:', {
+                  simpleFlavors: product?.simpleFlavors,
+                  variants: product?.variants,
+                  variantsType: typeof product?.variants,
+                  variantsLength: Array.isArray(product?.variants) ? product.variants.length : 'not array'
+                });
+                
+                // Priority 1: Simple Flavors (if exists, don't show variants)
+                if (product?.simpleFlavors && product.simpleFlavors.trim()) {
                   return (
                     <div className="space-y-4 pt-2">
-                      {product.simpleFlavors && (
-                        <div className="space-y-3">
-                          <label className="text-sm font-semibold text-gray-900">
-                            Flavor
-                          </label>
-                          <Select
-                            value={selectedFlavor}
-                            onValueChange={setSelectedFlavor}
-                          >
-                            <SelectTrigger className="w-full h-12 border-2 border-gray-200 hover:border-[#F9A245] focus:border-[#F9A245] focus:ring-2 focus:ring-[#F9A245]/20 rounded-lg bg-white">
-                              <SelectValue
-                                placeholder="Choose flavor"
-                                className="text-gray-700"
-                              />
-                            </SelectTrigger>
-                            <SelectContent className="border-2 border-gray-200 rounded-lg shadow-lg">
-                              {product.simpleFlavors.split(',').map((flavor, index) => (
-                                <SelectItem
-                                  key={`flavor-${index}`}
-                                  value={flavor.trim()}
-                                  className="hover:bg-[#F9A245]/10 hover:text-black focus:bg-[#F9A245]/10 focus:text-black cursor-pointer py-3"
-                                >
-                                  {flavor.trim()}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      )}
-                      
-                      {product.simpleWeights && (
-                        <div className="space-y-3">
-                          <label className="text-sm font-semibold text-gray-900">
-                            Weight
-                          </label>
-                          <Select
-                            value={selectedWeight}
-                            onValueChange={setSelectedWeight}
-                          >
-                            <SelectTrigger className="w-full h-12 border-2 border-gray-200 hover:border-[#F9A245] focus:border-[#F9A245] focus:ring-2 focus:ring-[#F9A245]/20 rounded-lg bg-white">
-                              <SelectValue
-                                placeholder="Choose weight"
-                                className="text-gray-700"
-                              />
-                            </SelectTrigger>
-                            <SelectContent className="border-2 border-gray-200 rounded-lg shadow-lg">
-                              {product.simpleWeights.split(',').map((weight, index) => (
-                                <SelectItem
-                                  key={`weight-${index}`}
-                                  value={weight.trim()}
-                                  className="hover:bg-[#F9A245]/10 hover:text-black focus:bg-[#F9A245]/10 focus:text-black cursor-pointer py-3"
-                                >
-                                  {weight.trim()}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      )}
+                      <div className="space-y-3">
+                        <label className="text-sm font-semibold text-gray-900">
+                          Flavor
+                        </label>
+                        <Select
+                          value={selectedFlavor}
+                          onValueChange={setSelectedFlavor}
+                        >
+                          <SelectTrigger className="w-full h-12 border-2 border-gray-200 hover:border-[#F9A245] focus:border-[#F9A245] focus:ring-2 focus:ring-[#F9A245]/20 rounded-lg bg-white">
+                            <SelectValue
+                              placeholder="Choose flavor"
+                              className="text-gray-700"
+                            />
+                          </SelectTrigger>
+                          <SelectContent className="border-2 border-gray-200 rounded-lg shadow-lg">
+                            {product.simpleFlavors.split(',').map((flavor, index) => (
+                              <SelectItem
+                                key={`flavor-${index}`}
+                                value={flavor.trim()}
+                                className="hover:bg-[#F9A245]/10 hover:text-black focus:bg-[#F9A245]/10 focus:text-black cursor-pointer py-3"
+                              >
+                                {flavor.trim()}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                   );
                 }
                 
-                // Option 2: Variants with individual pricing (mutually exclusive with simple options)
+                // Priority 2: Variants with pricing (only if no simple flavors)
                 if (product?.variants && product.variants.length > 0) {
                   const variantFlavors = Array.from(new Set(product.variants.map(v => v.flavor).filter(Boolean)));
                   const variantWeights = Array.from(new Set(product.variants.map(v => v.weight).filter(Boolean)));
@@ -608,7 +571,6 @@ const ProductDetail: React.FC = () => {
                             </SelectTrigger>
                             <SelectContent className="border-2 border-gray-200 rounded-lg shadow-lg">
                               {variantWeights.map((weight, index) => {
-                                // Find variant with this weight to show price
                                 const variantWithPrice = product.variants.find(v => v.weight === weight);
                                 return (
                                   <SelectItem
@@ -641,7 +603,6 @@ const ProductDetail: React.FC = () => {
                           <div className="text-xl font-bold text-[#F9A245]">
                             ₹{(selectedPrice || product.price).toLocaleString()}
                           </div>
-
                         </div>
                       )}
                     </div>
@@ -787,27 +748,50 @@ const ProductDetail: React.FC = () => {
           <TabsContent value="ingredients" className="mt-6">
             <Card>
               <CardContent className="p-6">
-                {product.ingredients && product.ingredients.length > 0 ? (
-                  <div className="space-y-2">
-                    <h3 className="font-semibold text-gray-900 mb-3">
-                      Ingredients:
-                    </h3>
+                {(() => {
+                  // Handle different ingredient data types
+                  if (product.ingredients) {
+                    // If ingredients is a string, display it directly
+                    if (typeof product.ingredients === 'string') {
+                      return (
+                        <div className="space-y-2">
+                          <h3 className="font-semibold text-gray-900 mb-3">
+                            Ingredients:
+                          </h3>
+                          <p className="text-gray-700">
+                            {product.ingredients}
+                          </p>
+                        </div>
+                      );
+                    }
+                    // If ingredients is an array, process it
+                    if (Array.isArray(product.ingredients) && product.ingredients.length > 0) {
+                      return (
+                        <div className="space-y-2">
+                          <h3 className="font-semibold text-gray-900 mb-3">
+                            Ingredients:
+                          </h3>
+                          <p className="text-gray-700">
+                            {product.ingredients
+                              .map((ingredient) =>
+                                typeof ingredient === "object" && ingredient?.name
+                                  ? ingredient.name
+                                  : String(ingredient)
+                              )
+                              .join(", ")}
+                          </p>
+                        </div>
+                      );
+                    }
+                  }
+                  // Default fallback
+                  return (
                     <p className="text-gray-700">
-                      {product.ingredients
-                        .map((ingredient) =>
-                          typeof ingredient === "object"
-                            ? ingredient.name
-                            : ingredient
-                        )
-                        .join(", ")}
+                      Made with premium, carefully selected ingredients to ensure
+                      quality and effectiveness.
                     </p>
-                  </div>
-                ) : (
-                  <p className="text-gray-700">
-                    Made with premium, carefully selected ingredients to ensure
-                    quality and effectiveness.
-                  </p>
-                )}
+                  );
+                })()}
               </CardContent>
             </Card>
           </TabsContent>
@@ -867,6 +851,7 @@ const ProductDetail: React.FC = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {displayCertifications.map((cert, index) => {
               const Icon = getCertificationIcon(cert);
+              const certText = typeof cert === 'string' ? cert : cert.name || 'Certified';
               return (
                 <div
                   key={index}
@@ -874,7 +859,7 @@ const ProductDetail: React.FC = () => {
                 >
                   <Icon className="w-8 h-8 text-[#F9A245] mb-2" />
                   <span className="text-sm font-medium text-gray-900 text-center">
-                    {cert}
+                    {certText}
                   </span>
                 </div>
               );

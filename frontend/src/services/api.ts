@@ -179,12 +179,23 @@ export const productApi = {
         image: typeof product.image === 'string' && product.image.startsWith('/') 
           ? getImageUrl(product.image) 
           : (typeof product.image === 'string' ? product.image : null),
-        images: product.images?.map((img: any) => ({
-          url: img.url && img.url.startsWith('/') 
-            ? getImageUrl(img.url) 
-            : img.url,
-          imageType: img.imageType
-        })) || [],
+        images: (() => {
+          try {
+            if (typeof product.images === 'string') {
+              const parsedImages = JSON.parse(product.images)
+              return Array.isArray(parsedImages) ? parsedImages.map((url: string) => ({
+                url: url && url.startsWith('/') ? getImageUrl(url) : url,
+                imageType: 'url'
+              })) : []
+            }
+            return product.images?.map((img: any) => ({
+              url: img.url && img.url.startsWith('/') ? getImageUrl(img.url) : img.url,
+              imageType: img.imageType
+            })) || []
+          } catch (e) {
+            return []
+          }
+        })(),
         rating: product.rating,
         reviews: product.reviews,
         price: product.price,
@@ -202,14 +213,54 @@ export const productApi = {
         lovedByExperts: product.lovedByExperts,
         shopByGoal: product.shopByGoal,
         description: product.description,
-        certifications: product.certifications || [],
-        nutritionInfo: product.nutritionInfo || {},
+        certifications: (() => {
+          try {
+            if (typeof product.certifications === 'string') {
+              return JSON.parse(product.certifications) || []
+            }
+            return product.certifications || []
+          } catch (e) {
+            return []
+          }
+        })(),
+        nutritionInfo: typeof product.nutritionInfo === 'string' ? product.nutritionInfo : (product.nutritionInfo || {}),
         nutritionImage: product.nutritionImage && product.nutritionImage.startsWith('/') 
           ? getImageUrl(product.nutritionImage) 
           : product.nutritionImage,
-        ingredients: product.ingredients || [],
+        ingredients: (() => {
+          try {
+            if (typeof product.ingredients === 'string') {
+              return product.ingredients.split(',').map((ingredient: string) => ({
+                name: ingredient.trim()
+              }))
+            }
+            return product.ingredients || []
+          } catch (e) {
+            return []
+          }
+        })(),
         subscriptionOptions: product.subscriptionOptions || {},
-        variants: product.variants || [],
+        variants: (() => {
+          try {
+            if (typeof product.variants === 'string') {
+              let variantStr = product.variants
+              if (variantStr && variantStr !== '[]') {
+                // Fix malformed JSON: add quotes to keys and string values
+                variantStr = variantStr
+                  .replace(/([{,])\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g, '$1"$2":')
+                  .replace(/:([^,}\[\]"]+)([,}])/g, ':"$1"$2')
+                  .replace(/:"(\d+)"([,}])/g, ':$1$2') // Keep numbers unquoted
+                console.log('Parsing variants:', variantStr)
+                return JSON.parse(variantStr) || []
+              }
+              return []
+            }
+            return product.variants || []
+          } catch (e) {
+            console.log('Variant parsing error:', e.message, 'for:', product.variants)
+            return []
+          }
+        })(),
         simpleFlavors: product.simpleFlavors,
         simpleWeights: product.simpleWeights,
         bundledOffers: product.bundledOffers || [],
@@ -256,12 +307,23 @@ export const productApi = {
         image: typeof data.image === 'string' && data.image.startsWith('/') 
           ? getImageUrl(data.image) 
           : (typeof data.image === 'string' ? data.image : null),
-        images: data.images?.map((img: any) => ({
-          url: img.url && img.url.startsWith('/') 
-            ? getImageUrl(img.url) 
-            : img.url,
-          imageType: img.imageType
-        })) || [],
+        images: (() => {
+          try {
+            if (typeof data.images === 'string') {
+              const parsedImages = JSON.parse(data.images)
+              return Array.isArray(parsedImages) ? parsedImages.map((url: string) => ({
+                url: url && url.startsWith('/') ? getImageUrl(url) : url,
+                imageType: 'url'
+              })) : []
+            }
+            return data.images?.map((img: any) => ({
+              url: img.url && img.url.startsWith('/') ? getImageUrl(img.url) : img.url,
+              imageType: img.imageType
+            })) || []
+          } catch (e) {
+            return []
+          }
+        })(),
         rating: data.rating,
         reviews: data.reviews,
         price: data.price,
@@ -279,14 +341,39 @@ export const productApi = {
         lovedByExperts: data.lovedByExperts,
         shopByGoal: data.shopByGoal,
         description: data.description,
-        certifications: data.certifications || [],
-        nutritionInfo: data.nutritionInfo || {},
+        certifications: (() => {
+          try {
+            if (typeof data.certifications === 'string') {
+              return JSON.parse(data.certifications) || []
+            }
+            return data.certifications || []
+          } catch (e) {
+            return []
+          }
+        })(),
+        nutritionInfo: typeof data.nutritionInfo === 'string' ? data.nutritionInfo : (data.nutritionInfo || {}),
         nutritionImage: data.nutritionImage && data.nutritionImage.startsWith('/') 
           ? getImageUrl(data.nutritionImage) 
           : data.nutritionImage,
         ingredients: data.ingredients || [],
         subscriptionOptions: data.subscriptionOptions || {},
-        variants: data.variants || [],
+        variants: (() => {
+          try {
+            if (typeof data.variants === 'string') {
+              let variantStr = data.variants
+              // Decode HTML entities
+              variantStr = variantStr.replace(/&quot;/g, '"').replace(/&amp;/g, '&')
+              if (variantStr && variantStr !== '[]') {
+                return JSON.parse(variantStr) || []
+              }
+              return []
+            }
+            return data.variants || []
+          } catch (e) {
+            console.log('Variant parsing error:', e.message, 'for:', data.variants)
+            return []
+          }
+        })(),
         simpleFlavors: data.simpleFlavors,
         simpleWeights: data.simpleWeights,
         bundledOffers: data.bundledOffers || [],
@@ -339,12 +426,23 @@ export const productApi = {
         image: typeof product.image === 'string' && product.image.startsWith('/') 
           ? getImageUrl(product.image) 
           : (typeof product.image === 'string' ? product.image : null),
-        images: product.images?.map((img: any) => ({
-          url: img.url && img.url.startsWith('/') 
-            ? getImageUrl(img.url) 
-            : img.url,
-          imageType: img.imageType
-        })) || [],
+        images: (() => {
+          try {
+            if (typeof product.images === 'string') {
+              const parsedImages = JSON.parse(product.images)
+              return Array.isArray(parsedImages) ? parsedImages.map((url: string) => ({
+                url: url && url.startsWith('/') ? getImageUrl(url) : url,
+                imageType: 'url'
+              })) : []
+            }
+            return product.images?.map((img: any) => ({
+              url: img.url && img.url.startsWith('/') ? getImageUrl(img.url) : img.url,
+              imageType: img.imageType
+            })) || []
+          } catch (e) {
+            return []
+          }
+        })(),
         rating: product.rating,
         reviews: product.reviews,
         price: product.price,
@@ -362,14 +460,54 @@ export const productApi = {
         lovedByExperts: product.lovedByExperts,
         shopByGoal: product.shopByGoal,
         description: product.description,
-        certifications: product.certifications || [],
-        nutritionInfo: product.nutritionInfo || {},
+        certifications: (() => {
+          try {
+            if (typeof product.certifications === 'string') {
+              return JSON.parse(product.certifications) || []
+            }
+            return product.certifications || []
+          } catch (e) {
+            return []
+          }
+        })(),
+        nutritionInfo: typeof product.nutritionInfo === 'string' ? product.nutritionInfo : (product.nutritionInfo || {}),
         nutritionImage: product.nutritionImage && product.nutritionImage.startsWith('/') 
           ? getImageUrl(product.nutritionImage) 
           : product.nutritionImage,
-        ingredients: product.ingredients || [],
+        ingredients: (() => {
+          try {
+            if (typeof product.ingredients === 'string') {
+              return product.ingredients.split(',').map((ingredient: string) => ({
+                name: ingredient.trim()
+              }))
+            }
+            return product.ingredients || []
+          } catch (e) {
+            return []
+          }
+        })(),
         subscriptionOptions: product.subscriptionOptions || {},
-        variants: product.variants || [],
+        variants: (() => {
+          try {
+            if (typeof product.variants === 'string') {
+              let variantStr = product.variants
+              if (variantStr && variantStr !== '[]') {
+                // Fix malformed JSON: add quotes to keys and string values
+                variantStr = variantStr
+                  .replace(/([{,])\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:/g, '$1"$2":')
+                  .replace(/:([^,}\[\]"]+)([,}])/g, ':"$1"$2')
+                  .replace(/:"(\d+)"([,}])/g, ':$1$2') // Keep numbers unquoted
+                console.log('Parsing variants:', variantStr)
+                return JSON.parse(variantStr) || []
+              }
+              return []
+            }
+            return product.variants || []
+          } catch (e) {
+            console.log('Variant parsing error:', e.message, 'for:', product.variants)
+            return []
+          }
+        })(),
         simpleFlavors: product.simpleFlavors,
         simpleWeights: product.simpleWeights,
         bundledOffers: product.bundledOffers || [],

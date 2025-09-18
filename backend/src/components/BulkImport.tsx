@@ -12,7 +12,7 @@ const BulkImport: React.FC = () => {
           style={{ 
             display: 'inline-block',
             padding: '8px 16px',
-            backgroundColor: '#0066cc',
+            backgroundColor: '#F9A246',
             color: 'white',
             textDecoration: 'none',
             borderRadius: '4px',

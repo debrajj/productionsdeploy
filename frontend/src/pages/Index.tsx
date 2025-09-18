@@ -217,6 +217,7 @@ const Index: React.FC = () => {
       try {
         setLoading(true);
 
+
         const [bestSellersResponse, expertsResponse] = await Promise.all([
           productApi.getBestSellerProducts(8),
           productApi.getLovedByExpertsProducts(4),
@@ -245,7 +246,7 @@ const Index: React.FC = () => {
               lovedByExperts: apiProduct.lovedByExperts,
               description: apiProduct.description,
               nutritionInfo: apiProduct.nutritionInfo,
-              ingredients: apiProduct.ingredients?.map((ing) => ing.name) || [],
+              ingredients: [],
             })
           );
           setBestSellers(transformedBestSellers);
@@ -274,7 +275,7 @@ const Index: React.FC = () => {
               lovedByExperts: apiProduct.lovedByExperts,
               description: apiProduct.description,
               nutritionInfo: apiProduct.nutritionInfo,
-              ingredients: apiProduct.ingredients?.map((ing) => ing.name) || [],
+              ingredients: [],
             })
           );
           setLovedByExperts(transformedExperts);
@@ -587,6 +588,7 @@ const Index: React.FC = () => {
         }}
       >
         {/* Best Sellers - Only show if products are marked as bestSeller */}
+
         {bestSellers.length > 0 && (
           <section
             className="py-8 bg-gradient-to-b from-[#f8fafc] via-[#fff9f2] to-[#f8fafc] rounded-t-3xl relative z-10"
@@ -730,6 +732,7 @@ const Index: React.FC = () => {
         </section>
 
         {/* Loved by Experts - Only show if products are marked as lovedByExperts */}
+
         {lovedByExperts.length > 0 && (
           <section
             className="py-8 bg-gradient-to-b from-[#f8fafc] via-[#fff9f2] to-[#f8fafc] relative z-10"
